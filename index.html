@@ -17,14 +17,14 @@
   --muted: #B5B5B5;
   --line: #ECECEC;
   --line-strong: #DDD;
-  --mh: #F4A8B4;
-  --mh-strong: #E8869B;
-  --mh-bg: #FDF1F4;
-  --mh-text: #6b3942;
-  --hj: #A8C8E8;
-  --hj-strong: #7FA8D2;
-  --hj-bg: #EDF4FB;
-  --hj-text: #2d4d6e;
+  --mh: #A8C8E8;
+  --mh-strong: #7FA8D2;
+  --mh-bg: #EDF4FB;
+  --mh-text: #2d4d6e;
+  --hj: #F4A8B4;
+  --hj-strong: #E8869B;
+  --hj-bg: #FDF1F4;
+  --hj-text: #6b3942;
   --accent: #111111;
   --gold: #F2C94C;
   --gold-bg: #FFF8E1;
@@ -55,6 +55,7 @@ button { font-family: inherit; cursor: pointer; }
 .btn:disabled { opacity: .4; cursor: not-allowed; }
 .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); padding: 8px 14px; border-radius: 100px; font-weight: 500; font-size: 12px; }
 .btn-ghost:hover { background: #F2F2F2; }
+.btn-ghost.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 section { margin-bottom: 32px; }
 .section-title { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
@@ -96,7 +97,7 @@ section { margin-bottom: 32px; }
 .together-stat strong { color: var(--text); font-weight: 700; }
 
 /* ===== Trip / Journey ===== */
-.trip-card { background: linear-gradient(135deg, #FFF8E1 0%, #F0F7FF 50%, #FDF1F4 100%); border: 1px solid var(--line); }
+.trip-card { background: linear-gradient(135deg, #FFF8E1 0%, #F0F7FF 50%, #FDF1F4 100%); border: 1px solid var(--line); padding-top: 50px; }
 .trip-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
 .trip-now { display: flex; align-items: center; gap: 14px; }
 .trip-emoji { font-size: 38px; line-height: 1; }
@@ -202,34 +203,73 @@ section { margin-bottom: 32px; }
 .cal-summary strong { color: var(--text); font-weight: 700; }
 
 /* ===== Food total (compact) ===== */
-.food-card { background: linear-gradient(135deg, #FFF8E1 0%, #FFF3D6 100%); border: 1px solid #FCE9A8; padding: 18px; }
+.food-card { background: linear-gradient(135deg, #FFF8E1 0%, #FFF3D6 100%); border: 1px solid #FCE9A8; padding: 18px; padding-top: 50px; }
 .food-total-num { font-size: 22px; font-weight: 800; color: var(--gold-text); letter-spacing: -.5px; }
 .food-total-num small { font-size: 11px; color: #8a7400; font-weight: 500; margin-left: 3px; }
-.food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 14px; }
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* 80px씩 알아서 칸 채우기 */
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 개별 아이템 (카드 형태) */
+.food-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 10px 5px;
+  border-radius: 12px;
+}
+
+.food-line-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.4); padding: 8px 4px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03); }
+.f-emoji { font-size: 1.1rem; margin-bottom: 2px; }
+.f-count { font-weight: 700; font-size: 0.95rem; color: #333; }
+.f-name { font-size: 10px; color: #888; letter-spacing: -0.5px; }
 .food-item { background: rgba(255,255,255,0.7); border-radius: 10px; padding: 10px 8px; text-align: center; }
 .food-item .f-emoji { font-size: 24px; line-height: 1.1; }
 .food-item .f-count { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; }
 .food-item .f-name { font-size: 11px; color: var(--sub); margin-top: 2px; line-height: 1.3; }
 
 /* ===== Feed list ===== */
-.feed-item { display: flex; gap: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); margin-bottom: 10px; }
+.feed-item { display: flex; gap: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); margin-bottom: 10px; align-items: center; }
+.feed-item.compact { display: flex; gap: 12px; padding: 12px 14px; margin-bottom: 6px; align-items: center; justify-content: space-between; min-height: auto; }
 .feed-item .left { flex-shrink: 0; }
 .feed-item .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
 .feed-item .avatar.mh { background: var(--mh-strong); }
 .feed-item .avatar.hj { background: var(--hj-strong); }
+.feed-item.compact .avatar { width: 32px; height: 32px; font-size: 12px; }
 .feed-item .body { flex: 1; min-width: 0; }
+.feed-item.compact .body { display: flex; gap: 10px; align-items: center; flex: 1; flex-wrap: wrap; }
 .feed-item .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.feed-item.compact .meta { display: flex; gap: 10px; align-items: center; }
 .feed-item .name { font-weight: 800; font-size: 14px; }
+.feed-item.compact .name { font-size: 12px; white-space: nowrap; }
 .feed-item .date { color: var(--muted); font-size: 12px; flex: 1; }
+.feed-item.compact .date { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.feed-item.compact .memo-text { font-size: 11px; color: var(--muted); }
+.feed-item.compact .food-badge { background: var(--gold-bg); padding: 4px 10px; border-radius: 100px; font-size: 11px; color: var(--gold-text); border: 1px solid #FCE9A8; white-space: nowrap; }
 .feed-item .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+.feed-item.compact .stats { display: flex; gap: 8px; margin-top: 0; font-size: 11px; }
+.feed-item.compact .stat { font-size: 11px; }
+.feed-item.compact .stat strong { font-size: 13px; }
 .feed-item .stat { font-size: 12px; }
 .feed-item .stat strong { font-size: 15px; font-weight: 800; }
 .feed-item .stat label { color: var(--muted); display: block; font-size: 10px; margin-bottom: 2px; font-weight: 600; }
+.feed-item.compact .stat label { display: none; }
 .feed-item .memo { color: var(--sub); font-size: 13px; margin-top: 12px; line-height: 1.55; white-space: pre-wrap; padding: 10px 12px; background: #FAFAFA; border-radius: var(--radius-sm); }
 .feed-item .photo { margin-top: 10px; }
 .feed-item .photo img { max-width: 100%; max-height: 320px; border-radius: var(--radius-sm); display: block; cursor: pointer; }
 .feed-item .food { display: inline-block; margin-top: 10px; background: var(--gold-bg); padding: 6px 12px; border-radius: 100px; font-size: 12px; color: var(--gold-text); border: 1px solid #FCE9A8; }
+.feed-item .actions { display: flex; gap: 6px; }
+.feed-item.compact .actions { display: flex; gap: 4px; }
 .feed-item .delete { background: transparent; border: 0; color: var(--muted); font-size: 11px; cursor: pointer; padding: 2px 6px; }
+.feed-item.compact .delete { padding: 4px 8px; background: #FFE4E4; color: #B84040; border-radius: 4px; font-size: 10px; }
+.feed-item.compact .delete:hover { background: #FFD1D1; }
+.feed-item .edit { background: transparent; border: 0; color: var(--muted); font-size: 11px; cursor: pointer; padding: 2px 6px; }
+.feed-item.compact .edit { padding: 4px 8px; background: var(--line); color: var(--text); border-radius: 4px; font-size: 10px; }
+.feed-item.compact .edit:hover { background: var(--line-strong); }
 .feed-item .delete:hover { color: #d33; }
 
 /* ===== Floating add button ===== */
@@ -262,32 +302,64 @@ section { margin-bottom: 32px; }
 .person-toggle button.active.mh { background: var(--mh-bg); color: var(--mh-text); border-color: var(--mh-strong); }
 .person-toggle button.active.hj { background: var(--hj-bg); color: var(--hj-text); border-color: var(--hj-strong); }
 
+/* ===== Goal + Activity Summary Layout ===== */
+.goal-activity-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.goal-section { flex: 1; }
+.goal-section .users-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.activity-summary { background: var(--card); border-radius: var(--radius); padding: 20px; border: 1px solid var(--line); display: flex; flex-direction: column; height: 100%; }
+.activity-summary .section-title { margin-bottom: 14px; }
+.summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex: 1; }
+.summary-left { display: flex; flex-direction: column; }
+.summary-right { display: flex; flex-direction: column; }
+.weekly-stats { display: flex; flex-direction: column; gap: 10px; }
+.stat-user { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+.stat-user:last-child { border-bottom: none; }
+.stat-user .name { font-weight: 700; }
+.stat-user .value { color: var(--sub); font-size: 11px; }
+.monthly-progress { display: flex; flex-direction: column; gap: 12px; }
+.progress-item { }
+.progress-item .label { font-size: 11px; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.progress-item .label .name { }
+.progress-item .label .percent { color: var(--muted); }
+.progress-bar-container { height: 6px; background: #F0F0F0; border-radius: 100px; overflow: hidden; }
+.progress-bar-container .fill { height: 100%; transition: width .3s ease; border-radius: 100px; }
+.progress-bar-container .fill.mh { background: var(--mh-strong); }
+.progress-bar-container .fill.hj { background: var(--hj-strong); }
+.combined-bar { display: flex; height: 8px; border-radius: 100px; overflow: hidden; margin-top: 10px; background: #F0F0F0; }
+.combined-bar > div { transition: width .3s ease; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+
+@media (max-width: 768px) {
+  .goal-activity-row { grid-template-columns: 1fr; }
+  .summary-row { grid-template-columns: 1fr; }
+}
+
 .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); }
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.86); color: #fff; padding: 11px 18px; border-radius: 100px; font-size: 13px; z-index: 1000; opacity: 0; transition: opacity .25s; pointer-events: none; }
 .toast.show { opacity: 1; }
 
 /* ===== Today's mission ===== */
-.mission-card { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); border: 1px solid #FCE9A8; display: flex; align-items: center; gap: 18px; padding: 18px 22px; }
-.mission-card .m-emoji { font-size: 38px; line-height: 1; flex-shrink: 0; }
-.mission-card .m-body { flex: 1; min-width: 0; }
-.mission-card .m-label { font-size: 10px; font-weight: 800; color: var(--gold-text); letter-spacing: 1.3px; text-transform: uppercase; opacity: .8; }
-.mission-card .m-text { font-size: 17px; font-weight: 800; margin-top: 4px; color: var(--text); letter-spacing: -.3px; line-height: 1.3; }
-.mission-card .m-checks { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
-.m-check { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 5px 10px; border-radius: 100px; background: rgba(255,255,255,0.7); font-weight: 700; color: var(--sub); }
+.mission-card { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); border: 1px solid #FCE9A8; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); flex-wrap: wrap; }
+.mission-card .m-emoji { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.mission-card .m-body { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mission-card .m-label { display: none; }
+.mission-card .m-text { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: -.2px; }
+.mission-card .m-checks { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.m-check { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 4px 8px; border-radius: 100px; background: rgba(255,255,255,0.7); font-weight: 700; color: var(--sub); }
 .m-check.done { background: #4CAF50; color: #fff; }
-.m-check .nd { width: 6px; height: 6px; border-radius: 50%; }
+.m-check .nd { width: 5px; height: 5px; border-radius: 50%; }
 .m-check .nd.mh { background: var(--mh-strong); }
 .m-check .nd.hj { background: var(--hj-strong); }
 .m-check.done .nd { background: #fff; }
-.m-celebrate { background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%); color: #fff; padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; }
-.m-spin { background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.06); width: 46px; height: 46px; border-radius: 50%; font-size: 22px; cursor: pointer; flex-shrink: 0; transition: background .15s, transform .15s; padding: 0; line-height: 1; }
+.m-celebrate { background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%); color: #fff; padding: 4px 10px; border-radius: 100px; font-size: 10px; font-weight: 700; }
+.m-spin { background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.06); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; flex-shrink: 0; transition: background .15s, transform .15s; padding: 0; line-height: 1; }
 .m-spin:hover { background: #fff; transform: scale(1.08); }
 .m-spin:disabled { cursor: wait; }
 .m-spin.spinning { animation: missionSpin 1.8s cubic-bezier(0.17, 0.67, 0.34, 1); pointer-events: none; }
 @keyframes missionSpin { from { transform: rotate(0deg); } to { transform: rotate(1080deg); } }
 .m-text.shuffling, .m-emoji.shuffling { animation: textPulse 0.08s linear infinite alternate; }
 @keyframes textPulse { from { opacity: .55; } to { opacity: 1; } }
-@media (max-width: 540px) { .mission-card { gap: 12px; padding: 16px; } .mission-card .m-emoji { font-size: 30px; } .mission-card .m-text { font-size: 14px; } .m-spin { width: 40px; height: 40px; font-size: 18px; } }
+@media (max-width: 768px) { .mission-card { gap: 10px; padding: 10px 12px; } .mission-card .m-emoji { font-size: 24px; } .mission-card .m-text { font-size: 12px; } .m-check { font-size: 9px; padding: 3px 6px; } .m-spin { width: 32px; height: 32px; font-size: 16px; } }
+@media (max-width: 480px) { .mission-card { gap: 8px; padding: 8px 10px; } .mission-card .m-emoji { font-size: 20px; } .mission-card .m-body { gap: 6px; } .mission-card .m-text { font-size: 11px; } .m-check { font-size: 8px; padding: 2px 5px; } .m-spin { width: 28px; height: 28px; font-size: 14px; } }
 
 .help-banner { background: var(--gold-bg); border: 1px solid #FCE9A8; border-radius: var(--radius-sm); padding: 14px 16px; font-size: 12px; line-height: 1.7; color: var(--gold-text); margin-bottom: 18px; }
 .help-banner code { background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-size: 11px; font-family: 'SF Mono', Menlo, Consolas, monospace; }
@@ -298,14 +370,41 @@ section { margin-bottom: 32px; }
 .lightbox.show { display: flex; }
 .lightbox img { max-width: 92vw; max-height: 92vh; }
 
+@media (max-width: 768px) {
+  .goal-activity-container {
+    grid-template-columns: 1fr !important;
+  }
+  .summary-row { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+}
+
 @media (max-width: 600px) {
-  .users-grid { grid-template-columns: 1fr; }
+  .goal-activity-container {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+  .goal-column {
+    order: 1;
+  }
+  .activity-column {
+    order: 2;
+  }
+  .users-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .user-card { padding: 14px; min-height: auto; }
+  .user-card .name { font-size: 13px; }
+  .user-card .goal-label { font-size: 11px; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-card .progress-num { font-size: 20px; margin-top: 8px; }
+  .user-card .progress-num small { font-size: 10px; }
+  .user-card .streak { gap: 6px; margin-top: 8px; font-size: 10px; }
+  .user-card .streak .chip { padding: 3px 8px; font-size: 9px; }
+  .user-card .edit { padding: 4px 8px; font-size: 10px; top: 10px; right: 10px; }
   .combined-card { grid-template-columns: 1fr; }
   .total-num { font-size: 36px; }
   .feed-item .stats { grid-template-columns: repeat(2, 1fr); }
   .badge-section { grid-template-columns: 1fr; }
   .badges-grid { grid-template-columns: repeat(5, 1fr); }
   header h1 { font-size: 19px; }
+  .summary-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .activity-summary { padding: 16px; }
 }
 </style>
 </head>
@@ -329,35 +428,54 @@ section { margin-bottom: 32px; }
     <div class="card mission-card" id="missionCard"></div>
   </section>
 
-  <!-- 1. User goal cards -->
+  <!-- 1. Goal + Activity Summary -->
   <section>
-    <div class="section-title"><span class="section-emoji">🎯</span>이번 달 목표</div>
-    <div class="users-grid" id="userCards"></div>
-  </section>
-
-  <!-- 2. Combined stats -->
-  <section>
-    <div class="section-title"><span class="section-emoji">🤝</span>함께 누적</div>
-    <div class="card combined-card">
-      <div>
-        <div class="total-num"><span id="totalKm">0.0</span><small> km 달려왔어요</small></div>
-        <div class="contribution-bar" id="contribBar"></div>
-        <div class="together-stat" id="togetherStat"></div>
+    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; align-items: stretch;" class="goal-activity-container">
+      <!-- 좌측: 목표 -->
+      <div style="display: flex; flex-direction: column;" class="goal-column">
+        <div class="section-title"><span class="section-emoji">🎯</span>이번 달 목표</div>
+        <div class="users-grid" id="userCards" style="flex: 1; align-content: start;"></div>
       </div>
-      <div class="fun-msg" id="funMsg">오늘 첫 발을 떼볼까요? 화이팅 💪</div>
+
+      <!-- 우측: 최근 활동 요약 -->
+      <div style="display: flex; flex-direction: column;" class="activity-column">
+        <div class="section-title"><span class="section-emoji">📈</span>최근 활동</div>
+        <div class="activity-summary">
+          <div class="summary-row">
+            <div class="summary-left">
+              <div style="font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase;">지난 7일</div>
+              <div class="weekly-stats" id="weeklySummary"></div>
+            </div>
+            <div class="summary-right">
+              <div style="font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase;">이번 달</div>
+              <div class="monthly-progress" id="monthlySummary"></div>
+            </div>
+          </div>
+          <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); text-align: center;">
+            <div style="font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 8px;" id="cumulativeKm">0.0 km</div>
+            <div style="font-size: 11px; line-height: 1.5; color: var(--sub);" id="cumulativeMsg">데이터 로딩중...</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 3. Trip + Food (side by side) -->
+  <!-- 2. Trip + Food (side by side) with filter -->
   <section>
     <div class="two-col-row">
       <div>
-        <div class="section-title"><span class="section-emoji">🗺️</span>우리의 여행</div>
-        <div class="card trip-card" id="tripCard"></div>
+        <div class="section-title" style="margin-bottom: 12px;"><span class="section-emoji">🗺️</span>우리의 여행</div>
+        <div class="card trip-card" style="position: relative;">
+          <div id="tripFilter" style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"></div>
+          <div id="tripCard"></div>
+        </div>
       </div>
       <div>
-        <div class="section-title"><span class="section-emoji">🍗</span>우리가 태운 음식</div>
-        <div class="card food-card" id="foodCard"></div>
+        <div class="section-title" style="margin-bottom: 12px;"><span class="section-emoji">🍗</span>우리가 태운 음식</div>
+        <div class="card food-card" style="position: relative;">
+          <div id="foodFilter" style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"></div>
+          <div id="foodCard"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -382,14 +500,14 @@ section { margin-bottom: 32px; }
         <div class="chart-head">
           <div class="chart-title" id="actChartLabel"></div>
           <div class="user-toggle">
-            <button class="active" id="actModeMonth" onclick="setActMode('month')">월별</button>
-            <button id="actModeDay" onclick="setActMode('day')">일별</button>
+            <button id="actModeMonth" onclick="setActMode('month')">월별</button>
+            <button class="active" id="actModeDay" onclick="setActMode('day')">일별</button>
           </div>
         </div>
         <div class="act-chart" id="actChart"></div>
         <div class="chart-legend">
-          <div><span class="sw mh"></span>미현</div>
           <div><span class="sw hj"></span>현주</div>
+          <div><span class="sw mh"></span>미현</div>
         </div>
         <div class="act-stats" id="actStats"></div>
       </div>
@@ -512,7 +630,7 @@ const SUPABASE_URL = 'https://toelsfsukrjhndypyvgv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_U6KBnGyta7UEvCAOqNZqQg_Yqypr5Ds';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const STORAGE_BUCKET = 'run-photos';
-const NAMES = ['미현', '현주'];
+const NAMES = ['현주', '미현'];
 
 // ============== State ==============
 let users = [], goals = [], logs = [];
@@ -520,14 +638,18 @@ const today = new Date();
 let calYear = today.getFullYear();
 let calMonth = today.getMonth() + 1;
 let calFilter = 'all';
+let tripFilter = 'month';
+let foodFilter = 'month';
+let statsFilter0 = 'week';  // 현주 (index 0)
+let statsFilter1 = 'week';  // 미현 (index 1)
 let goalEditingUserId = null;
-let addPersonName = '미현';
+let addPersonName = '현주';
 
 // ============== Helpers ==============
 const $ = (id) => document.getElementById(id);
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2400); }
 function fmtDate(d) { if (typeof d === 'string') d = new Date(d + 'T00:00'); return `${d.getFullYear()}. ${String(d.getMonth()+1).padStart(2,'0')}. ${String(d.getDate()).padStart(2,'0')}.`; }
-function userClass(name) { return name === '미현' ? 'mh' : 'hj'; }
+function userClass(name) { return name === '현주' ? 'hj' : 'mh'; }
 function paceFromSec(sec, km) { if (!km || !sec) return '-'; const sp = sec / km; const m = Math.floor(sp/60); const s = Math.round(sp%60); return `${m}'${String(s).padStart(2,'0')}"`; }
 function fmtDuration(sec) { sec = Math.round(sec); const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; if(h>0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; return `${m}:${String(s).padStart(2,'0')}`; }
 function getWeight(name) { const w = localStorage.getItem('weight_' + name); return w ? parseFloat(w) : 60; }
@@ -554,36 +676,28 @@ function getFood(kcal) {
 
 const milestones = [
   { km:0,       msg:'오늘 첫 발을 떼볼까요? 화이팅 💪' },
-  { km:1,       msg:'🌱 트랙 2.5바퀴! 시작이 반이에요' },
-  { km:3,       msg:'🏢 63빌딩 12개를 눕힌 길이! 고층빌딩 정복' },
-  { km:5,       msg:'🌃 남산 둘레길 한 바퀴! 야경은 보너스' },
-  { km:7,       msg:'🌉 한강대교 6번 건너기! 다리 부자가 됐어요' },
-  { km:10,      msg:'🏃‍♀️ 마라톤 1/4 완주! 진짜 러너 입성' },
-  { km:13,      msg:'🚖 잠실 → 강남! 택시비 굳혔네요' },
-  { km:15,      msg:'⭐ 서울 시내 가로지르기! 도로 위의 별' },
-  { km:18,      msg:'👀 하프까지 3km! 거의 다 왔어요' },
-  { km:21.0975, msg:'📸 공식 하프 마라톤 완주! 인증샷 필수' },
-  { km:25,      msg:'🌊 한강 종주 임박! 윤슬도 친구가 됐어요' },
-  { km:30,      msg:'🏙️ 서울 → 분당! 출퇴근 한 번 한 거예요' },
-  { km:35,      msg:'🎒 서울 → 일산! 여행 다녀온 셈' },
-  { km:42.195,  msg:'🏆 풀 마라톤 완주! 신화의 주인공' },
-  { km:50,      msg:'✈️ 서울 → 인천공항! 여권 챙기실 차례' },
-  { km:70,      msg:'🎟️ 서울 → 평택! 기차표 환불해도 돼요' },
-  { km:100,     msg:'🌿 서울 → 대전! KTX보다 친환경' },
-  { km:150,     msg:'🌏 서울 → 청주! 지구 둘레의 0.4% 정복' },
-  { km:200,     msg:'🚆 서울 → 광주! 호남선 완주' },
-  { km:300,     msg:'✨ 서울 → 부산! 한반도 종단' },
-  { km:500,     msg:'🚄 서울 ↔ 부산 왕복! 발이 KTX예요' },
-  { km:700,     msg:'🗺️ 부산 갔다가 대전도 들렀어요' },
-  { km:1000,    msg:'🌊 서울 → 후쿠오카! 바다도 건넜어요' },
-  { km:1500,    msg:'🏯 서울 → 베이징! 만리장성도 보여요' },
-  { km:2000,    msg:'🚌 버스 2,000대 일렬 주차! 교통정체 해결사급' },
-  { km:2100,    msg:'🚌 버스 2,100대 일렬 주차! 진심을 다하셨네요' },
-  { km:3000,    msg:'🧚 한반도 3바퀴! 신선의 경지' },
-  { km:5000,    msg:'🌴 서울 → 자카르타! 적도가 코앞' },
-  { km:10000,   msg:'🌍 지구 1/4 둘레! 우주에서도 보여요' },
-  { km:20000,   msg:'🌐 지구 반바퀴! 반대편이에요' },
-  { km:40075,   msg:'🏅 지구 한 바퀴! 전설의 페이지에 등록' },
+  { km:1,       msg:'🏢 드디어 첫 발! 63빌딩을 걸어서 한 번 올라간 셈이에요.' },
+  { km:3,       msg:'🐟 우리가 달린 길에 붕어빵 3만 개를 일렬로 세울 수 있어요!' },
+  { km:5,       msg:'🗼 축하해요! 남산타워 정상까지 직선거리로 도착했습니다.' },
+  { km:10,      msg:'🦵 오늘까지 밟은 계단만 1만 5천 개! 무릎이 기뻐하고 있어요.' },
+  { km:15,      msg:'🏟️ 운동장 트랙 37바퀴 돌파! 이제 운동장이 집 마당 같죠?' },
+  { km:20,      msg:'👟 우리가 굴린 발걸음이 3만 보를 넘었어요. 지구 지각이 놀랐을걸요?' },
+  { km:25,      msg:'🚌 버스 2,100대를 일렬로 주차한 거리! 교통정체 해결사급이네요.' },
+  { km:30,      msg:'🏙️ 잠실 롯데월드타워(555m)를 54번이나 쌓아 올린 높이예요!' },
+  { km:35,      msg:'⚽ 축구 선수들이 전반/후반 기진맥진하며 3경기를 뛴 거리예요.' },
+  { km:42,      msg:'🏁 드디어 풀 마라톤 거리 정복! 이제 \'진짜 러너\'라고 불러드릴게요.' },
+  { km:45,      msg:'💧 우리가 흘린 땀방울을 모으면 생수 500ml 100병은 나올걸요?' },
+  { km:50,      msg:'🎖️ 최종 목표 달성! 서울 광화문에서 평택까지 발로 걸어온 대장정!' },
+  { km:55,      msg:'🌟 55km 도달! 이제 마라톤 완주자의 영역을 넘어섰어요.' },
+  { km:60,      msg:'🎯 60km 달성! 너희의 열정이 지구를 돌리고 있어요.' },
+  { km:65,      msg:'🔥 65km 돌파! 계속 이 열정이면 세계일주도 가능할 것 같은데?' },
+  { km:70,      msg:'🚀 70km 넘김! 이제 진짜 뛰어다니는 게 일상이 되었네요.' },
+  { km:75,      msg:'⭐ 75km 완주! 너희는 별처럼 밝게 빛나고 있어요.' },
+  { km:80,      msg:'🏆 80km 달성! 대왕의 칭호를 드려야 할 것 같아요.' },
+  { km:85,      msg:'🎊 85km 도달! 축하합니다, 마라톤 대마왕님!' },
+  { km:90,      msg:'💪 90km 넘김! 이제 너희가 운동의 정의를 다시 쓰고 있어요.' },
+  { km:95,      msg:'✨ 95km 완주! 100km까지 정말 얼마 안 남았어요. 화이팅!' },
+  { km:100,     msg:'👑 축하합니다! 100km 정복! 너희는 진정한 러닝 왕과 여왕입니다!' }
 ];
 function getMilestone(km) { let p = milestones[0]; for (const m of milestones) if (km >= m.km) p = m; else break; return p.msg; }
 
@@ -644,9 +758,8 @@ function renderMission() {
       <div class="m-label">🎲 오늘의 랜덤 미션</div>
       <div class="m-text" id="mText">${m.t}</div>
       <div class="m-checks">
-        <div class="m-check ${mhDone?'done':''}"><span class="nd ${mhDone?'':'mh'}"></span>미현 ${mhDone?'✓ 완료':'아직'}</div>
-        <div class="m-check ${hjDone?'done':''}"><span class="nd ${hjDone?'':'hj'}"></span>현주 ${hjDone?'✓ 완료':'아직'}</div>
-        ${allDone ? '<div class="m-celebrate">🎉 둘 다 클리어!</div>' : ''}
+        <div class="m-check ${mhDone?'done':''}"><span class="nd ${mhDone?'':'mh'}"></span>미현</div>
+        <div class="m-check ${hjDone?'done':''}"><span class="nd ${hjDone?'':'hj'}"></span>현주</div>
       </div>
     </div>
     <button class="m-spin" id="mSpinBtn" onclick="spinMission()" title="다른 미션으로 돌리기">🎰</button>
@@ -752,6 +865,20 @@ function getUserByName(n) { return users.find(u => u.user_name === n); }
 function getUserById(id) { return users.find(u => String(u.user_id) === String(id)); }
 function userLogs(name) { const u = getUserByName(name); if (!u) return []; return logs.filter(l => String(l.user_id) === String(u.user_id)); }
 
+function getFilteredLogs(filterType) {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+
+  if (filterType === 'month') {
+    return logs.filter(l => {
+      const d = new Date(l.run_date + 'T00:00');
+      return d.getFullYear() === currentYear && d.getMonth() + 1 === currentMonth;
+    });
+  }
+  return logs; // 'all'
+}
+
 function userTotalKm(name) { return userLogs(name).reduce((s,l) => s + parseFloat(l.distance||0), 0); }
 function userBestPace(name) {
   let best = null;
@@ -807,13 +934,16 @@ function userLastRunDate(name) {
 function renderAll() {
   renderMission();
   renderUserCards();
+  renderActivitySummary();
   renderCombined();
+  renderTripFilters();
   renderTrip();
   renderActivityChart();
   renderPRBoard();
   renderBadges();
   renderUserToggle();
   renderCalendar();
+  renderFoodFilters();
   renderFoodTotal();
   renderFeed();
   renderAddPersonOptions();
@@ -832,12 +962,13 @@ function renderUserCards() {
         progress = km;
         label = `이번 달 <strong>${km.toFixed(1)} / ${target}</strong> km`;
       } else if (goal.goal_type === 'WEEKLY_COUNT') {
-        const d = new Date(); const day = d.getDay() === 0 ? 7 : d.getDay();
-        const mon = new Date(d); mon.setDate(d.getDate()-day+1); mon.setHours(0,0,0,0);
-        const sun = new Date(mon); sun.setDate(mon.getDate()+7);
-        const cnt = new Set(userLogs(name).filter(x => { const dt = new Date(x.run_date+'T00:00'); return dt >= mon && dt < sun; }).map(x => x.run_date)).size;
-        progress = cnt;
-        label = `이번 주 <strong>${cnt} / ${target}</strong> 회`;
+        // 이번 달 전체 진행도 (주*4)
+        const monthlyTarget = target * 4;
+        const monthlyCnt = new Set(userLogs(name).filter(x => { const d = new Date(x.run_date+'T00:00'); return d.getFullYear()===today.getFullYear() && d.getMonth()+1===today.getMonth()+1; }).map(x => x.run_date)).size;
+
+        progress = monthlyCnt;
+        target = monthlyTarget;
+        label = `이번 달 <strong>${monthlyCnt} / ${monthlyTarget}</strong> 회`;
       }
     }
     const pct = target ? Math.min(100, (progress / target) * 100) : 0;
@@ -861,33 +992,152 @@ function renderUserCards() {
         <div class="streak">${streakChip}${lastChip}</div>
       </div>`;
   }).join('');
-  $('userCards').innerHTML = html;
+  const el = $('userCards');
+  if (el) el.innerHTML = html;
+}
+
+function renderActivitySummary() {
+  try {
+    // 지난 7일 요약
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const weeklyHtml = NAMES.map(name => {
+      const weeklyLogs = userLogs(name).filter(l => new Date(l.run_date + 'T00:00') >= sevenDaysAgo);
+      const weeklyKm = weeklyLogs.reduce((s, l) => s + parseFloat(l.distance || 0), 0);
+      const weeklyDays = new Set(weeklyLogs.map(l => l.run_date)).size;
+      return `
+        <div class="stat-user">
+          <span class="name">${name}</span>
+          <span class="value">${weeklyKm.toFixed(1)}km · ${weeklyDays}일</span>
+        </div>`;
+    }).join('');
+    const weeklySummaryEl = $('weeklySummary');
+    if (weeklySummaryEl) weeklySummaryEl.innerHTML = weeklyHtml;
+
+  // 이번 달 진행도
+  const monthlyLogs = logs.filter(l => {
+    const d = new Date(l.run_date + 'T00:00');
+    return d.getFullYear() === today.getFullYear() && d.getMonth() + 1 === today.getMonth() + 1;
+  });
+
+  const monthlyByUser = {};
+  NAMES.forEach(name => {
+    const userMonthlyLogs = monthlyLogs.filter(l => {
+      const u = getUserById(l.user_id);
+      return u && u.user_name === name;
+    });
+    const monthlyKm = userMonthlyLogs.reduce((s, l) => s + parseFloat(l.distance || 0), 0);
+    monthlyByUser[name] = monthlyKm;
+  });
+
+  const totalMonthly = Object.values(monthlyByUser).reduce((s, k) => s + k, 0);
+
+  const monthlyHtml = NAMES.map(name => {
+    const km = monthlyByUser[name];
+    const pct = totalMonthly > 0 ? (km / totalMonthly) * 100 : 0;
+    return `
+      <div class="progress-item">
+        <div class="label">
+          <span class="name">${name}</span>
+          <span class="percent">${km.toFixed(1)}km</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="fill ${userClass(name)}" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // 누적 거리 멘트 찾기
+  let milestone = milestones[0];
+  for (let i = milestones.length - 1; i >= 0; i--) {
+    if (totalMonthly >= milestones[i].km) {
+      milestone = milestones[i];
+      break;
+    }
+  }
+
+  // 누적 거리를 가운데에 표시
+  const cumulativeKmEl = $('cumulativeKm');
+  const cumulativeMsgEl = $('cumulativeMsg');
+  if (cumulativeKmEl) cumulativeKmEl.textContent = totalMonthly.toFixed(1) + ' km';
+  if (cumulativeMsgEl) cumulativeMsgEl.innerHTML = milestone.msg;
+
+  const monthlySummaryEl = $('monthlySummary');
+  if (monthlySummaryEl) monthlySummaryEl.innerHTML = monthlyHtml;
+  } catch (e) {
+    console.error('renderActivitySummary error:', e);
+  }
 }
 
 function renderCombined() {
-  const total = logs.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
-  $('totalKm').textContent = total.toFixed(1);
-  $('funMsg').textContent = getMilestone(total);
-  const mhKm = userTotalKm('미현'), hjKm = userTotalKm('현주');
-  const sum = mhKm + hjKm;
-  if (sum === 0) {
-    $('contribBar').innerHTML = '<div style="width:100%;color:var(--muted);font-size:11px;display:flex;align-items:center;justify-content:center">아직 기록이 없어요</div>';
-  } else {
-    const mhPct = (mhKm / sum) * 100, hjPct = (hjKm / sum) * 100;
-    $('contribBar').innerHTML = `
-      <div class="mh-fill" style="width:${mhPct}%">${mhPct > 14 ? `미현 ${mhKm.toFixed(1)}km` : ''}</div>
-      <div class="hj-fill" style="width:${hjPct}%">${hjPct > 14 ? `현주 ${hjKm.toFixed(1)}km` : ''}</div>`;
+  try {
+    const total = logs.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
+    const totalKmEl = $('totalKm');
+    if (totalKmEl) totalKmEl.textContent = total.toFixed(1);
+
+    const funMsgEl = $('funMsg');
+    if (funMsgEl) funMsgEl.textContent = getMilestone(total);
+
+    const mhKm = userTotalKm('미현'), hjKm = userTotalKm('현주');
+    const sum = mhKm + hjKm;
+    const contribBarEl = $('contribBar');
+    if (contribBarEl) {
+      if (sum === 0) {
+        contribBarEl.innerHTML = '<div style="width:100%;color:var(--muted);font-size:11px;display:flex;align-items:center;justify-content:center">아직 기록이 없어요</div>';
+      } else {
+        const mhPct = (mhKm / sum) * 100, hjPct = (hjKm / sum) * 100;
+        contribBarEl.innerHTML = `
+          <div class="mh-fill" style="width:${mhPct}%">${mhPct > 14 ? `미현 ${mhKm.toFixed(1)}km` : ''}</div>
+          <div class="hj-fill" style="width:${hjPct}%">${hjPct > 14 ? `현주 ${hjKm.toFixed(1)}km` : ''}</div>`;
+      }
+    }
+
+    // 함께 뛴 날
+    const mhDates = new Set(userLogs('미현').map(l => l.run_date));
+    const hjDates = new Set(userLogs('현주').map(l => l.run_date));
+    let common = 0; for (const d of mhDates) if (hjDates.has(d)) common++;
+    const totalDays = new Set([...mhDates, ...hjDates]).size;
+    const togetherStatEl = $('togetherStat');
+    if (togetherStatEl) togetherStatEl.innerHTML = `🤝 함께 뛴 날 <strong>${common}일</strong> · 둘 중 한 명이라도 뛴 날 <strong>${totalDays}일</strong>`;
+  } catch (e) {
+    console.error('renderCombined error:', e);
   }
-  // 함께 뛴 날
-  const mhDates = new Set(userLogs('미현').map(l => l.run_date));
-  const hjDates = new Set(userLogs('현주').map(l => l.run_date));
-  let common = 0; for (const d of mhDates) if (hjDates.has(d)) common++;
-  const totalDays = new Set([...mhDates, ...hjDates]).size;
-  $('togetherStat').innerHTML = `🤝 함께 뛴 날 <strong>${common}일</strong> · 둘 중 한 명이라도 뛴 날 <strong>${totalDays}일</strong>`;
+}
+
+function renderTripFilters() {
+  const buttons = ['month', 'all'].map(type => {
+    const label = type === 'month' ? '월간' : '전체';
+    const isActive = tripFilter === type ? 'active' : '';
+    return `<button class="btn-ghost ${isActive}" style="font-size: 12px; padding: 8px 12px;" onclick="setTripFilter('${type}')">${label}</button>`;
+  }).join('');
+  $('tripFilter').innerHTML = buttons;
+}
+
+function setTripFilter(type) {
+  tripFilter = type;
+  renderTripFilters();
+  renderTrip();
+}
+
+function renderFoodFilters() {
+  const buttons = ['month', 'all'].map(type => {
+    const label = type === 'month' ? '월간' : '전체';
+    const isActive = foodFilter === type ? 'active' : '';
+    return `<button class="btn-ghost ${isActive}" style="font-size: 12px; padding: 8px 12px;" onclick="setFoodFilter('${type}')">${label}</button>`;
+  }).join('');
+  $('foodFilter').innerHTML = buttons;
+}
+
+function setFoodFilter(type) {
+  foodFilter = type;
+  renderFoodFilters();
+  renderFoodTotal();
 }
 
 function renderTrip() {
-  const total = logs.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
+  const filteredLogs = getFilteredLogs(tripFilter);
+  const total = filteredLogs.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
   // find current segment
   let seg = { from: cities[0], to: cities[1], pct: 0 };
   for (let i = 0; i < cities.length - 1; i++) {
@@ -933,7 +1183,7 @@ function renderTrip() {
   `;
 }
 
-let actMode = 'month';
+let actMode = 'day';
 function setActMode(mode) {
   actMode = mode;
   $('actModeMonth').classList.toggle('active', mode === 'month');
@@ -1140,7 +1390,7 @@ function renderCalendar() {
   const isThisMonth = todayD.getFullYear() === calYear && (todayD.getMonth()+1) === calMonth;
   const wkdays = ['일','월','화','수','목','금','토'];
   let html = '<div class="calendar-grid">' + wkdays.map((w, i) =>
-    `<div class="cal-weekday" style="color:${i===0?'#e89aa5':i===6?'#9ab8d8':'var(--muted)'}">${w}</div>`).join('');
+    `<div class="cal-weekday" style="color:${i===0?'#9ab8d8':i===6?'#e89aa5':'var(--muted)'}">${w}</div>`).join('');
   for (let i = 0; i < startDay; i++) html += '<div class="cal-day empty"></div>';
   const mhU = getUserByName('미현'), hjU = getUserByName('현주');
   for (let d = 1; d <= daysInMonth; d++) {
@@ -1174,8 +1424,8 @@ function renderCalendar() {
   const mhKm = userLogs('미현').filter(x => { const d = new Date(x.run_date+'T00:00'); return d.getFullYear()===calYear && (d.getMonth()+1)===calMonth; }).reduce((s,x)=>s+parseFloat(x.distance||0),0);
   const hjKm = userLogs('현주').filter(x => { const d = new Date(x.run_date+'T00:00'); return d.getFullYear()===calYear && (d.getMonth()+1)===calMonth; }).reduce((s,x)=>s+parseFloat(x.distance||0),0);
   $('calSummary').innerHTML = `
-    <div>미현 <strong>${mhDates.size}일 · ${mhKm.toFixed(1)}km</strong></div>
     <div>현주 <strong>${hjDates.size}일 · ${hjKm.toFixed(1)}km</strong></div>
+    <div>미현 <strong>${mhDates.size}일 · ${mhKm.toFixed(1)}km</strong></div>
     <div>같이 뛴 날 <strong>${common}일</strong></div>
   `;
 }
@@ -1184,8 +1434,9 @@ function prevMonth() { calMonth--; if (calMonth < 1) { calMonth = 12; calYear--;
 function nextMonth() { calMonth++; if (calMonth > 12) { calMonth = 1; calYear++; } renderCalendar(); }
 
 function renderFoodTotal() {
+  const filteredLogs = getFilteredLogs(foodFilter);
   let totalKcal = 0;
-  for (const l of logs) {
+  for (const l of filteredLogs) {
     const u = getUserById(l.user_id); if (!u) continue;
     totalKcal += calcKcal(parseFloat(l.distance||0), u.user_name);
   }
@@ -1194,21 +1445,22 @@ function renderFoodTotal() {
     return;
   }
   const foods = [
+    { kcal: 10, name: '아메리카노', emoji: '☕' },
     { kcal: 100, name: '붕어빵', emoji: '🥖' },
     { kcal: 250, name: '아이스크림', emoji: '🍦' },
-    { kcal: 300, name: '치킨 한 조각', emoji: '🍗' },
+    { kcal: 300, name: '생맥주 500cc', emoji: '🍺' },   
     { kcal: 500, name: '햄버거', emoji: '🍔' },
     { kcal: 600, name: '라면 한 봉지', emoji: '🍜' },
     { kcal: 700, name: '피자 한 조각', emoji: '🍕' },
     { kcal: 1000, name: '치킨 한 마리', emoji: '🍗' },
   ];
-  const grid = foods.map(f => {
+  const items = foods.map(f => {
     const cnt = Math.floor(totalKcal / f.kcal);
-    return `<div class="food-item"><div class="f-emoji">${f.emoji}</div><div class="f-count">${cnt.toLocaleString()}</div><div class="f-name">${f.name}</div></div>`;
+    return `<div class="food-line-item"><span class="f-emoji">${f.emoji}</span><span class="f-count">${cnt}</span><span class="f-name">${f.name}</span></div>`;
   }).join('');
   $('foodCard').innerHTML = `
-    <div class="food-total-num">${totalKcal.toLocaleString()}<small> kcal · 두 사람 누적</small></div>
-    <div class="food-grid">${grid}</div>
+    <div class="food-total-num">${totalKcal.toLocaleString()}<small> kcal</small></div>
+    <div class="food-grid">${items}</div>
   `;
 }
 
@@ -1224,24 +1476,28 @@ function renderFeed() {
     const km = parseFloat(l.distance || 0);
     const sec = parseInt(l.duration_seconds || 0);
     const kcal = calcKcal(km, name);
+    const foodText = getFood(kcal);
+    const memo = l.memo ? escapeHtml(l.memo) : '';
+    const truncatedMemo = memo.length > 30 ? memo.substring(0, 30) + '...' : memo;
+    const memoHtml = memo ? `<span class="memo-text">${truncatedMemo}</span>` : '';
     return `
-      <div class="feed-item">
+      <div class="feed-item compact">
         <div class="left"><div class="avatar ${cls}">${name[0]}</div></div>
         <div class="body">
           <div class="meta">
             <span class="name">${name}</span>
             <span class="date">${fmtDate(l.run_date)}</span>
-            <button class="delete" onclick="deleteLog('${l.id}')">삭제</button>
           </div>
-          <div class="stats">
-            <div class="stat"><label>거리</label><strong>${km.toFixed(2)}</strong> km</div>
-            <div class="stat"><label>시간</label><strong>${fmtDuration(sec)}</strong></div>
-            <div class="stat"><label>평균 페이스</label><strong>${paceFromSec(sec, km)}</strong>/km</div>
-            <div class="stat"><label>칼로리</label><strong>${kcal}</strong> kcal</div>
-          </div>
-          ${l.memo ? `<div class="memo">${escapeHtml(l.memo)}</div>` : ''}
-          <div class="food">소모량 ≈ ${getFood(kcal)}</div>
-          ${l.image_url ? `<div class="photo"><img src="${l.image_url}" onclick="openLightbox('${l.image_url}')" alt="" /></div>` : ''}
+          <div class="stat"><strong>${km.toFixed(2)}</strong> km</div>
+          <div class="stat"><strong>${fmtDuration(sec)}</strong></div>
+          <div class="stat"><strong>${paceFromSec(sec, km)}</strong>/km</div>
+          <div class="stat"><strong>${kcal}</strong> kcal</div>
+          <div class="food-badge">소모 ≈ ${foodText}</div>
+          ${memoHtml}
+        </div>
+        <div class="actions">
+          <button class="edit" onclick="editLog('${l.id}')">수정</button>
+          <button class="delete" onclick="deleteLog('${l.id}')">삭제</button>
         </div>
       </div>`;
   }).join('');
@@ -1320,6 +1576,62 @@ async function submitAdd() {
     return;
   }
   toast('기록이 저장됐어요 🏃‍♀️');
+  closeModal('addModal');
+  await loadAll();
+}
+
+function editLog(id) {
+  const log = logs.find(l => l.id === id);
+  if (!log) return;
+  const u = getUserById(log.user_id);
+  const name = u ? u.user_name : '?';
+
+  $('addDate').value = log.run_date;
+  $('addDistance').value = parseFloat(log.distance || 0);
+  const sec = parseInt(log.duration_seconds || 0);
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  $('addH').value = h || '';
+  $('addM').value = m || '';
+  $('addS').value = s || '';
+  $('addMemo').value = log.memo || '';
+  addPersonName = name;
+
+  const modalTitle = document.querySelector('#addModal h3');
+  const submitBtn = $('addSubmit');
+  modalTitle.textContent = '러닝 기록 수정';
+  submitBtn.textContent = '수정';
+  submitBtn.onclick = () => submitEdit(id);
+
+  renderAddPersonOptions();
+  updateAddPreview();
+  openModal('addModal');
+}
+
+async function submitEdit(id) {
+  const u = getUserByName(addPersonName);
+  if (!u) { toast('사용자를 찾을 수 없어요'); return; }
+  const date = $('addDate').value;
+  const km = parseFloat($('addDistance').value);
+  const h = parseInt($('addH').value) || 0, m = parseInt($('addM').value) || 0, s = parseInt($('addS').value) || 0;
+  const sec = h*3600 + m*60 + s;
+  if (!date) { toast('날짜를 선택해 주세요'); return; }
+  if (!km || km <= 0) { toast('거리를 입력해 주세요'); return; }
+  if (!sec) { toast('시간을 입력해 주세요'); return; }
+
+  const { error } = await sb.from('run_log').update({
+    user_id: u.user_id, run_date: date, distance: km, duration_seconds: sec,
+    memo: $('addMemo').value || null
+  }).eq('id', id);
+
+  if (error) { toast('수정 실패: ' + error.message); return; }
+  toast('수정됐어요');
+  const modalTitle = document.querySelector('#addModal h3');
+  const submitBtn = $('addSubmit');
+  modalTitle.textContent = '러닝 기록 추가';
+  submitBtn.textContent = '저장';
+  submitBtn.onclick = submitAdd;
   closeModal('addModal');
   await loadAll();
 }
