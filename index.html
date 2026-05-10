@@ -276,6 +276,10 @@ section { margin-bottom: 32px; }
 .feed-item.compact .edit:hover { background: var(--line-strong); }
 .feed-item .delete:hover { color: #d33; }
 
+/* ===== Feed expand/collapse ===== */
+.feed-toggle-btn { background: transparent; border: 1px solid var(--line); border-radius: 100px; padding: 8px 16px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; margin-top: 16px; transition: all .2s; }
+.feed-toggle-btn:hover { background: #F2F2F2; }
+
 /* ===== Floating add button ===== */
 .fab { position: fixed; right: 24px; bottom: 24px; background: var(--accent); color: #fff; border: 0; width: 58px; height: 58px; border-radius: 50%; font-size: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.22); cursor: pointer; line-height: 0; padding-bottom: 4px; z-index: 50; }
 .fab:hover { transform: translateY(-2px); transition: transform .2s; }
@@ -341,6 +345,18 @@ section { margin-bottom: 32px; }
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.86); color: #fff; padding: 11px 18px; border-radius: 100px; font-size: 13px; z-index: 1000; opacity: 0; transition: opacity .25s; pointer-events: none; }
 .toast.show { opacity: 1; }
 
+/* ===== Scope tabs ===== */
+.scope-tabs { display: flex; gap: 4px; background: #F2F2F2; padding: 4px; border-radius: 100px; margin-bottom: 24px; width: fit-content; }
+.scope-tabs button { background: transparent; border: 0; padding: 9px 18px; border-radius: 100px; font-size: 13px; font-weight: 700; color: var(--sub); cursor: pointer; transition: all .2s; }
+.scope-tabs button:hover:not(.active) { color: var(--text); }
+.scope-tabs button.active { background: #fff; color: var(--text); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+.scope-tabs button[data-scope="미현"].active { color: var(--mh-text); background: var(--mh-bg); }
+.scope-tabs button[data-scope="현주"].active { color: var(--hj-text); background: var(--hj-bg); }
+@media (max-width: 540px) {
+  .scope-tabs { width: 100%; justify-content: space-between; }
+  .scope-tabs button { flex: 1; padding: 9px 8px; font-size: 12px; }
+}
+
 /* ===== Today's mission ===== */
 .mission-card { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); border: 1px solid #FCE9A8; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); flex-wrap: wrap; }
 .mission-card .m-emoji { font-size: 28px; line-height: 1; flex-shrink: 0; }
@@ -382,6 +398,7 @@ section { margin-bottom: 32px; }
 }
 
 @media (max-width: 600px) {
+  body { font-size: 15px; }
   .goal-activity-container {
     grid-template-columns: 1fr !important;
     grid-template-rows: auto auto !important;
@@ -392,23 +409,64 @@ section { margin-bottom: 32px; }
   .activity-column {
     order: 2;
   }
+  header h1 { font-size: 22px; }
+  header .sub { font-size: 13px; }
+  .section-title { font-size: 12px; }
   .users-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .user-card { padding: 14px; min-height: auto; }
-  .user-card .name { font-size: 13px; }
-  .user-card .goal-label { font-size: 11px; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .user-card .progress-num { font-size: 20px; margin-top: 8px; }
-  .user-card .progress-num small { font-size: 10px; }
-  .user-card .streak { gap: 6px; margin-top: 8px; font-size: 10px; }
-  .user-card .streak .chip { padding: 3px 8px; font-size: 9px; }
-  .user-card .edit { padding: 4px 8px; font-size: 10px; top: 10px; right: 10px; }
+  .user-card .name { font-size: 14px; }
+  .user-card .goal-label { font-size: 12px; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-card .progress-num { font-size: 22px; margin-top: 8px; }
+  .user-card .progress-num small { font-size: 11px; }
+  .user-card .streak { gap: 6px; margin-top: 8px; font-size: 11px; }
+  .user-card .streak .chip { padding: 3px 8px; font-size: 10px; }
+  .user-card .edit { padding: 4px 8px; font-size: 11px; top: 10px; right: 10px; }
   .combined-card { grid-template-columns: 1fr; }
-  .total-num { font-size: 36px; }
+  .total-num { font-size: 40px; }
+  .stat-user { font-size: 13px; }
+  .stat-user .value { font-size: 12px; }
+  .feed-item.compact { padding: 14px 16px; gap: 14px; }
+  .feed-item.compact .name { font-size: 13px; }
+  .feed-item.compact .date { font-size: 12px; }
+  .feed-item.compact .stat { font-size: 12px; }
+  .feed-item.compact .stat strong { font-size: 14px; }
+  .feed-item.compact .food-badge { font-size: 12px; }
   .feed-item .stats { grid-template-columns: repeat(2, 1fr); }
   .badge-section { grid-template-columns: 1fr; }
-  .badges-grid { grid-template-columns: repeat(5, 1fr); }
-  header h1 { font-size: 19px; }
+  .badges-grid { grid-template-columns: repeat(5, 1fr); gap: 3px; }
   .summary-row { grid-template-columns: 1fr !important; gap: 12px !important; }
   .activity-summary { padding: 16px; }
+  .chart-title { font-size: 13px; }
+  .trip-current-name { font-size: 19px; }
+  .trip-current-detail { font-size: 13px; }
+  .food-total-num { font-size: 24px; }
+  .f-name { font-size: 11px; }
+  .f-count { font-size: 1.2rem; }
+  .f-unit { font-size: 10px; }
+}
+
+/* Extra-tight mobile — keep 3-col layouts, fix right-side cutoff */
+@media (max-width: 540px) {
+  .wrap { padding: 22px 12px 120px; }
+  .card { padding: 16px; }
+  .food-card { padding: 14px 10px !important; }
+  .food-total-num { font-size: 17px !important; }
+  .food-total-num small { font-size: 10px; }
+  .food-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; margin-top: 10px !important; }
+  .food-item { padding: 8px 4px !important; border-radius: 8px !important; min-width: 0 !important; }
+  .food-item .f-emoji { font-size: 20px !important; }
+  .food-item .f-count { font-size: 14px !important; }
+  .food-item .f-name { font-size: 10px !important; line-height: 1.2; word-break: keep-all; }
+  .trip-card { padding: 14px !important; }
+  .trip-current-name { font-size: 16px !important; }
+  .trip-current-detail { font-size: 11px !important; }
+  .trip-pct-big { font-size: 24px !important; }
+  .pr-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
+  .pr-card { padding: 10px 8px !important; }
+  .pr-card .pr-value { font-size: 14px !important; }
+  .pr-card .pr-emoji { font-size: 14px !important; top: 8px; right: 8px; }
+  .pr-card .pr-label { font-size: 8px !important; padding-right: 18px; }
+  .pr-card .pr-holder { font-size: 9px !important; }
 }
 </style>
 </head>
@@ -425,6 +483,13 @@ section { margin-bottom: 32px; }
   </header>
 
   <div id="banner"></div>
+
+  <!-- Scope tabs: 함께 / 현주 / 미현 -->
+  <div class="scope-tabs" id="scopeTabs">
+    <button class="active" data-scope="all" onclick="setScope('all')">🤝 함께</button>
+    <button data-scope="현주" onclick="setScope('현주')">현주</button>
+    <button data-scope="미현" onclick="setScope('미현')">미현</button>
+  </div>
 
   <!-- 0. Today's mission -->
   <section>
@@ -467,14 +532,14 @@ section { margin-bottom: 32px; }
   <section>
     <div class="two-col-row">
       <div>
-        <div class="section-title" style="margin-bottom: 12px;"><span class="section-emoji">🗺️</span>우리의 여행</div>
+        <div class="section-title" style="margin-bottom: 12px;" id="tripTitle"><span class="section-emoji">🗺️</span>우리의 여행</div>
         <div class="card trip-card" style="position: relative;">
           <div id="tripFilter" style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"></div>
           <div id="tripCard"></div>
         </div>
       </div>
       <div>
-        <div class="section-title" style="margin-bottom: 12px;"><span class="section-emoji">🍗</span>우리가 태운 음식</div>
+        <div class="section-title" style="margin-bottom: 12px;" id="foodTitle"><span class="section-emoji">🍗</span>우리가 태운 음식</div>
         <div class="card food-card" style="position: relative;">
           <div id="foodFilter" style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"></div>
           <div id="foodCard"></div>
@@ -519,12 +584,12 @@ section { margin-bottom: 32px; }
 
   <!-- 6. PR Board -->
   <section>
-    <div class="section-title"><span class="section-emoji">🏆</span>우리의 최고 기록</div>
+    <div class="section-title" id="prTitle"><span class="section-emoji">🏆</span>우리의 최고 기록</div>
     <div class="pr-grid" id="prGrid"></div>
   </section>
 
   <!-- 7. Badges -->
-  <section>
+  <section id="badgeSectionWrap">
     <div class="section-title"><span class="section-emoji">🎖️</span>배지 컬렉션</div>
     <div class="card">
       <div class="badge-section" id="badgeSection"></div>
@@ -643,6 +708,47 @@ let statsFilter0 = 'week';  // 현주 (index 0)
 let statsFilter1 = 'week';  // 미현 (index 1)
 let goalEditingUserId = null;
 let addPersonName = '현주';
+let viewScope = 'all'; // 'all' | '미현' | '현주'
+
+function setScope(scope) {
+  viewScope = scope;
+  document.querySelectorAll('.scope-tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.scope === scope);
+  });
+  // Sync calendar filter to scope
+  if (scope === 'all') calFilter = 'all';
+  else { const u = getUserByName(scope); if (u) calFilter = String(u.user_id); }
+  // Update dynamic titles
+  updateScopedTitles();
+  renderAll();
+}
+
+function updateScopedTitles() {
+  const tripT = $('tripTitle');
+  const foodT = $('foodTitle');
+  const prT = $('prTitle');
+  if (viewScope === 'all') {
+    if (tripT) tripT.innerHTML = '<span class="section-emoji">🗺️</span>우리의 여행';
+    if (foodT) foodT.innerHTML = '<span class="section-emoji">🍗</span>우리가 태운 음식';
+    if (prT)   prT.innerHTML   = '<span class="section-emoji">🏆</span>우리의 최고 기록';
+  } else {
+    const n = viewScope;
+    if (tripT) tripT.innerHTML = `<span class="section-emoji">🗺️</span>${n}의 여행`;
+    if (foodT) foodT.innerHTML = `<span class="section-emoji">🍗</span>${n}이 태운 음식`;
+    if (prT)   prT.innerHTML   = `<span class="section-emoji">🏆</span>${n}의 최고 기록`;
+  }
+}
+
+function scopedLogs() {
+  if (viewScope === 'all') return logs;
+  return logs.filter(l => {
+    const u = getUserById(l.user_id);
+    return u && u.user_name === viewScope;
+  });
+}
+function scopedNames() {
+  return viewScope === 'all' ? NAMES : [viewScope];
+}
 
 // ============== Helpers ==============
 const $ = (id) => document.getElementById(id);
@@ -748,18 +854,19 @@ let isSpinning = false;
 function renderMission() {
   const idx = getCurrentMissionIndex();
   const m = missions[idx];
-  const mhDone = m.c(todayLogsByName('미현'), null, '미현');
-  const hjDone = m.c(todayLogsByName('현주'), null, '현주');
-  const allDone = mhDone && hjDone;
+  const names = scopedNames();
+  const checks = names.map(n => {
+    const done = m.c(todayLogsByName(n), null, n);
+    return `<div class="m-check ${done?'done':''}"><span class="nd ${done?'':userClass(n)}"></span>${n}</div>`;
+  }).join('');
+  const allDone = names.every(n => m.c(todayLogsByName(n), null, n));
+  const celebrate = (names.length > 1 && allDone) ? '<div class="m-celebrate">🎉 둘 다 클리어!</div>' : '';
   $('missionCard').innerHTML = `
     <div class="m-emoji" id="mEmoji">${m.e}</div>
     <div class="m-body">
       <div class="m-label">🎲 오늘의 랜덤 미션</div>
       <div class="m-text" id="mText">${m.t}</div>
-      <div class="m-checks">
-        <div class="m-check ${mhDone?'done':''}"><span class="nd ${mhDone?'':'mh'}"></span>미현</div>
-        <div class="m-check ${hjDone?'done':''}"><span class="nd ${hjDone?'':'hj'}"></span>현주</div>
-      </div>
+      <div class="m-checks">${checks}${celebrate}</div>
     </div>
     <button class="m-spin" id="mSpinBtn" onclick="spinMission()" title="다른 미션으로 돌리기">🎰</button>
   `;
@@ -807,8 +914,8 @@ function spinMission() {
   tick();
 }
 
-// World tour cities — using running km from Seoul
-const cities = [
+// World tour cities — per origin (미현 starts 서울, 현주 starts 창원)
+const citiesSeoul = [
   { km:0,     name:'서울',           emoji:'🏠' },
   { km:30,    name:'수원',           emoji:'🏰' },
   { km:85,    name:'천안',           emoji:'🌰' },
@@ -836,6 +943,39 @@ const cities = [
   { km:20000, name:'지구 반바퀴',     emoji:'🌐' },
   { km:40075, name:'지구 한바퀴 ✨',  emoji:'🌍' },
 ];
+
+// 현주 — 창원 출발
+const citiesChangwon = [
+  { km:0,     name:'창원',           emoji:'🌊' },
+  { km:50,    name:'부산',           emoji:'🏖️' },
+  { km:100,   name:'대구',           emoji:'🍎' },
+  { km:175,   name:'전주',           emoji:'🍚' },
+  { km:230,   name:'대전',           emoji:'🦌' },
+  { km:280,   name:'청주',           emoji:'🌳' },
+  { km:355,   name:'서울',           emoji:'🏠' },
+  { km:400,   name:'인천',           emoji:'✈️' },
+  { km:600,   name:'창원 (왕복!)',   emoji:'🔄' },
+  { km:850,   name:'후쿠오카 🇯🇵',    emoji:'🗾' },
+  { km:1300,  name:'오사카 🇯🇵',      emoji:'🐙' },
+  { km:1800,  name:'도쿄 🇯🇵',        emoji:'🗼' },
+  { km:2900,  name:'베이징 🇨🇳',      emoji:'🐼' },
+  { km:4400,  name:'하노이 🇻🇳',      emoji:'🍜' },
+  { km:6000,  name:'두바이 🇦🇪',      emoji:'🐪' },
+  { km:8200,  name:'카이로 🇪🇬',      emoji:'🐫' },
+  { km:9700,  name:'파리 🇫🇷',        emoji:'🗼' },
+  { km:11200, name:'뉴욕 🇺🇸',        emoji:'🗽' },
+  { km:14000, name:'리우 🇧🇷',        emoji:'⛪' },
+  { km:18300, name:'시드니 🇦🇺',      emoji:'🦘' },
+  { km:20000, name:'지구 반바퀴',     emoji:'🌐' },
+  { km:40075, name:'지구 한바퀴 ✨',  emoji:'🌍' },
+];
+
+function getCities() {
+  if (viewScope === '현주') return citiesChangwon;
+  return citiesSeoul; // 미현 + 함께
+}
+// Backwards compat
+const cities = citiesSeoul;
 
 // ============== Data load ==============
 async function loadAll() {
@@ -868,14 +1008,17 @@ function getFilteredLogs(filterType) {
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
-
+  let base = logs;
+  if (viewScope !== 'all') {
+    base = base.filter(l => { const u = getUserById(l.user_id); return u && u.user_name === viewScope; });
+  }
   if (filterType === 'month') {
-    return logs.filter(l => {
+    return base.filter(l => {
       const d = new Date(l.run_date + 'T00:00');
       return d.getFullYear() === currentYear && d.getMonth() + 1 === currentMonth;
     });
   }
-  return logs; // 'all'
+  return base; // 'all'
 }
 
 function userTotalKm(name) { return userLogs(name).reduce((s,l) => s + parseFloat(l.distance||0), 0); }
@@ -949,7 +1092,10 @@ function renderAll() {
 }
 
 function renderUserCards() {
-  const html = NAMES.map(name => {
+  const namesToShow = scopedNames();
+  const el = $('userCards');
+  if (el) el.style.gridTemplateColumns = namesToShow.length === 1 ? '1fr' : '1fr 1fr';
+  const html = namesToShow.map(name => {
     const u = getUserByName(name);
     if (!u) return `<div class="user-card"><div class="name"><span class="dot ${userClass(name)}"></span>${name}</div><div class="goal-label">아직 등록되지 않았어요</div></div>`;
     const goal = goals.find(g => String(g.user_id) === String(u.user_id));
@@ -991,7 +1137,6 @@ function renderUserCards() {
         <div class="streak">${streakChip}${lastChip}</div>
       </div>`;
   }).join('');
-  const el = $('userCards');
   if (el) el.innerHTML = html;
 }
 
@@ -1071,34 +1216,49 @@ function renderActivitySummary() {
 
 function renderCombined() {
   try {
-    const total = logs.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
+    const scoped = scopedLogs();
+    const total = scoped.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
     const totalKmEl = $('totalKm');
     if (totalKmEl) totalKmEl.textContent = total.toFixed(1);
 
     const funMsgEl = $('funMsg');
     if (funMsgEl) funMsgEl.textContent = getMilestone(total);
 
-    const mhKm = userTotalKm('미현'), hjKm = userTotalKm('현주');
-    const sum = mhKm + hjKm;
     const contribBarEl = $('contribBar');
     if (contribBarEl) {
-      if (sum === 0) {
-        contribBarEl.innerHTML = '<div style="width:100%;color:var(--muted);font-size:11px;display:flex;align-items:center;justify-content:center">아직 기록이 없어요</div>';
+      if (viewScope !== 'all') {
+        // Single user — show single full bar
+        const cls = userClass(viewScope);
+        contribBarEl.innerHTML = total === 0
+          ? '<div style="width:100%;color:var(--muted);font-size:11px;display:flex;align-items:center;justify-content:center">아직 기록이 없어요</div>'
+          : `<div class="${cls}-fill" style="width:100%">${viewScope} ${total.toFixed(1)}km</div>`;
       } else {
-        const mhPct = (mhKm / sum) * 100, hjPct = (hjKm / sum) * 100;
-        contribBarEl.innerHTML = `
-          <div class="mh-fill" style="width:${mhPct}%">${mhPct > 14 ? `미현 ${mhKm.toFixed(1)}km` : ''}</div>
-          <div class="hj-fill" style="width:${hjPct}%">${hjPct > 14 ? `현주 ${hjKm.toFixed(1)}km` : ''}</div>`;
+        const mhKm = userTotalKm('미현'), hjKm = userTotalKm('현주');
+        const sum = mhKm + hjKm;
+        if (sum === 0) {
+          contribBarEl.innerHTML = '<div style="width:100%;color:var(--muted);font-size:11px;display:flex;align-items:center;justify-content:center">아직 기록이 없어요</div>';
+        } else {
+          const mhPct = (mhKm / sum) * 100, hjPct = (hjKm / sum) * 100;
+          contribBarEl.innerHTML = `
+            <div class="mh-fill" style="width:${mhPct}%">${mhPct > 14 ? `미현 ${mhKm.toFixed(1)}km` : ''}</div>
+            <div class="hj-fill" style="width:${hjPct}%">${hjPct > 14 ? `현주 ${hjKm.toFixed(1)}km` : ''}</div>`;
+        }
       }
     }
 
-    // 함께 뛴 날
-    const mhDates = new Set(userLogs('미현').map(l => l.run_date));
-    const hjDates = new Set(userLogs('현주').map(l => l.run_date));
-    let common = 0; for (const d of mhDates) if (hjDates.has(d)) common++;
-    const totalDays = new Set([...mhDates, ...hjDates]).size;
     const togetherStatEl = $('togetherStat');
-    if (togetherStatEl) togetherStatEl.innerHTML = `🤝 함께 뛴 날 <strong>${common}일</strong> · 둘 중 한 명이라도 뛴 날 <strong>${totalDays}일</strong>`;
+    if (togetherStatEl) {
+      if (viewScope !== 'all') {
+        const myDates = new Set(userLogs(viewScope).map(l => l.run_date));
+        togetherStatEl.innerHTML = `🏃‍♀️ ${viewScope}이 뛴 날 <strong>${myDates.size}일</strong> · 누적 <strong>${total.toFixed(1)}km</strong>`;
+      } else {
+        const mhDates = new Set(userLogs('미현').map(l => l.run_date));
+        const hjDates = new Set(userLogs('현주').map(l => l.run_date));
+        let common = 0; for (const d of mhDates) if (hjDates.has(d)) common++;
+        const totalDays = new Set([...mhDates, ...hjDates]).size;
+        togetherStatEl.innerHTML = `🤝 함께 뛴 날 <strong>${common}일</strong> · 둘 중 한 명이라도 뛴 날 <strong>${totalDays}일</strong>`;
+      }
+    }
   } catch (e) {
     console.error('renderCombined error:', e);
   }
@@ -1135,24 +1295,24 @@ function setFoodFilter(type) {
 }
 
 function renderTrip() {
+  const cs = getCities();
   const filteredLogs = getFilteredLogs(tripFilter);
   const total = filteredLogs.reduce((s, x) => s + parseFloat(x.distance || 0), 0);
   // find current segment
-  let seg = { from: cities[0], to: cities[1], pct: 0 };
-  for (let i = 0; i < cities.length - 1; i++) {
-    if (total >= cities[i].km && total < cities[i+1].km) {
-      seg = { from: cities[i], to: cities[i+1], pct: (total - cities[i].km) / (cities[i+1].km - cities[i].km) };
+  let seg = { from: cs[0], to: cs[1], pct: 0 };
+  for (let i = 0; i < cs.length - 1; i++) {
+    if (total >= cs[i].km && total < cs[i+1].km) {
+      seg = { from: cs[i], to: cs[i+1], pct: (total - cs[i].km) / (cs[i+1].km - cs[i].km) };
       break;
     }
   }
-  if (total >= cities[cities.length - 1].km) {
-    seg = { from: cities[cities.length - 1], to: null, pct: 1 };
+  if (total >= cs[cs.length - 1].km) {
+    seg = { from: cs[cs.length - 1], to: null, pct: 1 };
   }
-  // Build city chips: show 5 around current
-  const fromIdx = cities.findIndex(c => c === seg.from);
+  const fromIdx = cs.findIndex(c => c === seg.from);
   const start = Math.max(0, fromIdx - 2);
-  const end = Math.min(cities.length, fromIdx + 4);
-  const slice = cities.slice(start, end);
+  const end = Math.min(cs.length, fromIdx + 4);
+  const slice = cs.slice(start, end);
   const chips = slice.map((c, i) => {
     let cls = 'upcoming';
     if (i + start < fromIdx) cls = 'visited';
@@ -1163,7 +1323,7 @@ function renderTrip() {
 
   const distLeft = seg.to ? (seg.to.km - total).toFixed(0) : 0;
   const segPct = (seg.pct * 100).toFixed(0);
-  const totalPctOfFinal = Math.min(100, (total / cities[cities.length-1].km) * 100);
+  const totalPctOfFinal = Math.min(100, (total / cs[cs.length-1].km) * 100);
 
   $('tripCard').innerHTML = `
     <div class="trip-header">
@@ -1171,7 +1331,7 @@ function renderTrip() {
         <div class="trip-emoji">${seg.from.emoji}</div>
         <div>
           <div class="trip-current-name">지금 ${seg.from.name} ${seg.to ? '근처' : '도착!'}</div>
-          <div class="trip-current-detail">${total.toFixed(1)}km / ${cities[cities.length-1].km.toLocaleString()}km · 전체 ${totalPctOfFinal.toFixed(2)}%</div>
+          <div class="trip-current-detail">${total.toFixed(1)}km / ${cs[cs.length-1].km.toLocaleString()}km · 전체 ${totalPctOfFinal.toFixed(2)}%</div>
         </div>
       </div>
       <div class="trip-pct-big">${segPct}%<small> 다음 도시까지</small></div>
@@ -1200,7 +1360,7 @@ function renderMonthChart() {
   $('actChartLabel').textContent = `${year}년 월별 활동`;
   const months = [];
   for (let m = 1; m <= 12; m++) months.push({ label: m, mh: 0, hj: 0 });
-  for (const l of logs) {
+  for (const l of scopedLogs()) {
     const d = new Date(l.run_date + 'T00:00');
     if (d.getFullYear() === year) {
       const u = getUserById(l.user_id);
@@ -1250,7 +1410,7 @@ function renderDayChart() {
     const d = new Date(year, month - 1, i);
     days.push({ date: dateKey(d), label: `${i}`, mh: 0, hj: 0 });
   }
-  for (const l of logs) {
+  for (const l of scopedLogs()) {
     const day = days.find(x => x.date === l.run_date);
     if (day) {
       const u = getUserById(l.user_id);
@@ -1292,37 +1452,33 @@ function renderDayChart() {
 
 function renderPRBoard() {
   const items = [];
-  // 최장 단일 거리
+  const candidates = scopedNames();
   let longest = { km: 0, name: null };
-  for (const n of NAMES) { const r = userLongestRun(n); if (r.km > longest.km) longest = { km: r.km, name: n }; }
+  for (const n of candidates) { const r = userLongestRun(n); if (r.km > longest.km) longest = { km: r.km, name: n }; }
   items.push({ label: '최장 단일 거리', value: longest.km > 0 ? `${longest.km.toFixed(2)}<small> km</small>` : '-', holder: longest.name, emoji: '🏃‍♀️' });
-  // 최단 페이스
   let bestPace = { sec: null, name: null };
-  for (const n of NAMES) { const p = userBestPace(n); if (p && (bestPace.sec === null || p < bestPace.sec)) bestPace = { sec: p, name: n }; }
+  for (const n of candidates) { const p = userBestPace(n); if (p && (bestPace.sec === null || p < bestPace.sec)) bestPace = { sec: p, name: n }; }
   items.push({ label: '최단 평균 페이스', value: bestPace.sec ? `${Math.floor(bestPace.sec/60)}'${String(Math.round(bestPace.sec%60)).padStart(2,'0')}"<small>/km</small>` : '-', holder: bestPace.name, emoji: '💨' });
-  // 최장 시간
   let longestT = { sec: 0, name: null };
-  for (const n of NAMES) { const s = userLongestDuration(n); if (s > longestT.sec) longestT = { sec: s, name: n }; }
+  for (const n of candidates) { const s = userLongestDuration(n); if (s > longestT.sec) longestT = { sec: s, name: n }; }
   items.push({ label: '최장 러닝 시간', value: longestT.sec > 0 ? fmtDuration(longestT.sec) : '-', holder: longestT.name, emoji: '⏱️' });
-  // 최다 주간 km
   let bestWeek = { km: 0, name: null };
-  for (const n of NAMES) { const k = userMaxWeeklyKm(n); if (k > bestWeek.km) bestWeek = { km: k, name: n }; }
+  for (const n of candidates) { const k = userMaxWeeklyKm(n); if (k > bestWeek.km) bestWeek = { km: k, name: n }; }
   items.push({ label: '최다 주간 거리', value: bestWeek.km > 0 ? `${bestWeek.km.toFixed(1)}<small> km</small>` : '-', holder: bestWeek.name, emoji: '🔥' });
-  // 최다 월간 km
   let bestMonth = { km: 0, name: null };
-  for (const n of NAMES) { const k = userMaxMonthKm(n); if (k > bestMonth.km) bestMonth = { km: k, name: n }; }
+  for (const n of candidates) { const k = userMaxMonthKm(n); if (k > bestMonth.km) bestMonth = { km: k, name: n }; }
   items.push({ label: '최다 월간 거리', value: bestMonth.km > 0 ? `${bestMonth.km.toFixed(1)}<small> km</small>` : '-', holder: bestMonth.name, emoji: '🏆' });
-  // 최장 연속 출석
   let bestStreak = { d: 0, name: null };
-  for (const n of NAMES) { const s = userMaxStreak(n); if (s > bestStreak.d) bestStreak = { d: s, name: n }; }
+  for (const n of candidates) { const s = userMaxStreak(n); if (s > bestStreak.d) bestStreak = { d: s, name: n }; }
   items.push({ label: '최장 연속 출석', value: bestStreak.d > 0 ? `${bestStreak.d}<small> 일</small>` : '-', holder: bestStreak.name, emoji: '🔁' });
 
+  const showHolder = viewScope === 'all';
   $('prGrid').innerHTML = items.map(it => `
     <div class="pr-card">
       <div class="pr-emoji">${it.emoji}</div>
       <div class="pr-label">${it.label}</div>
       <div class="pr-value">${it.value}</div>
-      <div class="pr-holder">${it.holder ? `보유자 <b class="${userClass(it.holder)}">${it.holder}</b>` : '아직 기록 없음'}</div>
+      ${showHolder ? `<div class="pr-holder">${it.holder ? `보유자 <b class="${userClass(it.holder)}">${it.holder}</b>` : '아직 기록 없음'}</div>` : ''}
     </div>`).join('');
 }
 
@@ -1350,7 +1506,13 @@ const badgeDefs = [
 ];
 
 function renderBadges() {
-  $('badgeSection').innerHTML = NAMES.map(n => {
+  const wrap = $('badgeSectionWrap');
+  if (wrap) wrap.style.display = (viewScope === 'all') ? '' : 'none';
+  if (viewScope !== 'all') return;
+  const namesToShow = scopedNames();
+  const el = $('badgeSection');
+  if (el) el.style.gridTemplateColumns = namesToShow.length === 1 ? '1fr' : '1fr 1fr';
+  el.innerHTML = namesToShow.map(n => {
     const got = badgeDefs.filter(b => b.chk(n)).length;
     return `
       <div class="badge-block">
@@ -1466,12 +1628,17 @@ function renderFoodTotal() {
   `;
 }
 
+let feedExpanded = false;
+
 function renderFeed() {
-  if (!logs.length) {
-    $('feed').innerHTML = '<div class="empty-state">아직 기록이 없어요. 오른쪽 아래 ＋ 버튼으로 첫 러닝을 추가해보세요 🏃‍♀️</div>';
+  const sourceLogs = scopedLogs();
+  if (!sourceLogs.length) {
+    $('feed').innerHTML = '<div class="empty-state">아직 기록이 없어요. 오른쪽 위 ＋ 기록 추가 버튼으로 첫 러닝을 남겨보세요 🏃‍♀️</div>';
     return;
   }
-  $('feed').innerHTML = logs.slice(0, 30).map(l => {
+  const displayCount = feedExpanded ? 30 : 3;
+  const logsToShow = sourceLogs.slice(0, displayCount);
+  let html = logsToShow.map(l => {
     const u = getUserById(l.user_id);
     const name = u ? u.user_name : '?';
     const cls = userClass(name);
@@ -1503,6 +1670,18 @@ function renderFeed() {
         </div>
       </div>`;
   }).join('');
+
+  if (sourceLogs.length > 3) {
+    const toggleText = feedExpanded ? '위로 접기' : `아래로 펼치기 (${sourceLogs.length - 3}개 더)`;
+    html += `<button class="feed-toggle-btn" onclick="toggleFeedExpand()">${toggleText}</button>`;
+  }
+
+  $('feed').innerHTML = html;
+}
+
+function toggleFeedExpand() {
+  feedExpanded = !feedExpanded;
+  renderFeed();
 }
 
 // ============== Modal handlers (same as before) ==============
