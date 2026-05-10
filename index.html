@@ -111,110 +111,107 @@ section { margin-bottom: 32px; }
 .trip-city.visited { background: rgba(255,255,255,0.9); color: var(--text); }
 .trip-city.current { background: var(--accent); color: #fff; font-weight: 700; }
 .trip-city.upcoming { color: var(--muted); border-color: var(--line); background: transparent; }
-.trip-next { font-size: 12px; color: var(--sub); margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.06); }
+.trip-next { font-size: 12px; color: var(--sub); margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.06); }
 .trip-next strong { color: var(--text); font-weight: 700; }
+.trip-cities-wrap { padding-top: 4px; }
 
-/* ===== Weekly chart ===== */
-.weekly-chart { display: flex; gap: 6px; align-items: flex-end; height: 180px; padding: 0 4px; }
-.week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
-.week-bar-stack { width: 100%; display: flex; flex-direction: column; justify-content: flex-end; height: 140px; gap: 2px; }
-.week-bar-fill { width: 100%; border-radius: 4px 4px 0 0; min-height: 0; transition: height .4s ease; position: relative; }
-.week-bar-fill.mh { background: var(--mh); }
-.week-bar-fill.hj { background: var(--hj); }
-.week-bar-fill.zero { background: rgba(0,0,0,0.04); border-radius: 4px; min-height: 4px; }
-.week-bar-label { font-size: 9px; color: var(--muted); text-align: center; font-weight: 600; }
-.week-bar-total { font-size: 10px; color: var(--text); font-weight: 700; margin-top: 2px; }
-.chart-legend { display: flex; gap: 14px; justify-content: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 11px; color: var(--sub); }
-.chart-legend .lg { display: flex; align-items: center; gap: 6px; }
-.chart-legend .sw { width: 10px; height: 10px; border-radius: 3px; }
+/* ===== Activity (calendar + heatmap side-by-side) ===== */
+.activity-row { display: grid; grid-template-columns: 280px 1fr; gap: 16px; align-items: stretch; }
+.activity-row > .card { display: flex; flex-direction: column; }
+@media (max-width: 760px) { .activity-row { grid-template-columns: 1fr; } }
+/* Two equal columns (trip + food) — equalize card heights */
+.two-col-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+.two-col-row > div { display: flex; flex-direction: column; min-width: 0; }
+.two-col-row > div > .section-title { margin-bottom: 12px; }
+.two-col-row > div > .card { flex: 1; display: flex; flex-direction: column; }
+@media (max-width: 760px) { .two-col-row { grid-template-columns: 1fr; } }
+
+/* ===== Activity chart ===== */
+.chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; flex-wrap: wrap; }
+.chart-title { font-size: 12px; font-weight: 700; color: var(--sub); }
+.act-chart { display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 4px; }
+.act-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.act-bar-stack { width: 100%; display: flex; flex-direction: column; justify-content: flex-end; height: 160px; gap: 2px; }
+.act-bar-fill { width: 100%; border-radius: 3px 3px 0 0; min-height: 0; transition: height .35s ease; }
+.act-bar-fill.mh { background: var(--mh); }
+.act-bar-fill.hj { background: var(--hj); }
+.act-bar-fill.zero { background: rgba(0,0,0,0.04); border-radius: 3px; min-height: 3px; }
+.act-bar-label { font-size: 9px; color: var(--muted); text-align: center; font-weight: 700; line-height: 1.2; min-height: 11px; }
+.act-bar-total { font-size: 9px; color: var(--text); font-weight: 800; }
+.act-bar.narrow .act-bar-total { display: none; }
+.chart-legend { display: flex; gap: 14px; justify-content: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 11px; color: var(--sub); }
+.chart-legend .sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 4px; vertical-align: middle; }
 .chart-legend .sw.mh { background: var(--mh); }
 .chart-legend .sw.hj { background: var(--hj); }
+.act-stats { display: flex; gap: 16px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.act-stats .stat { font-size: 12px; color: var(--sub); }
+.act-stats .stat strong { color: var(--text); font-size: 16px; font-weight: 800; display: block; }
 
-/* ===== Heatmap ===== */
-.heatmap-wrapper { overflow-x: auto; padding-bottom: 4px; }
-.heatmap { display: grid; grid-template-rows: repeat(7, 11px); grid-auto-flow: column; grid-auto-columns: 11px; gap: 2px; min-width: 720px; }
-.hm-cell { width: 11px; height: 11px; border-radius: 2px; background: #EDEDED; }
-.hm-cell.hm-1 { background: #F8D8DE; }
-.hm-cell.hm-2 { background: #F4A8B4; }
-.hm-cell.hm-3 { background: #E07A91; }
-.hm-cell.hm-4 { background: #C95471; }
-.hm-cell.both-1 { background: linear-gradient(135deg, #F8D8DE 50%, #D6E6F5 50%); }
-.hm-cell.both-2 { background: linear-gradient(135deg, #F4A8B4 50%, #A8C8E8 50%); }
-.hm-cell.both-3 { background: linear-gradient(135deg, #E07A91 50%, #7FA8D2 50%); }
-.hm-cell.both-4 { background: linear-gradient(135deg, #C95471 50%, #4F86B6 50%); }
-.heatmap-months { display: flex; gap: 2px; min-width: 720px; font-size: 10px; color: var(--muted); margin-bottom: 4px; padding-left: 22px; font-weight: 600; }
-.heatmap-row { display: flex; align-items: flex-start; gap: 8px; }
-.heatmap-days { display: grid; grid-template-rows: repeat(7, 11px); gap: 2px; font-size: 9px; color: var(--muted); padding-top: 0; }
-.heatmap-days span { line-height: 11px; height: 11px; }
-.heatmap-legend { display: flex; gap: 6px; justify-content: flex-end; align-items: center; font-size: 11px; color: var(--sub); margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
-.heatmap-legend .hm-cell { display: inline-block; }
-.heatmap-stats { display: flex; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-.heatmap-stats .stat { font-size: 12px; color: var(--sub); }
-.heatmap-stats .stat strong { color: var(--text); font-size: 16px; font-weight: 800; display: block; }
-
-/* ===== PR Board ===== */
-.pr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
-.pr-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; position: relative; overflow: hidden; }
-.pr-card .pr-label { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
-.pr-card .pr-emoji { position: absolute; top: 12px; right: 12px; font-size: 22px; opacity: .8; }
-.pr-card .pr-value { font-size: 22px; font-weight: 800; margin-top: 4px; letter-spacing: -.5px; }
-.pr-card .pr-value small { font-size: 11px; color: var(--sub); font-weight: 500; }
-.pr-card .pr-holder { font-size: 11px; color: var(--sub); margin-top: 4px; }
+/* ===== PR Board (compact) ===== */
+.pr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+.pr-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 12px 10px; position: relative; overflow: hidden; }
+.pr-card .pr-label { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: .6px; text-transform: uppercase; line-height: 1.2; padding-right: 22px; }
+.pr-card .pr-emoji { position: absolute; top: 10px; right: 10px; font-size: 16px; opacity: .8; }
+.pr-card .pr-value { font-size: 17px; font-weight: 800; margin-top: 4px; letter-spacing: -.4px; line-height: 1.1; }
+.pr-card .pr-value small { font-size: 10px; color: var(--sub); font-weight: 500; }
+.pr-card .pr-holder { font-size: 10px; color: var(--sub); margin-top: 4px; }
 .pr-card .pr-holder b { font-weight: 700; }
 .pr-card .pr-holder b.mh { color: var(--mh-text); }
 .pr-card .pr-holder b.hj { color: var(--hj-text); }
 
-/* ===== Badges ===== */
-.badge-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.badge-block h4 { font-size: 13px; font-weight: 700; margin: 0 0 10px; display: flex; align-items: center; gap: 6px; }
-.badge-block h4 .dot { width: 8px; height: 8px; border-radius: 50%; }
+/* ===== Badges (compact) ===== */
+.badge-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.badge-block h4 { font-size: 12px; font-weight: 700; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
+.badge-block h4 .dot { width: 7px; height: 7px; border-radius: 50%; }
 .badge-block h4 .dot.mh { background: var(--mh-strong); }
 .badge-block h4 .dot.hj { background: var(--hj-strong); }
-.badge-block .got-count { color: var(--muted); font-size: 11px; font-weight: 500; margin-left: auto; }
-.badges-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.badge { aspect-ratio: 1; border-radius: 12px; background: #F5F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 4px; text-align: center; position: relative; cursor: help; }
+.badge-block .got-count { color: var(--muted); font-size: 10px; font-weight: 500; margin-left: auto; }
+.badges-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.badge { aspect-ratio: 1; border-radius: 10px; background: #F5F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 3px; text-align: center; position: relative; cursor: help; }
 .badge.unlocked { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); }
 .badge.locked { opacity: .35; filter: grayscale(.7); }
-.badge .b-emoji { font-size: 22px; line-height: 1.1; }
-.badge .b-name { font-size: 9px; color: var(--sub); font-weight: 700; margin-top: 2px; line-height: 1.2; }
+.badge .b-emoji { font-size: 20px; line-height: 1; }
+.badge .b-name { font-size: 10px; color: var(--sub); font-weight: 700; margin-top: 3px; line-height: 1.15; }
 .badge.unlocked .b-name { color: var(--gold-text); }
+@media (max-width: 720px) { .badge-section { grid-template-columns: 1fr; } .badges-grid { grid-template-columns: repeat(6, 1fr); } }
 
-/* ===== Calendar ===== */
-.calendar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 10px; flex-wrap: wrap; }
-.cal-nav { display: flex; align-items: center; gap: 8px; }
-.cal-nav button { background: transparent; border: 1px solid var(--line); border-radius: 100px; width: 30px; height: 30px; font-size: 14px; }
+/* ===== Calendar (compact) ===== */
+.cal-card { padding: 16px; }
+.calendar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 6px; }
+.cal-nav { display: flex; align-items: center; gap: 4px; }
+.cal-nav button { background: transparent; border: 1px solid var(--line); border-radius: 100px; width: 24px; height: 24px; font-size: 12px; padding: 0; line-height: 1; }
 .cal-nav button:hover { background: #F2F2F2; }
-.cal-month { font-size: 14px; font-weight: 700; min-width: 110px; text-align: center; }
-.user-toggle { display: flex; gap: 4px; background: #F2F2F2; padding: 3px; border-radius: 100px; }
-.user-toggle button { background: transparent; border: 0; padding: 6px 14px; border-radius: 100px; font-size: 12px; color: var(--sub); cursor: pointer; }
+.cal-month { font-size: 12px; font-weight: 700; min-width: 78px; text-align: center; }
+.user-toggle { display: flex; gap: 2px; background: #F2F2F2; padding: 2px; border-radius: 100px; }
+.user-toggle button { background: transparent; border: 0; padding: 4px 8px; border-radius: 100px; font-size: 10px; color: var(--sub); cursor: pointer; }
 .user-toggle button.active { background: #fff; color: var(--text); font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.cal-day { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: var(--sub); position: relative; background: #FAFAFA; padding: 4px 0; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.cal-day { aspect-ratio: 1; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--sub); position: relative; background: #FAFAFA; padding: 2px 0; }
 .cal-day.empty { background: transparent; }
 .cal-day.today { border: 1.5px solid var(--accent); font-weight: 800; color: var(--text); background: #fff; }
 .cal-day.both { background: linear-gradient(135deg, var(--mh-bg) 50%, var(--hj-bg) 50%); }
 .cal-day.mh-only { background: var(--mh-bg); }
 .cal-day.hj-only { background: var(--hj-bg); }
-.cal-day .num { font-size: 12px; }
-.cal-day .dots { display: flex; gap: 2px; margin-top: 4px; min-height: 6px; }
-.cal-day .dots span { width: 6px; height: 6px; border-radius: 50%; }
+.cal-day .num { font-size: 10px; line-height: 1; }
+.cal-day .dots { display: flex; gap: 2px; margin-top: 2px; min-height: 4px; }
+.cal-day .dots span { width: 4px; height: 4px; border-radius: 50%; }
 .cal-day .dots .mh { background: var(--mh-strong); }
 .cal-day .dots .hj { background: var(--hj-strong); }
-.cal-weekday { font-size: 10px; color: var(--muted); text-align: center; padding: 4px 0; font-weight: 700; }
-.cal-summary { display: flex; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--sub); flex-wrap: wrap; }
+.cal-weekday { font-size: 9px; color: var(--muted); text-align: center; padding: 2px 0; font-weight: 700; }
+.cal-summary { display: flex; flex-direction: column; gap: 4px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--sub); }
 .cal-summary strong { color: var(--text); font-weight: 700; }
 
-/* ===== Food total ===== */
-.food-card { background: linear-gradient(135deg, #FFF8E1 0%, #FFF3D6 100%); border: 1px solid #FCE9A8; }
-.food-total-num { font-size: 32px; font-weight: 800; color: var(--gold-text); letter-spacing: -1px; }
-.food-total-num small { font-size: 13px; color: #8a7400; font-weight: 500; margin-left: 4px; }
-.food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 16px; }
-.food-item { background: rgba(255,255,255,0.7); border-radius: 10px; padding: 12px 10px; text-align: center; }
-.food-item .f-emoji { font-size: 28px; line-height: 1.2; }
+/* ===== Food total (compact) ===== */
+.food-card { background: linear-gradient(135deg, #FFF8E1 0%, #FFF3D6 100%); border: 1px solid #FCE9A8; padding: 18px; }
+.food-total-num { font-size: 22px; font-weight: 800; color: var(--gold-text); letter-spacing: -.5px; }
+.food-total-num small { font-size: 11px; color: #8a7400; font-weight: 500; margin-left: 3px; }
+.food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 14px; }
+.food-item { background: rgba(255,255,255,0.7); border-radius: 10px; padding: 10px 8px; text-align: center; }
+.food-item .f-emoji { font-size: 24px; line-height: 1.1; }
 .food-item .f-count { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; }
-.food-item .f-name { font-size: 11px; color: var(--sub); margin-top: 2px; }
+.food-item .f-name { font-size: 11px; color: var(--sub); margin-top: 2px; line-height: 1.3; }
 
-/* ===== Feed ===== */
+/* ===== Feed list ===== */
 .feed-item { display: flex; gap: 14px; padding: 18px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); margin-bottom: 10px; }
 .feed-item .left { flex-shrink: 0; }
 .feed-item .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
@@ -269,6 +266,29 @@ section { margin-bottom: 32px; }
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.86); color: #fff; padding: 11px 18px; border-radius: 100px; font-size: 13px; z-index: 1000; opacity: 0; transition: opacity .25s; pointer-events: none; }
 .toast.show { opacity: 1; }
 
+/* ===== Today's mission ===== */
+.mission-card { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); border: 1px solid #FCE9A8; display: flex; align-items: center; gap: 18px; padding: 18px 22px; }
+.mission-card .m-emoji { font-size: 38px; line-height: 1; flex-shrink: 0; }
+.mission-card .m-body { flex: 1; min-width: 0; }
+.mission-card .m-label { font-size: 10px; font-weight: 800; color: var(--gold-text); letter-spacing: 1.3px; text-transform: uppercase; opacity: .8; }
+.mission-card .m-text { font-size: 17px; font-weight: 800; margin-top: 4px; color: var(--text); letter-spacing: -.3px; line-height: 1.3; }
+.mission-card .m-checks { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.m-check { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 5px 10px; border-radius: 100px; background: rgba(255,255,255,0.7); font-weight: 700; color: var(--sub); }
+.m-check.done { background: #4CAF50; color: #fff; }
+.m-check .nd { width: 6px; height: 6px; border-radius: 50%; }
+.m-check .nd.mh { background: var(--mh-strong); }
+.m-check .nd.hj { background: var(--hj-strong); }
+.m-check.done .nd { background: #fff; }
+.m-celebrate { background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%); color: #fff; padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.m-spin { background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.06); width: 46px; height: 46px; border-radius: 50%; font-size: 22px; cursor: pointer; flex-shrink: 0; transition: background .15s, transform .15s; padding: 0; line-height: 1; }
+.m-spin:hover { background: #fff; transform: scale(1.08); }
+.m-spin:disabled { cursor: wait; }
+.m-spin.spinning { animation: missionSpin 1.8s cubic-bezier(0.17, 0.67, 0.34, 1); pointer-events: none; }
+@keyframes missionSpin { from { transform: rotate(0deg); } to { transform: rotate(1080deg); } }
+.m-text.shuffling, .m-emoji.shuffling { animation: textPulse 0.08s linear infinite alternate; }
+@keyframes textPulse { from { opacity: .55; } to { opacity: 1; } }
+@media (max-width: 540px) { .mission-card { gap: 12px; padding: 16px; } .mission-card .m-emoji { font-size: 30px; } .mission-card .m-text { font-size: 14px; } .m-spin { width: 40px; height: 40px; font-size: 18px; } }
+
 .help-banner { background: var(--gold-bg); border: 1px solid #FCE9A8; border-radius: var(--radius-sm); padding: 14px 16px; font-size: 12px; line-height: 1.7; color: var(--gold-text); margin-bottom: 18px; }
 .help-banner code { background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-size: 11px; font-family: 'SF Mono', Menlo, Consolas, monospace; }
 .help-banner b { color: #3d3000; }
@@ -277,9 +297,6 @@ section { margin-bottom: 32px; }
 .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); display: none; align-items: center; justify-content: center; z-index: 200; cursor: pointer; }
 .lightbox.show { display: flex; }
 .lightbox img { max-width: 92vw; max-height: 92vh; }
-
-/* Tooltip on heatmap cells */
-.hm-cell[title]:hover { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 @media (max-width: 600px) {
   .users-grid { grid-template-columns: 1fr; }
@@ -299,10 +316,18 @@ section { margin-bottom: 32px; }
       <h1>같이 뛰자 🏃‍♀️</h1>
       <div class="sub">미현 · 현주의 러닝 일지</div>
     </div>
-    <button class="btn-ghost" onclick="openSetup()">⚙️ 설정</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn" onclick="openAddModal()">＋ 기록 추가</button>
+      <button class="btn-ghost" onclick="openSetup()" title="설정">⚙️</button>
+    </div>
   </header>
 
   <div id="banner"></div>
+
+  <!-- 0. Today's mission -->
+  <section>
+    <div class="card mission-card" id="missionCard"></div>
+  </section>
 
   <!-- 1. User goal cards -->
   <section>
@@ -323,44 +348,50 @@ section { margin-bottom: 32px; }
     </div>
   </section>
 
-  <!-- 3. Trip / Journey -->
+  <!-- 3. Trip + Food (side by side) -->
   <section>
-    <div class="section-title"><span class="section-emoji">🗺️</span>우리의 여행</div>
-    <div class="card trip-card" id="tripCard"></div>
-  </section>
-
-  <!-- 4. Weekly chart -->
-  <section>
-    <div class="section-title"><span class="section-emoji">📊</span>최근 12주 추이</div>
-    <div class="card">
-      <div class="weekly-chart" id="weeklyChart"></div>
-      <div class="chart-legend">
-        <div class="lg"><span class="sw mh"></span> 미현</div>
-        <div class="lg"><span class="sw hj"></span> 현주</div>
+    <div class="two-col-row">
+      <div>
+        <div class="section-title"><span class="section-emoji">🗺️</span>우리의 여행</div>
+        <div class="card trip-card" id="tripCard"></div>
+      </div>
+      <div>
+        <div class="section-title"><span class="section-emoji">🍗</span>우리가 태운 음식</div>
+        <div class="card food-card" id="foodCard"></div>
       </div>
     </div>
   </section>
 
-  <!-- 5. 365-day heatmap -->
+  <!-- 4. Activity: calendar + heatmap -->
   <section>
-    <div class="section-title"><span class="section-emoji">🌱</span>365일 출석 잔디</div>
-    <div class="card">
-      <div class="heatmap-wrapper">
-        <div class="heatmap-months" id="heatmapMonths"></div>
-        <div class="heatmap-row">
-          <div class="heatmap-days"><span></span><span>월</span><span></span><span>수</span><span></span><span>금</span><span></span></div>
-          <div class="heatmap" id="heatmap"></div>
+    <div class="section-title"><span class="section-emoji">📊</span>활동 한눈에 보기</div>
+    <div class="activity-row">
+      <div class="card cal-card">
+        <div class="calendar-head">
+          <div class="cal-nav">
+            <button onclick="prevMonth()">‹</button>
+            <span class="cal-month" id="calMonth"></span>
+            <button onclick="nextMonth()">›</button>
+          </div>
+          <div class="user-toggle" id="userToggle"></div>
         </div>
+        <div id="calendarBody"></div>
+        <div class="cal-summary" id="calSummary"></div>
       </div>
-      <div class="heatmap-stats" id="heatmapStats"></div>
-      <div class="heatmap-legend">
-        <span>적게</span>
-        <span class="hm-cell"></span>
-        <span class="hm-cell hm-1"></span>
-        <span class="hm-cell hm-2"></span>
-        <span class="hm-cell hm-3"></span>
-        <span class="hm-cell hm-4"></span>
-        <span>많이</span>
+      <div class="card">
+        <div class="chart-head">
+          <div class="chart-title" id="actChartLabel"></div>
+          <div class="user-toggle">
+            <button class="active" id="actModeMonth" onclick="setActMode('month')">월별</button>
+            <button id="actModeDay" onclick="setActMode('day')">일별</button>
+          </div>
+        </div>
+        <div class="act-chart" id="actChart"></div>
+        <div class="chart-legend">
+          <div><span class="sw mh"></span>미현</div>
+          <div><span class="sw hj"></span>현주</div>
+        </div>
+        <div class="act-stats" id="actStats"></div>
       </div>
     </div>
   </section>
@@ -379,28 +410,7 @@ section { margin-bottom: 32px; }
     </div>
   </section>
 
-  <!-- 8. Calendar -->
-  <section>
-    <div class="section-title"><span class="section-emoji">📅</span>월별 출석</div>
-    <div class="card">
-      <div class="calendar-head">
-        <div class="cal-nav">
-          <button onclick="prevMonth()">‹</button>
-          <span class="cal-month" id="calMonth"></span>
-          <button onclick="nextMonth()">›</button>
-        </div>
-        <div class="user-toggle" id="userToggle"></div>
-      </div>
-      <div id="calendarBody"></div>
-      <div class="cal-summary" id="calSummary"></div>
-    </div>
-  </section>
 
-  <!-- 9. Food total -->
-  <section>
-    <div class="section-title"><span class="section-emoji">🍗</span>우리가 태운 음식</div>
-    <div class="card food-card" id="foodCard"></div>
-  </section>
 
   <!-- 10. Feed -->
   <section>
@@ -577,6 +587,114 @@ const milestones = [
 ];
 function getMilestone(km) { let p = milestones[0]; for (const m of milestones) if (km >= m.km) p = m; else break; return p.msg; }
 
+// Daily missions — picked deterministically by date hash so it's the same all day
+const missions = [
+  { e:'🌱', t:'오늘 1km 가볍게 워밍업 러닝', c:(L)=>L.some(l=>parseFloat(l.distance||0)>=1) },
+  { e:'🏃', t:'오늘 3km 이상 한 번에 뛰기', c:(L)=>L.some(l=>parseFloat(l.distance||0)>=3) },
+  { e:'🏃‍♀️', t:'오늘 5km 이상 도전!', c:(L)=>L.some(l=>parseFloat(l.distance||0)>=5) },
+  { e:'⚡', t:'오늘 7km 챌린지', c:(L)=>L.some(l=>parseFloat(l.distance||0)>=7) },
+  { e:'🔥', t:'오늘 10km 풀코스 도전!', c:(L)=>L.some(l=>parseFloat(l.distance||0)>=10) },
+  { e:'⏱️', t:'한 번에 20분 이상 뛰기', c:(L)=>L.some(l=>parseInt(l.duration_seconds||0)>=1200) },
+  { e:'⏰', t:'한 번에 30분 이상 뛰기', c:(L)=>L.some(l=>parseInt(l.duration_seconds||0)>=1800) },
+  { e:'🕘', t:'한 번에 45분 이상 뛰기', c:(L)=>L.some(l=>parseInt(l.duration_seconds||0)>=2700) },
+  { e:'⌛', t:'1시간 풀타임 도전!', c:(L)=>L.some(l=>parseInt(l.duration_seconds||0)>=3600) },
+  { e:'💨', t:'평균 페이스 7분/km 이하로 뛰기', c:(L)=>L.some(l=>{const d=parseFloat(l.distance||0),s=parseInt(l.duration_seconds||0);return d>0&&s/d<420;}) },
+  { e:'🚀', t:'평균 페이스 6분/km 이하 도전', c:(L)=>L.some(l=>{const d=parseFloat(l.distance||0),s=parseInt(l.duration_seconds||0);return d>0&&s/d<360;}) },
+  { e:'💥', t:'스피드런! 5분/km 이하 도전', c:(L)=>L.some(l=>{const d=parseFloat(l.distance||0),s=parseInt(l.duration_seconds||0);return d>0&&s/d<300;}) },
+  { e:'📝', t:'러닝 후기 메모 5자 이상 남기기', c:(L)=>L.some(l=>l.memo && l.memo.trim().length>=5) },
+  { e:'📸', t:'러닝 인증샷 한 장 첨부하기', c:(L)=>L.some(l=>l.image_url) },
+  { e:'💪', t:'오늘 두 번 나눠서 뛰기 (분할 러닝)', c:(L)=>L.length>=2 },
+  { e:'🎯', t:'오늘 누적 7km 채우기 (몇 번 나눠도 OK)', c:(L)=>L.reduce((s,l)=>s+parseFloat(l.distance||0),0)>=7 },
+  { e:'🌸', t:'오늘 단 한 발이라도 뛰기 (출석 체크)', c:(L)=>L.length>=1 },
+  { e:'🦋', t:'어제보다 오늘 더 뛰기 (거리)', c:(L,_,name)=>{ const tk=dateKey(new Date()); const yk=dateKey(new Date(Date.now()-86400000)); const todayKm=L.filter(l=>l.run_date===tk).reduce((s,l)=>s+parseFloat(l.distance||0),0); const ydKm=userLogs(name).filter(l=>l.run_date===yk).reduce((s,l)=>s+parseFloat(l.distance||0),0); return todayKm>0 && todayKm>ydKm; } },
+  { e:'🌈', t:'한 번에 2km 이상 5km 이하로 페이스 유지', c:(L)=>L.some(l=>{const d=parseFloat(l.distance||0);return d>=2 && d<=5;}) },
+  { e:'🌞', t:'오늘 30분 이상 + 4km 이상 동시 달성', c:(L)=>L.some(l=>parseFloat(l.distance||0)>=4 && parseInt(l.duration_seconds||0)>=1800) },
+];
+
+function defaultMissionIndex() {
+  const k = dateKey(new Date());
+  let h = 0;
+  for (let i = 0; i < k.length; i++) h = ((h << 5) - h + k.charCodeAt(i)) | 0;
+  return Math.abs(h) % missions.length;
+}
+
+function getCurrentMissionIndex() {
+  const k = dateKey(new Date());
+  const stored = localStorage.getItem('mission_pick_' + k);
+  if (stored !== null && !isNaN(parseInt(stored))) return parseInt(stored);
+  return defaultMissionIndex();
+}
+
+function todayLogsByName(name) {
+  const tk = dateKey(new Date());
+  return userLogs(name).filter(l => l.run_date === tk);
+}
+
+let isSpinning = false;
+
+function renderMission() {
+  const idx = getCurrentMissionIndex();
+  const m = missions[idx];
+  const mhDone = m.c(todayLogsByName('미현'), null, '미현');
+  const hjDone = m.c(todayLogsByName('현주'), null, '현주');
+  const allDone = mhDone && hjDone;
+  $('missionCard').innerHTML = `
+    <div class="m-emoji" id="mEmoji">${m.e}</div>
+    <div class="m-body">
+      <div class="m-label">🎲 오늘의 랜덤 미션</div>
+      <div class="m-text" id="mText">${m.t}</div>
+      <div class="m-checks">
+        <div class="m-check ${mhDone?'done':''}"><span class="nd ${mhDone?'':'mh'}"></span>미현 ${mhDone?'✓ 완료':'아직'}</div>
+        <div class="m-check ${hjDone?'done':''}"><span class="nd ${hjDone?'':'hj'}"></span>현주 ${hjDone?'✓ 완료':'아직'}</div>
+        ${allDone ? '<div class="m-celebrate">🎉 둘 다 클리어!</div>' : ''}
+      </div>
+    </div>
+    <button class="m-spin" id="mSpinBtn" onclick="spinMission()" title="다른 미션으로 돌리기">🎰</button>
+  `;
+}
+
+function spinMission() {
+  if (isSpinning) return;
+  isSpinning = true;
+  const btn = $('mSpinBtn');
+  if (btn) btn.classList.add('spinning');
+  const emojiEl = $('mEmoji');
+  const textEl = $('mText');
+  if (emojiEl) emojiEl.classList.add('shuffling');
+  if (textEl) textEl.classList.add('shuffling');
+
+  // Pick final index now (excluding current to guarantee a change)
+  const currentIdx = getCurrentMissionIndex();
+  let finalIdx = Math.floor(Math.random() * missions.length);
+  if (missions.length > 1) {
+    while (finalIdx === currentIdx) finalIdx = Math.floor(Math.random() * missions.length);
+  }
+
+  let elapsed = 0;
+  let interval = 50;
+  const totalMs = 1700;
+  let lastShownIdx = -1;
+  function tick() {
+    elapsed += interval;
+    if (elapsed >= totalMs) {
+      // Land on final
+      localStorage.setItem('mission_pick_' + dateKey(new Date()), String(finalIdx));
+      isSpinning = false;
+      renderMission();
+      return;
+    }
+    let r = Math.floor(Math.random() * missions.length);
+    if (r === lastShownIdx && missions.length > 1) r = (r + 1) % missions.length;
+    lastShownIdx = r;
+    const mm = missions[r];
+    if (emojiEl) emojiEl.textContent = mm.e;
+    if (textEl) textEl.textContent = mm.t;
+    interval = Math.min(220, interval * 1.18);
+    setTimeout(tick, interval);
+  }
+  tick();
+}
+
 // World tour cities — using running km from Seoul
 const cities = [
   { km:0,     name:'서울',           emoji:'🏠' },
@@ -687,11 +805,11 @@ function userLastRunDate(name) {
 
 // ============== Render ==============
 function renderAll() {
+  renderMission();
   renderUserCards();
   renderCombined();
   renderTrip();
-  renderWeeklyChart();
-  renderHeatmap();
+  renderActivityChart();
   renderPRBoard();
   renderBadges();
   renderUserToggle();
@@ -815,117 +933,109 @@ function renderTrip() {
   `;
 }
 
-function renderWeeklyChart() {
-  // last 12 weeks (Mon-Sun)
-  const d = new Date(); const day = d.getDay() === 0 ? 7 : d.getDay();
-  const thisMon = new Date(d); thisMon.setDate(d.getDate() - day + 1); thisMon.setHours(0,0,0,0);
-  const weeks = [];
-  for (let i = 11; i >= 0; i--) {
-    const start = new Date(thisMon); start.setDate(thisMon.getDate() - i*7);
-    const end = new Date(start); end.setDate(start.getDate() + 7);
-    weeks.push({ start, end, mh: 0, hj: 0 });
-  }
-  for (const l of logs) {
-    const dt = new Date(l.run_date + 'T00:00');
-    for (const w of weeks) {
-      if (dt >= w.start && dt < w.end) {
-        const u = getUserById(l.user_id);
-        if (u && u.user_name === '미현') w.mh += parseFloat(l.distance||0);
-        if (u && u.user_name === '현주') w.hj += parseFloat(l.distance||0);
-        break;
-      }
-    }
-  }
-  const max = Math.max(0.1, ...weeks.map(w => w.mh + w.hj));
-  $('weeklyChart').innerHTML = weeks.map((w, i) => {
-    const total = w.mh + w.hj;
-    const totalH = total === 0 ? 0 : (total / max) * 100;
-    const mhH = total === 0 ? 0 : (w.mh / total) * totalH;
-    const hjH = total === 0 ? 0 : (w.hj / total) * totalH;
-    const label = i === 11 ? '이번주' : `${w.start.getMonth()+1}/${w.start.getDate()}`;
-    if (total === 0) {
-      return `<div class="week-bar"><div class="week-bar-stack"><div class="week-bar-fill zero" style="height:4px"></div></div><div class="week-bar-total" style="color:var(--muted)">-</div><div class="week-bar-label">${label}</div></div>`;
-    }
-    return `
-      <div class="week-bar" title="${label}: 미현 ${w.mh.toFixed(1)}km, 현주 ${w.hj.toFixed(1)}km">
-        <div class="week-bar-stack">
-          ${w.mh > 0 ? `<div class="week-bar-fill mh" style="height:${mhH}%"></div>` : ''}
-          ${w.hj > 0 ? `<div class="week-bar-fill hj" style="height:${hjH}%"></div>` : ''}
-        </div>
-        <div class="week-bar-total">${total.toFixed(0)}</div>
-        <div class="week-bar-label">${label}</div>
-      </div>`;
-  }).join('');
+let actMode = 'month';
+function setActMode(mode) {
+  actMode = mode;
+  $('actModeMonth').classList.toggle('active', mode === 'month');
+  $('actModeDay').classList.toggle('active', mode === 'day');
+  renderActivityChart();
 }
 
-function renderHeatmap() {
-  // 365 days back from today, aligned to Sunday-start
-  const todayD = new Date(); todayD.setHours(0,0,0,0);
-  const start = new Date(todayD); start.setDate(todayD.getDate() - 364);
-  // Adjust start to Sunday (getDay 0=Sun)
-  start.setDate(start.getDate() - start.getDay());
-  // Build map
-  const dayMap = {}; // date -> { mhKm, hjKm }
-  for (const l of logs) {
-    const k = l.run_date;
-    if (!dayMap[k]) dayMap[k] = { mhKm: 0, hjKm: 0 };
-    const u = getUserById(l.user_id);
-    if (u && u.user_name === '미현') dayMap[k].mhKm += parseFloat(l.distance||0);
-    if (u && u.user_name === '현주') dayMap[k].hjKm += parseFloat(l.distance||0);
-  }
-  const cells = [];
-  const cur = new Date(start);
-  let monthLabels = [];
-  let lastMonth = -1;
-  while (cur <= todayD) {
-    const k = dateKey(cur);
-    const e = dayMap[k] || { mhKm: 0, hjKm: 0 };
-    const km = e.mhKm + e.hjKm;
-    let lvl = 0;
-    if (km > 0) lvl = 1;
-    if (km >= 3) lvl = 2;
-    if (km >= 6) lvl = 3;
-    if (km >= 10) lvl = 4;
-    const both = e.mhKm > 0 && e.hjKm > 0;
-    let cls = `hm-cell hm-${lvl}`;
-    if (lvl > 0 && both) cls = `hm-cell both-${lvl}`;
-    const tip = `${k}\n미현 ${e.mhKm.toFixed(1)}km · 현주 ${e.hjKm.toFixed(1)}km`;
-    cells.push(`<div class="${cls}" title="${tip}"></div>`);
-    cur.setDate(cur.getDate() + 1);
-  }
-  $('heatmap').innerHTML = cells.join('');
+function renderActivityChart() {
+  if (actMode === 'month') renderMonthChart();
+  else renderDayChart();
+}
 
-  // Month labels — every Sunday, mark first occurrence of month
-  const monthEls = [];
-  const cur2 = new Date(start);
-  let week = 0;
-  let labels = new Array(54).fill('');
-  let seen = new Set();
-  while (cur2 <= todayD) {
-    if (cur2.getDay() === 0) {
-      const m = cur2.getMonth();
-      if (!seen.has(m) && cur2.getDate() <= 7) { labels[week] = `${m+1}월`; seen.add(m); }
-      week++;
+function renderMonthChart() {
+  const year = today.getFullYear();
+  $('actChartLabel').textContent = `${year}년 월별 활동`;
+  const months = [];
+  for (let m = 1; m <= 12; m++) months.push({ label: m, mh: 0, hj: 0 });
+  for (const l of logs) {
+    const d = new Date(l.run_date + 'T00:00');
+    if (d.getFullYear() === year) {
+      const u = getUserById(l.user_id);
+      const km = parseFloat(l.distance||0);
+      if (u && u.user_name === '미현') months[d.getMonth()].mh += km;
+      if (u && u.user_name === '현주') months[d.getMonth()].hj += km;
     }
-    cur2.setDate(cur2.getDate() + 1);
   }
-  $('heatmapMonths').innerHTML = labels.map(l => `<div style="width:11px;flex:0 0 11px">${l}</div>`).join('');
+  const max = Math.max(0.1, ...months.map(m => m.mh + m.hj));
+  $('actChart').innerHTML = months.map(m => {
+    const total = m.mh + m.hj;
+    const totalH = total === 0 ? 0 : (total / max) * 100;
+    const mhH = total === 0 ? 0 : (m.mh / total) * totalH;
+    const hjH = total === 0 ? 0 : (m.hj / total) * totalH;
+    if (total === 0) {
+      return `<div class="act-bar"><div class="act-bar-stack"><div class="act-bar-fill zero"></div></div><div class="act-bar-total" style="color:var(--muted)">-</div><div class="act-bar-label">${m.label}월</div></div>`;
+    }
+    return `
+      <div class="act-bar" title="${m.label}월: 미현 ${m.mh.toFixed(1)}km, 현주 ${m.hj.toFixed(1)}km">
+        <div class="act-bar-stack">
+          ${m.mh > 0 ? `<div class="act-bar-fill mh" style="height:${mhH}%"></div>` : ''}
+          ${m.hj > 0 ? `<div class="act-bar-fill hj" style="height:${hjH}%"></div>` : ''}
+        </div>
+        <div class="act-bar-total">${total.toFixed(0)}</div>
+        <div class="act-bar-label">${m.label}월</div>
+      </div>`;
+  }).join('');
 
   // Stats
-  const allKeys = Object.keys(dayMap);
-  const past365Keys = allKeys.filter(k => { const dt = new Date(k+'T00:00'); return dt >= start && dt <= todayD; });
-  const totalRunDays = past365Keys.length;
-  const totalKm365 = past365Keys.reduce((s,k) => s + dayMap[k].mhKm + dayMap[k].hjKm, 0);
-  const dowCount = [0,0,0,0,0,0,0];
-  for (const k of past365Keys) { dowCount[new Date(k+'T00:00').getDay()]++; }
-  const dows = ['일','월','화','수','목','금','토'];
-  const maxDow = Math.max(...dowCount);
-  const favDay = dowCount.indexOf(maxDow);
-  $('heatmapStats').innerHTML = `
-    <div class="stat"><strong>${totalRunDays}일</strong>지난 365일 중 뛴 날</div>
-    <div class="stat"><strong>${totalKm365.toFixed(0)}km</strong>최근 1년 누적</div>
-    <div class="stat"><strong>${dows[favDay]}요일</strong>제일 좋아하는 요일 (${maxDow}회)</div>
-    <div class="stat"><strong>${(totalRunDays/365*100).toFixed(0)}%</strong>출석률</div>
+  const totalKm = months.reduce((s, m) => s + m.mh + m.hj, 0);
+  const bestMonth = months.reduce((b, m) => (m.mh + m.hj) > (b.mh + b.hj) ? m : b, months[0]);
+  const activeMonths = months.filter(m => (m.mh + m.hj) > 0).length;
+  $('actStats').innerHTML = `
+    <div class="stat"><strong>${totalKm.toFixed(0)}km</strong>${year}년 누적</div>
+    <div class="stat"><strong>${(bestMonth.mh + bestMonth.hj).toFixed(0)}km</strong>최다 ${bestMonth.label}월</div>
+    <div class="stat"><strong>${activeMonths}달</strong>달린 달</div>
+  `;
+}
+
+function renderDayChart() {
+  $('actChartLabel').textContent = `최근 30일 일별 활동`;
+  const todayD = new Date(); todayD.setHours(0,0,0,0);
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(todayD); d.setDate(todayD.getDate() - i);
+    days.push({ date: dateKey(d), label: `${d.getMonth()+1}/${d.getDate()}`, mh: 0, hj: 0 });
+  }
+  for (const l of logs) {
+    const day = days.find(x => x.date === l.run_date);
+    if (day) {
+      const u = getUserById(l.user_id);
+      const km = parseFloat(l.distance||0);
+      if (u && u.user_name === '미현') day.mh += km;
+      if (u && u.user_name === '현주') day.hj += km;
+    }
+  }
+  const max = Math.max(0.1, ...days.map(d => d.mh + d.hj));
+  $('actChart').innerHTML = days.map((d, i) => {
+    const total = d.mh + d.hj;
+    const totalH = total === 0 ? 0 : (total / max) * 100;
+    const mhH = total === 0 ? 0 : (d.mh / total) * totalH;
+    const hjH = total === 0 ? 0 : (d.hj / total) * totalH;
+    const showLabel = (i === 0 || i === 29 || (i + 1) % 5 === 0) ? d.label : '';
+    if (total === 0) {
+      return `<div class="act-bar narrow"><div class="act-bar-stack"><div class="act-bar-fill zero"></div></div><div class="act-bar-label">${showLabel}</div></div>`;
+    }
+    return `
+      <div class="act-bar narrow" title="${d.label}: 미현 ${d.mh.toFixed(1)}km, 현주 ${d.hj.toFixed(1)}km">
+        <div class="act-bar-stack">
+          ${d.mh > 0 ? `<div class="act-bar-fill mh" style="height:${mhH}%"></div>` : ''}
+          ${d.hj > 0 ? `<div class="act-bar-fill hj" style="height:${hjH}%"></div>` : ''}
+        </div>
+        <div class="act-bar-label">${showLabel}</div>
+      </div>`;
+  }).join('');
+
+  // Stats
+  const totalKm = days.reduce((s, d) => s + d.mh + d.hj, 0);
+  const ranDays = days.filter(d => (d.mh + d.hj) > 0).length;
+  const bestDay = days.reduce((b, d) => (d.mh + d.hj) > (b.mh + b.hj) ? d : b, days[0]);
+  $('actStats').innerHTML = `
+    <div class="stat"><strong>${totalKm.toFixed(0)}km</strong>최근 30일 누적</div>
+    <div class="stat"><strong>${ranDays}일</strong>30일 중 뛴 날</div>
+    <div class="stat"><strong>${(bestDay.mh + bestDay.hj).toFixed(1)}km</strong>최장 (${bestDay.label})</div>
   `;
 }
 
@@ -1097,12 +1207,7 @@ function renderFoodTotal() {
     return `<div class="food-item"><div class="f-emoji">${f.emoji}</div><div class="f-count">${cnt.toLocaleString()}</div><div class="f-name">${f.name}</div></div>`;
   }).join('');
   $('foodCard').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">
-      <div>
-        <div class="food-total-num">${totalKcal.toLocaleString()}<small> kcal 태웠어요</small></div>
-        <div style="color:var(--gold-text);font-size:12px;margin-top:4px">두 사람 누적 · 거리 × 몸무게 × 1.036</div>
-      </div>
-    </div>
+    <div class="food-total-num">${totalKcal.toLocaleString()}<small> kcal · 두 사람 누적</small></div>
     <div class="food-grid">${grid}</div>
   `;
 }
