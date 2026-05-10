@@ -46,7 +46,7 @@ body {
 .wrap { max-width: 960px; margin: 0 auto; padding: 28px 20px 120px; }
 
 header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; }
-header h1 { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.6px; }
+header h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.6px; }
 header .sub { color: var(--sub); font-size: 12px; margin-top: 4px; }
 
 button { font-family: inherit; cursor: pointer; }
@@ -61,7 +61,7 @@ section { margin-bottom: 32px; }
 .section-title { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
 .section-emoji { margin-right: 4px; }
 
-.card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+.card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--line); overflow: hidden; }
 
 /* ===== User goal cards ===== */
 .users-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -149,7 +149,9 @@ section { margin-bottom: 32px; }
 .act-stats .stat strong { color: var(--text); font-size: 16px; font-weight: 800; display: block; }
 
 /* ===== PR Board (compact) ===== */
-.pr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+.pr-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+@media (max-width: 768px) { .pr-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+@media (max-width: 600px) { .pr-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } }
 .pr-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 12px 10px; position: relative; overflow: hidden; }
 .pr-card .pr-label { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: .6px; text-transform: uppercase; line-height: 1.2; padding-right: 22px; }
 .pr-card .pr-emoji { position: absolute; top: 10px; right: 10px; font-size: 16px; opacity: .8; }
@@ -168,13 +170,14 @@ section { margin-bottom: 32px; }
 .badge-block h4 .dot.hj { background: var(--hj-strong); }
 .badge-block .got-count { color: var(--muted); font-size: 10px; font-weight: 500; margin-left: auto; }
 .badges-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.badge { aspect-ratio: 1; border-radius: 10px; background: #F5F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 3px; text-align: center; position: relative; cursor: help; }
+.badge { aspect-ratio: 1; border-radius: 12px; background: #F5F5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 6px; text-align: center; position: relative; cursor: help; }
 .badge.unlocked { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); }
 .badge.locked { opacity: .35; filter: grayscale(.7); }
-.badge .b-emoji { font-size: 20px; line-height: 1; }
-.badge .b-name { font-size: 10px; color: var(--sub); font-weight: 700; margin-top: 3px; line-height: 1.15; }
+.badge .b-emoji { font-size: 24px; line-height: 1; }
+.badge .b-name { font-size: 11px; color: var(--sub); font-weight: 700; margin-top: 4px; line-height: 1.2; }
 .badge.unlocked .b-name { color: var(--gold-text); }
-@media (max-width: 720px) { .badge-section { grid-template-columns: 1fr; } .badges-grid { grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 720px) { .badge-section { grid-template-columns: 1fr; } .badges-grid { grid-template-columns: repeat(6, 1fr); gap: 4px; } }
+@media (max-width: 600px) { .badges-grid { grid-template-columns: repeat(5, 1fr); gap: 3px; } .badge { padding: 6px 4px; } .badge .b-emoji { font-size: 20px; } .badge .b-name { font-size: 10px; margin-top: 3px; } }
 
 /* ===== Calendar (compact) ===== */
 .cal-card { padding: 16px; }
@@ -208,9 +211,9 @@ section { margin-bottom: 32px; }
 .food-total-num small { font-size: 11px; color: #8a7400; font-weight: 500; margin-left: 3px; }
 .food-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* 80px씩 알아서 칸 채우기 */
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 /* 개별 아이템 (카드 형태) */
@@ -223,10 +226,11 @@ section { margin-bottom: 32px; }
   border-radius: 12px;
 }
 
-.food-line-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.4); padding: 8px 4px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03); }
-.f-emoji { font-size: 1.1rem; margin-bottom: 2px; }
-.f-count { font-weight: 700; font-size: 0.95rem; color: #333; }
-.f-name { font-size: 10px; color: #888; letter-spacing: -0.5px; }
+.food-line-item { display: flex; align-items: center; justify-content: center; gap: 4px; background: rgba(255, 255, 255, 0.6); padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); }
+.f-emoji { font-size: 1rem; flex-shrink: 0; }
+.f-name { font-size: 10px; color: #666; font-weight: 500; flex-shrink: 0; }
+.f-count { font-weight: 700; font-size: 1.1rem; color: #333; flex-shrink: 0; }
+.f-unit { font-size: 9px; color: #999; font-weight: 500; flex-shrink: 0; }
 .food-item { background: rgba(255,255,255,0.7); border-radius: 10px; padding: 10px 8px; text-align: center; }
 .food-item .f-emoji { font-size: 24px; line-height: 1.1; }
 .food-item .f-count { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; }
@@ -417,7 +421,6 @@ section { margin-bottom: 32px; }
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="btn" onclick="openAddModal()">＋ 기록 추가</button>
-      <button class="btn-ghost" onclick="openSetup()" title="설정">⚙️</button>
     </div>
   </header>
 
@@ -569,10 +572,6 @@ section { margin-bottom: 32px; }
     <div class="field">
       <label>메모 (선택)</label>
       <textarea id="addMemo" placeholder="오늘의 러닝은 어땠나요?"></textarea>
-    </div>
-    <div class="field">
-      <label>사진 (선택)</label>
-      <input type="file" id="addPhoto" accept="image/*" />
     </div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('addModal')">취소</button>
@@ -1242,12 +1241,14 @@ function renderMonthChart() {
 }
 
 function renderDayChart() {
-  $('actChartLabel').textContent = `최근 30일 일별 활동`;
-  const todayD = new Date(); todayD.setHours(0,0,0,0);
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  $('actChartLabel').textContent = `${year}년 ${month}월 일별 활동`;
+  const daysInMonth = new Date(year, month, 0).getDate();
   const days = [];
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(todayD); d.setDate(todayD.getDate() - i);
-    days.push({ date: dateKey(d), label: `${d.getMonth()+1}/${d.getDate()}`, mh: 0, hj: 0 });
+  for (let i = 1; i <= daysInMonth; i++) {
+    const d = new Date(year, month - 1, i);
+    days.push({ date: dateKey(d), label: `${i}`, mh: 0, hj: 0 });
   }
   for (const l of logs) {
     const day = days.find(x => x.date === l.run_date);
@@ -1264,12 +1265,12 @@ function renderDayChart() {
     const totalH = total === 0 ? 0 : (total / max) * 100;
     const mhH = total === 0 ? 0 : (d.mh / total) * totalH;
     const hjH = total === 0 ? 0 : (d.hj / total) * totalH;
-    const showLabel = (i === 0 || i === 29 || (i + 1) % 5 === 0) ? d.label : '';
+    const showLabel = (i === 0 || i === daysInMonth - 1 || (i + 1) % 5 === 0) ? d.label : '';
     if (total === 0) {
       return `<div class="act-bar narrow"><div class="act-bar-stack"><div class="act-bar-fill zero"></div></div><div class="act-bar-label">${showLabel}</div></div>`;
     }
     return `
-      <div class="act-bar narrow" title="${d.label}: 미현 ${d.mh.toFixed(1)}km, 현주 ${d.hj.toFixed(1)}km">
+      <div class="act-bar narrow" title="${month}/${d.label}: 미현 ${d.mh.toFixed(1)}km, 현주 ${d.hj.toFixed(1)}km">
         <div class="act-bar-stack">
           ${d.mh > 0 ? `<div class="act-bar-fill mh" style="height:${mhH}%"></div>` : ''}
           ${d.hj > 0 ? `<div class="act-bar-fill hj" style="height:${hjH}%"></div>` : ''}
@@ -1283,9 +1284,9 @@ function renderDayChart() {
   const ranDays = days.filter(d => (d.mh + d.hj) > 0).length;
   const bestDay = days.reduce((b, d) => (d.mh + d.hj) > (b.mh + b.hj) ? d : b, days[0]);
   $('actStats').innerHTML = `
-    <div class="stat"><strong>${totalKm.toFixed(0)}km</strong>최근 30일 누적</div>
-    <div class="stat"><strong>${ranDays}일</strong>30일 중 뛴 날</div>
-    <div class="stat"><strong>${(bestDay.mh + bestDay.hj).toFixed(1)}km</strong>최장 (${bestDay.label})</div>
+    <div class="stat"><strong>${totalKm.toFixed(0)}km</strong>${month}월 누적</div>
+    <div class="stat"><strong>${ranDays}일</strong>${daysInMonth}일 중 뛴 날</div>
+    <div class="stat"><strong>${(bestDay.mh + bestDay.hj).toFixed(1)}km</strong>최장 (${month}/${bestDay.label})</div>
   `;
 }
 
@@ -1345,7 +1346,7 @@ const badgeDefs = [
   { id:'pace5',     emoji:'💨', name:'5분/km',       chk:(name)=>{ const p = userBestPace(name); return p && p < 300; } },
   { id:'pace4',     emoji:'⚡', name:'4분/km',       chk:(name)=>{ const p = userBestPace(name); return p && p < 240; } },
   { id:'long_h',    emoji:'⏱️', name:'1시간 러닝',    chk:(name)=>userLongestDuration(name)>=3600 },
-  { id:'photo',     emoji:'📸', name:'사진러',       chk:(name)=>userLogs(name).filter(l=>l.image_url).length>=5 },
+  { id:'memo',      emoji:'✍️', name:'메모 작가',     chk:(name)=>userLogs(name).filter(l=>l.memo && l.memo.trim().length>=5).length>=10 },
 ];
 
 function renderBadges() {
@@ -1445,18 +1446,19 @@ function renderFoodTotal() {
     return;
   }
   const foods = [
-    { kcal: 10, name: '아메리카노', emoji: '☕' },
-    { kcal: 100, name: '붕어빵', emoji: '🥖' },
-    { kcal: 250, name: '아이스크림', emoji: '🍦' },
-    { kcal: 300, name: '생맥주 500cc', emoji: '🍺' },   
-    { kcal: 500, name: '햄버거', emoji: '🍔' },
-    { kcal: 600, name: '라면 한 봉지', emoji: '🍜' },
-    { kcal: 700, name: '피자 한 조각', emoji: '🍕' },
-    { kcal: 1000, name: '치킨 한 마리', emoji: '🍗' },
+    { kcal: 10, name: '커피', unit: '잔', emoji: '☕' },
+    { kcal: 50, name: '초콜릿', unit: '조각', emoji: '🍫' },
+    { kcal: 100, name: '붕어빵', unit: '개', emoji: '🥖' },
+    { kcal: 250, name: '케이크', unit: '조각', emoji: '🍰' },
+    { kcal: 300, name: '맥주', unit: '잔', emoji: '🍺' },
+    { kcal: 500, name: '햄버거', unit: '개', emoji: '🍔' },
+    { kcal: 600, name: '라면', unit: '봉지', emoji: '🍜' },
+    { kcal: 700, name: '피자', unit: '조각', emoji: '🍕' },
+    { kcal: 1000, name: '치킨', unit: '마리', emoji: '🍗' },
   ];
   const items = foods.map(f => {
     const cnt = Math.floor(totalKcal / f.kcal);
-    return `<div class="food-line-item"><span class="f-emoji">${f.emoji}</span><span class="f-count">${cnt}</span><span class="f-name">${f.name}</span></div>`;
+    return `<div class="food-line-item"><span class="f-emoji">${f.emoji}</span><span class="f-name">${f.name}</span><span class="f-count">${cnt}</span><span class="f-unit">${f.unit}</span></div>`;
   }).join('');
   $('foodCard').innerHTML = `
     <div class="food-total-num">${totalKcal.toLocaleString()}<small> kcal</small></div>
@@ -1518,7 +1520,7 @@ function setAddPerson(n) { addPersonName = n; renderAddPersonOptions(); updateAd
 function openAddModal() {
   $('addDate').value = new Date().toISOString().slice(0, 10);
   $('addDistance').value = ''; $('addH').value = ''; $('addM').value = ''; $('addS').value = '';
-  $('addMemo').value = ''; $('addPhoto').value = '';
+  $('addMemo').value = '';
   updateAddPreview();
   openModal('addModal');
 }
@@ -1549,23 +1551,9 @@ async function submitAdd() {
   if (!sec) { toast('시간을 입력해 주세요'); return; }
 
   $('addSubmit').disabled = true;
-  let imageUrl = null;
-  const file = $('addPhoto').files[0];
-  if (file) {
-    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-    const path = `${u.user_id}/${Date.now()}.${ext}`;
-    const { error: ue } = await sb.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: false });
-    if (ue) {
-      const ok = confirm(`사진 업로드 실패: ${ue.message}\n\nSupabase Storage에 '${STORAGE_BUCKET}' 버킷이 있는지 확인해 주세요.\n\n사진 없이 저장할까요?`);
-      if (!ok) { $('addSubmit').disabled = false; return; }
-    } else {
-      imageUrl = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
-    }
-  }
-
   const { error } = await sb.from('run_log').insert({
     user_id: u.user_id, run_date: date, distance: km, duration_seconds: sec,
-    memo: $('addMemo').value || null, image_url: imageUrl
+    memo: $('addMemo').value || null
   });
   $('addSubmit').disabled = false;
   if (error) {
