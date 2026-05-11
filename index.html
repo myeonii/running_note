@@ -45,9 +45,21 @@ body {
 }
 .wrap { max-width: 960px; margin: 0 auto; padding: 28px 20px 120px; }
 
-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; }
-header h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.6px; }
-header .sub { color: var(--sub); font-size: 12px; margin-top: 4px; }
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 8px; }
+header h1 { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
+header .sub { color: var(--sub); font-size: 12px; margin-top: 3px; }
+.header-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.weather-chip { display: none; align-items: center; gap: 5px; background: #EDF4FB; border: 1px solid #c8dff5; border-radius: 100px; padding: 5px 10px; font-size: 12px; font-weight: 700; color: var(--mh-text); white-space: nowrap; }
+.weather-chip.show { display: flex; }
+.scope-inline { display: flex; gap: 1px; background: #F2F2F2; padding: 3px; border-radius: 100px; }
+.scope-inline button { background: transparent; border: 0; padding: 5px 9px; border-radius: 100px; font-size: 12px; font-weight: 700; color: var(--sub); cursor: pointer; white-space: nowrap; font-family: inherit; }
+.scope-inline button.active { background: #fff; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.scope-inline button[data-scope="미현"].active { color: var(--mh-text); background: var(--mh-bg); }
+.scope-inline button[data-scope="현주"].active { color: var(--hj-text); background: var(--hj-bg); }
+.outfit-strip { font-size: 11px; color: var(--sub); padding: 0 0 12px; line-height: 1.4; display: none; }
+.outfit-strip.show { display: block; }
+.header-add-btn { background: var(--accent); color: #fff; border: 0; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding-bottom: 2px; }
+.header-add-btn:hover { opacity: .85; }
 
 button { font-family: inherit; cursor: pointer; }
 .btn { background: var(--accent); color: #fff; border: 0; padding: 11px 20px; border-radius: 100px; font-weight: 700; font-size: 13px; }
@@ -358,8 +370,8 @@ section { margin-bottom: 32px; }
 }
 
 /* ===== Today's mission ===== */
-.mission-card { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); border: 1px solid #FCE9A8; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); flex-wrap: wrap; }
-.mission-card .m-emoji { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.mission-card { background: linear-gradient(135deg, #FFF8E1 0%, #FCE9A8 100%); border: 1px solid #FCE9A8; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: var(--radius-sm); flex-wrap: nowrap; }
+.mission-card .m-emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
 .mission-card .m-body { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .mission-card .m-label { display: none; }
 .mission-card .m-text { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: -.2px; }
@@ -418,6 +430,27 @@ section { margin-bottom: 32px; }
 
 /* ===== Trip card — stronger emphasis ===== */
 .trip-card { border-width: 1.5px; border-color: #b8cfe8; }
+
+/* ===== Weather bar ===== */
+.weather-bar { display: flex; align-items: center; gap: 14px; background: #F5F4F2; border: 1px solid #E8E6E3; border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.weather-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.w-emoji { font-size: 30px; line-height: 1; }
+.w-info .w-temp { font-size: 18px; font-weight: 800; letter-spacing: -.5px; color: var(--text); }
+.w-info .w-city { font-size: 11px; color: var(--sub); margin-top: 1px; }
+.w-outfit { flex: 1; min-width: 180px; }
+.w-outfit .wo-label { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+.w-outfit .wo-text { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.w-outfit .wo-tip { font-size: 11px; color: var(--sub); margin-top: 3px; line-height: 1.4; }
+@media (max-width: 600px) {
+  .weather-bar { flex-wrap: nowrap; gap: 10px; padding: 9px 12px; align-items: flex-start; }
+  .w-emoji { font-size: 20px; }
+  .w-info .w-temp { font-size: 13px; }
+  .w-info .w-city { font-size: 10px; }
+  .w-outfit { min-width: 0; }
+  .w-outfit .wo-label { display: none; }
+  .w-outfit .wo-text { font-size: 11px; }
+  .w-outfit .wo-tip { font-size: 10px; margin-top: 2px; }
+}
 
 @media (max-width: 768px) {
   .goal-activity-container {
@@ -506,18 +539,28 @@ section { margin-bottom: 32px; }
       <h1>같이 뛰자 🏃‍♀️</h1>
       <div class="sub">미현 · 현주의 러닝 일지</div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn" onclick="openAddModal()">＋ 기록 추가</button>
+    <div class="header-right">
+      <div class="scope-inline" id="scopeTabs">
+        <button class="active" data-scope="all" onclick="setScope('all')">함께</button>
+        <button data-scope="현주" onclick="setScope('현주')">현주</button>
+        <button data-scope="미현" onclick="setScope('미현')">미현</button>
+      </div>
+      <button class="header-add-btn" onclick="openAddModal()" title="기록 추가">＋</button>
     </div>
   </header>
 
   <div id="banner"></div>
 
-  <!-- Scope tabs: 함께 / 현주 / 미현 -->
-  <div class="scope-tabs" id="scopeTabs">
-    <button class="active" data-scope="all" onclick="setScope('all')">🤝 함께</button>
-    <button data-scope="현주" onclick="setScope('현주')">현주</button>
-    <button data-scope="미현" onclick="setScope('미현')">미현</button>
+  <!-- Weather -->
+  <div class="weather-bar" id="weatherBar" style="display:none">
+    <div class="weather-left">
+      <div class="w-emoji" id="wEmoji">🌤️</div>
+      <div class="w-info">
+        <div class="w-temp" id="wTemp">--°C</div>
+        <div class="w-city" id="wCity"></div>
+      </div>
+    </div>
+    <div class="w-outfit" id="wOutfit"></div>
   </div>
 
   <!-- 0. Today's mission -->
@@ -759,7 +802,7 @@ let viewScope = 'all'; // 'all' | '미현' | '현주'
 
 function setScope(scope) {
   viewScope = scope;
-  document.querySelectorAll('.scope-tabs button').forEach(b => {
+  document.querySelectorAll('#scopeTabs button').forEach(b => {
     b.classList.toggle('active', b.dataset.scope === scope);
   });
   // Sync calendar filter to scope
@@ -1969,6 +2012,63 @@ document.querySelectorAll('.modal-bg').forEach(bg => {
 });
 
 loadAll();
+
+async function loadWeather() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const { latitude: lat, longitude: lon } = pos.coords;
+    try {
+      const [wRes, gRes] = await Promise.all([
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=ms&timezone=auto`),
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ko`)
+      ]);
+      const wData = await wRes.json();
+      const gData = await gRes.json();
+      const temp = Math.round(wData.current.temperature_2m);
+      const code = wData.current.weather_code;
+      const wind = wData.current.wind_speed_10m;
+      const city = gData.address?.city || gData.address?.town || gData.address?.county || gData.address?.state || '';
+
+      let emoji = '☀️', desc = '맑음';
+      if (code === 0)       { emoji = '☀️'; desc = '맑음'; }
+      else if (code <= 2)   { emoji = '🌤️'; desc = '구름 조금'; }
+      else if (code === 3)  { emoji = '☁️'; desc = '흐림'; }
+      else if (code <= 48)  { emoji = '🌫️'; desc = '안개'; }
+      else if (code <= 55)  { emoji = '🌦️'; desc = '이슬비'; }
+      else if (code <= 65)  { emoji = '🌧️'; desc = '비'; }
+      else if (code <= 77)  { emoji = '❄️'; desc = '눈'; }
+      else if (code <= 82)  { emoji = '🌧️'; desc = '소나기'; }
+      else                  { emoji = '⛈️'; desc = '천둥번개'; }
+
+      const isRain = code >= 51 && code <= 82;
+      const isSnow = code >= 71 && code <= 77;
+      const isStorm = code >= 95;
+      const windChill = temp - (wind > 5 ? Math.round((wind - 5) * 0.7) : 0);
+
+      let outfit = '', tip = '';
+      if (isStorm)        { outfit = '🏠 실내 운동 추천';                              tip = '천둥번개 위험, 야외 러닝 삼가세요'; }
+      else if (isSnow)    { outfit = '❄️ 방한+방수 풀레이어 + 그립 좋은 신발';         tip = '눈길 미끄럼 주의'; }
+      else if (temp < 0)  { outfit = '🧤 기모 타이즈 + 방풍 재킷 + 장갑 + 귀마개';    tip = `체감 ${windChill}°C · 노출 최소화`; }
+      else if (temp < 5)  { outfit = '🧣 기모 타이즈 + 두꺼운 긴팔 + 바람막이 + 장갑'; tip = '준비운동 충분히!'; }
+      else if (temp < 10) { outfit = '🧥 긴팔 레이어 + 얇은 재킷 + 얇은 장갑';        tip = '뛰다 보면 더워져요, 레이어 추천'; }
+      else if (temp < 15) { outfit = '👕 긴팔 + 얇은 바람막이';                        tip = '러닝하기 딱 좋은 날씨! 🏃'; }
+      else if (temp < 20) { outfit = '👕 반팔 + 얇은 긴팔';                            tip = '상쾌한 날씨, 페이스 잡기 좋아요'; }
+      else if (temp < 25) { outfit = '🩳 반팔 + 반바지';                               tip = '물 챙기는 거 잊지 마세요 🚰'; }
+      else if (temp < 30) { outfit = '🩳 가벼운 반팔 + 반바지 + 모자';                 tip = '아침·저녁 러닝 추천 🌅'; }
+      else                { outfit = '🧊 초경량 반팔 + 반바지 + 모자 필수';             tip = '폭염 주의! 무리하지 마세요'; }
+      if (isRain && !isSnow && !isStorm) { outfit += ' + ☂️ 방수 재킷'; tip = '미끄럼 주의, 방수 재킷 챙겨요'; }
+
+      const bar = $('weatherBar');
+      if (!bar) return;
+      $('wEmoji').textContent = emoji;
+      $('wTemp').textContent = `${temp}°C · ${desc}`;
+      if (city) $('wCity').textContent = '📍 ' + city;
+      $('wOutfit').innerHTML = `<div class="wo-label">👗 오늘 러닝 옷차림</div><div class="wo-text">${outfit}</div><div class="wo-tip">${tip}</div>`;
+      bar.style.display = '';
+    } catch(e) {}
+  }, () => {});
+}
+loadWeather();
 </script>
 </body>
 </html>
