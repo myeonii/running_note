@@ -1511,7 +1511,7 @@ function renderBadges() {
   if (viewScope !== 'all') return;
   const namesToShow = scopedNames();
   const el = $('badgeSection');
-  if (el) el.style.gridTemplateColumns = namesToShow.length === 1 ? '1fr' : '1fr 1fr';
+  el.style.gridTemplateColumns = '';
   el.innerHTML = namesToShow.map(n => {
     const got = badgeDefs.filter(b => b.chk(n)).length;
     return `
