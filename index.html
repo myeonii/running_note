@@ -229,7 +229,7 @@ section { margin-bottom: 32px; }
 .food-line-item { display: flex; align-items: center; justify-content: center; gap: 4px; background: rgba(255, 255, 255, 0.6); padding: 8px 10px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); }
 .f-emoji { font-size: 1rem; flex-shrink: 0; }
 .f-name { font-size: 10px; color: #666; font-weight: 500; flex-shrink: 0; }
-.f-count { font-weight: 700; font-size: 1.1rem; color: #333; flex-shrink: 0; }
+.f-count { font-weight: 700; font-size: 13px; color: #333; flex-shrink: 0; }
 .f-unit { font-size: 9px; color: #999; font-weight: 500; flex-shrink: 0; }
 .food-item { background: rgba(255,255,255,0.7); border-radius: 10px; padding: 10px 8px; text-align: center; }
 .food-item .f-emoji { font-size: 24px; line-height: 1.1; }
@@ -389,6 +389,35 @@ section { margin-bottom: 32px; }
 .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); display: none; align-items: center; justify-content: center; z-index: 200; cursor: pointer; }
 .lightbox.show { display: flex; }
 .lightbox img { max-width: 92vw; max-height: 92vh; }
+
+/* ===== Together highlight card ===== */
+.together-card-wrap { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: var(--radius); padding: 20px 22px; display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; border: 1px solid rgba(255,255,255,0.08); }
+.together-stat-big { min-width: 80px; flex-shrink: 0; }
+.together-stat-big .t-num { font-size: 32px; font-weight: 800; letter-spacing: -1px; color: #fff; line-height: 1; }
+.together-stat-big .t-label { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+.together-divider { width: 1px; background: rgba(255,255,255,0.12); align-self: stretch; margin: 0 4px; flex-shrink: 0; }
+.together-pills { display: flex; gap: 7px; flex-wrap: wrap; align-items: flex-start; flex: 1; }
+.together-pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 100px; padding: 6px 12px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85); white-space: nowrap; }
+.together-pill.gold { background: rgba(242,201,76,0.18); border-color: rgba(242,201,76,0.35); color: #f2c94c; }
+.together-pill.hot { background: rgba(255,80,50,0.2); border-color: rgba(255,100,70,0.35); }
+@media (max-width: 600px) { .together-card-wrap { padding: 14px 16px; gap: 12px; } .together-stat-big .t-num { font-size: 26px; } .together-divider { display: none; } }
+
+/* ===== Badge progress ===== */
+.badge { aspect-ratio: unset; min-height: 68px; }
+.badge-prog { width: 100%; height: 3px; background: rgba(0,0,0,0.1); border-radius: 100px; overflow: hidden; margin-top: 4px; }
+.badge-prog .fill { height: 100%; background: linear-gradient(90deg, var(--mh-strong), var(--hj-strong)); border-radius: 100px; }
+.badge .b-prog-txt { font-size: 8px; color: var(--muted); margin-top: 2px; line-height: 1.2; text-align: center; }
+.badges-grid { align-items: start; }
+
+/* ===== Collapsible section ===== */
+.sec-head { display: flex; align-items: center; margin-bottom: 12px; }
+.sec-head .section-title { margin-bottom: 0; flex: 1; }
+.collapse-btn { background: transparent; border: 1px solid var(--line); border-radius: 100px; padding: 4px 10px; font-size: 11px; color: var(--muted); cursor: pointer; font-family: inherit; transition: all .15s; }
+.collapse-btn:hover { background: #F2F2F2; color: var(--text); }
+.collapsible.collapsed { display: none; }
+
+/* ===== Trip card — stronger emphasis ===== */
+.trip-card { border-width: 1.5px; border-color: #b8cfe8; }
 
 @media (max-width: 768px) {
   .goal-activity-container {
@@ -550,7 +579,11 @@ section { margin-bottom: 32px; }
 
   <!-- 4. Activity: calendar + heatmap -->
   <section>
-    <div class="section-title"><span class="section-emoji">📊</span>활동 한눈에 보기</div>
+    <div class="sec-head">
+      <div class="section-title"><span class="section-emoji">📊</span>활동 한눈에 보기</div>
+      <button class="collapse-btn" onclick="toggleCollapse('activityBody', this)">접기</button>
+    </div>
+    <div id="activityBody" class="collapsible">
     <div class="activity-row">
       <div class="card cal-card">
         <div class="calendar-head">
@@ -580,28 +613,42 @@ section { margin-bottom: 32px; }
         <div class="act-stats" id="actStats"></div>
       </div>
     </div>
+    </div><!-- /activityBody -->
   </section>
 
   <!-- 6. PR Board -->
   <section>
-    <div class="section-title" id="prTitle"><span class="section-emoji">🏆</span>우리의 최고 기록</div>
-    <div class="pr-grid" id="prGrid"></div>
+    <div class="sec-head">
+      <div class="section-title" id="prTitle"><span class="section-emoji">🏆</span>우리의 최고 기록</div>
+      <button class="collapse-btn" onclick="toggleCollapse('prBody', this)">접기</button>
+    </div>
+    <div id="prBody" class="collapsible">
+      <div class="pr-grid" id="prGrid"></div>
+    </div>
   </section>
 
   <!-- 7. Badges -->
   <section id="badgeSectionWrap">
-    <div class="section-title"><span class="section-emoji">🎖️</span>배지 컬렉션</div>
-    <div class="card">
-      <div class="badge-section" id="badgeSection"></div>
+    <div class="sec-head">
+      <div class="section-title"><span class="section-emoji">🎖️</span>배지 컬렉션</div>
+      <button class="collapse-btn" onclick="toggleCollapse('badgeBody', this)">접기</button>
+    </div>
+    <div id="badgeBody" class="collapsible">
+      <div class="card">
+        <div class="badge-section" id="badgeSection"></div>
+      </div>
     </div>
   </section>
 
-
-
   <!-- 10. Feed -->
   <section>
-    <div class="section-title"><span class="section-emoji">📰</span>최근 기록</div>
-    <div id="feed"></div>
+    <div class="sec-head">
+      <div class="section-title"><span class="section-emoji">📰</span>최근 기록</div>
+      <button class="collapse-btn" onclick="toggleCollapse('feedBody', this)">접기</button>
+    </div>
+    <div id="feedBody" class="collapsible">
+      <div id="feed"></div>
+    </div>
   </section>
 </div>
 
@@ -734,7 +781,7 @@ function updateScopedTitles() {
   } else {
     const n = viewScope;
     if (tripT) tripT.innerHTML = `<span class="section-emoji">🗺️</span>${n}의 여행`;
-    if (foodT) foodT.innerHTML = `<span class="section-emoji">🍗</span>${n}이 태운 음식`;
+    if (foodT) foodT.innerHTML = `<span class="section-emoji">🍗</span>${n}의 태운 음식`;
     if (prT)   prT.innerHTML   = `<span class="section-emoji">🏆</span>${n}의 최고 기록`;
   }
 }
@@ -1146,7 +1193,7 @@ function renderActivitySummary() {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const weeklyHtml = NAMES.map(name => {
+    const weeklyHtml = scopedNames().map(name => {
       const weeklyLogs = userLogs(name).filter(l => new Date(l.run_date + 'T00:00') >= sevenDaysAgo);
       const weeklyKm = weeklyLogs.reduce((s, l) => s + parseFloat(l.distance || 0), 0);
       const weeklyDays = new Set(weeklyLogs.map(l => l.run_date)).size;
@@ -1166,7 +1213,7 @@ function renderActivitySummary() {
   });
 
   const monthlyByUser = {};
-  NAMES.forEach(name => {
+  scopedNames().forEach(name => {
     const userMonthlyLogs = monthlyLogs.filter(l => {
       const u = getUserById(l.user_id);
       return u && u.user_name === name;
@@ -1177,7 +1224,7 @@ function renderActivitySummary() {
 
   const totalMonthly = Object.values(monthlyByUser).reduce((s, k) => s + k, 0);
 
-  const monthlyHtml = NAMES.map(name => {
+  const monthlyHtml = scopedNames().map(name => {
     const km = monthlyByUser[name];
     const pct = totalMonthly > 0 ? (km / totalMonthly) * 100 : 0;
     return `
@@ -1482,27 +1529,78 @@ function renderPRBoard() {
     </div>`).join('');
 }
 
+function _weekMap(name) {
+  const w = {};
+  for (const l of userLogs(name)) {
+    const dt = new Date(l.run_date+'T00:00'); const dd = dt.getDay()===0?7:dt.getDay();
+    const m = new Date(dt); m.setDate(dt.getDate()-dd+1);
+    const k = dateKey(m); w[k]=(w[k]||new Set()); w[k].add(l.run_date);
+  }
+  return w;
+}
+function _maxWeekCount(name) { const w=_weekMap(name); return Math.max(0,...Object.values(w).map(s=>s.size)); }
+
 const badgeDefs = [
-  { id:'first',     emoji:'👟', name:'첫 발걸음',   chk:(name)=>userLogs(name).length>=1 },
-  { id:'5k',        emoji:'🏃', name:'5K 클럽',      chk:(name)=>userLogs(name).some(l=>parseFloat(l.distance)>=5) },
-  { id:'10k',       emoji:'🎯', name:'10K 클럽',     chk:(name)=>userLogs(name).some(l=>parseFloat(l.distance)>=10) },
-  { id:'half',      emoji:'🏆', name:'하프',         chk:(name)=>userLogs(name).some(l=>parseFloat(l.distance)>=21.0975) },
-  { id:'full',      emoji:'👑', name:'풀',           chk:(name)=>userLogs(name).some(l=>parseFloat(l.distance)>=42.195) },
-  { id:'sum50',     emoji:'🌱', name:'누적 50',      chk:(name)=>userTotalKm(name)>=50 },
-  { id:'sum100',    emoji:'💯', name:'누적 100',     chk:(name)=>userTotalKm(name)>=100 },
-  { id:'sum300',    emoji:'🔥', name:'누적 300',     chk:(name)=>userTotalKm(name)>=300 },
-  { id:'sum500',    emoji:'🌟', name:'누적 500',     chk:(name)=>userTotalKm(name)>=500 },
-  { id:'sum1000',   emoji:'✨', name:'누적 1000',    chk:(name)=>userTotalKm(name)>=1000 },
-  { id:'streak3',   emoji:'🔁', name:'3일 연속',     chk:(name)=>userMaxStreak(name)>=3 },
-  { id:'streak7',   emoji:'🌈', name:'7일 연속',     chk:(name)=>userMaxStreak(name)>=7 },
-  { id:'streak14',  emoji:'⚡', name:'2주 연속',     chk:(name)=>userMaxStreak(name)>=14 },
-  { id:'streak30',  emoji:'💎', name:'한 달 연속',   chk:(name)=>userMaxStreak(name)>=30 },
-  { id:'week3',     emoji:'🌳', name:'주 3회',       chk:(name)=>{ const d = new Date(); const day=d.getDay()===0?7:d.getDay(); const mon = new Date(d); mon.setDate(d.getDate()-day+1); mon.setHours(0,0,0,0); /* compute any week with 3+ */ const w = {}; for (const l of userLogs(name)) { const dt = new Date(l.run_date+'T00:00'); const dd = dt.getDay()===0?7:dt.getDay(); const m = new Date(dt); m.setDate(dt.getDate()-dd+1); const k = dateKey(m); w[k]=(w[k]||new Set()); w[k].add(l.run_date); } return Object.values(w).some(s=>s.size>=3); } },
-  { id:'week5',     emoji:'🚀', name:'주 5회',       chk:(name)=>{ const w = {}; for (const l of userLogs(name)) { const dt = new Date(l.run_date+'T00:00'); const dd = dt.getDay()===0?7:dt.getDay(); const m = new Date(dt); m.setDate(dt.getDate()-dd+1); const k = dateKey(m); w[k]=(w[k]||new Set()); w[k].add(l.run_date); } return Object.values(w).some(s=>s.size>=5); } },
-  { id:'pace5',     emoji:'💨', name:'5분/km',       chk:(name)=>{ const p = userBestPace(name); return p && p < 300; } },
-  { id:'pace4',     emoji:'⚡', name:'4분/km',       chk:(name)=>{ const p = userBestPace(name); return p && p < 240; } },
-  { id:'long_h',    emoji:'⏱️', name:'1시간 러닝',    chk:(name)=>userLongestDuration(name)>=3600 },
-  { id:'memo',      emoji:'✍️', name:'메모 작가',     chk:(name)=>userLogs(name).filter(l=>l.memo && l.memo.trim().length>=5).length>=10 },
+  { id:'first',   emoji:'👟', name:'첫 발걸음',
+    chk:(n)=>userLogs(n).length>=1,
+    prog:(n)=>({ cur:Math.min(1,userLogs(n).length), max:1, unit:'회' }) },
+  { id:'5k',      emoji:'🏃', name:'5K 클럽',
+    chk:(n)=>userLogs(n).some(l=>parseFloat(l.distance)>=5),
+    prog:(n)=>{ const b=Math.max(0,...userLogs(n).map(l=>parseFloat(l.distance||0)),0); return { cur:parseFloat(Math.min(b,5).toFixed(1)), max:5, unit:'km' }; } },
+  { id:'10k',     emoji:'🎯', name:'10K 클럽',
+    chk:(n)=>userLogs(n).some(l=>parseFloat(l.distance)>=10),
+    prog:(n)=>{ const b=Math.max(0,...userLogs(n).map(l=>parseFloat(l.distance||0)),0); return { cur:parseFloat(Math.min(b,10).toFixed(1)), max:10, unit:'km' }; } },
+  { id:'half',    emoji:'🏆', name:'하프',
+    chk:(n)=>userLogs(n).some(l=>parseFloat(l.distance)>=21.0975),
+    prog:(n)=>{ const b=Math.max(0,...userLogs(n).map(l=>parseFloat(l.distance||0)),0); return { cur:parseFloat(Math.min(b,21.1).toFixed(1)), max:21.1, unit:'km' }; } },
+  { id:'full',    emoji:'👑', name:'풀',
+    chk:(n)=>userLogs(n).some(l=>parseFloat(l.distance)>=42.195),
+    prog:(n)=>{ const b=Math.max(0,...userLogs(n).map(l=>parseFloat(l.distance||0)),0); return { cur:parseFloat(Math.min(b,42.2).toFixed(1)), max:42.2, unit:'km' }; } },
+  { id:'sum50',   emoji:'🌱', name:'누적 50',
+    chk:(n)=>userTotalKm(n)>=50,
+    prog:(n)=>({ cur:parseFloat(Math.min(userTotalKm(n),50).toFixed(1)), max:50, unit:'km' }) },
+  { id:'sum100',  emoji:'💯', name:'누적 100',
+    chk:(n)=>userTotalKm(n)>=100,
+    prog:(n)=>({ cur:parseFloat(Math.min(userTotalKm(n),100).toFixed(1)), max:100, unit:'km' }) },
+  { id:'sum300',  emoji:'🔥', name:'누적 300',
+    chk:(n)=>userTotalKm(n)>=300,
+    prog:(n)=>({ cur:parseFloat(Math.min(userTotalKm(n),300).toFixed(0)), max:300, unit:'km' }) },
+  { id:'sum500',  emoji:'🌟', name:'누적 500',
+    chk:(n)=>userTotalKm(n)>=500,
+    prog:(n)=>({ cur:parseFloat(Math.min(userTotalKm(n),500).toFixed(0)), max:500, unit:'km' }) },
+  { id:'sum1000', emoji:'✨', name:'누적 1000',
+    chk:(n)=>userTotalKm(n)>=1000,
+    prog:(n)=>({ cur:parseFloat(Math.min(userTotalKm(n),1000).toFixed(0)), max:1000, unit:'km' }) },
+  { id:'streak3',  emoji:'🔁', name:'3일 연속',
+    chk:(n)=>userMaxStreak(n)>=3,
+    prog:(n)=>({ cur:Math.min(3,userMaxStreak(n)), max:3, unit:'일' }) },
+  { id:'streak7',  emoji:'🌈', name:'7일 연속',
+    chk:(n)=>userMaxStreak(n)>=7,
+    prog:(n)=>({ cur:Math.min(7,userMaxStreak(n)), max:7, unit:'일' }) },
+  { id:'streak14', emoji:'⚡', name:'2주 연속',
+    chk:(n)=>userMaxStreak(n)>=14,
+    prog:(n)=>({ cur:Math.min(14,userMaxStreak(n)), max:14, unit:'일' }) },
+  { id:'streak30', emoji:'💎', name:'한 달 연속',
+    chk:(n)=>userMaxStreak(n)>=30,
+    prog:(n)=>({ cur:Math.min(30,userMaxStreak(n)), max:30, unit:'일' }) },
+  { id:'week3',   emoji:'🌳', name:'주 3회',
+    chk:(n)=>Object.values(_weekMap(n)).some(s=>s.size>=3),
+    prog:(n)=>({ cur:Math.min(3,_maxWeekCount(n)), max:3, unit:'회/주' }) },
+  { id:'week5',   emoji:'🚀', name:'주 5회',
+    chk:(n)=>Object.values(_weekMap(n)).some(s=>s.size>=5),
+    prog:(n)=>({ cur:Math.min(5,_maxWeekCount(n)), max:5, unit:'회/주' }) },
+  { id:'pace5',   emoji:'💨', name:'5분/km',
+    chk:(n)=>{ const p=userBestPace(n); return p&&p<300; },
+    prog:(n)=>{ const p=userBestPace(n); if(!p) return null; const pm=Math.floor(p/60),ps=Math.round(p%60); return { txt:`현재 ${pm}'${String(ps).padStart(2,'0')}"/km` }; } },
+  { id:'pace4',   emoji:'⚡', name:'4분/km',
+    chk:(n)=>{ const p=userBestPace(n); return p&&p<240; },
+    prog:(n)=>{ const p=userBestPace(n); if(!p) return null; const pm=Math.floor(p/60),ps=Math.round(p%60); return { txt:`현재 ${pm}'${String(ps).padStart(2,'0')}"/km` }; } },
+  { id:'long_h',  emoji:'⏱️', name:'1시간 러닝',
+    chk:(n)=>userLongestDuration(n)>=3600,
+    prog:(n)=>({ cur:Math.min(60,Math.floor(userLongestDuration(n)/60)), max:60, unit:'분' }) },
+  { id:'memo',    emoji:'✍️', name:'메모 작가',
+    chk:(n)=>userLogs(n).filter(l=>l.memo&&l.memo.trim().length>=5).length>=10,
+    prog:(n)=>{ const c=userLogs(n).filter(l=>l.memo&&l.memo.trim().length>=5).length; return { cur:Math.min(10,c), max:10, unit:'개' }; } },
 ];
 
 function renderBadges() {
@@ -1518,14 +1616,36 @@ function renderBadges() {
       <div class="badge-block">
         <h4><span class="dot ${userClass(n)}"></span>${n} <span class="got-count">${got}/${badgeDefs.length}</span></h4>
         <div class="badges-grid">
-          ${badgeDefs.map(b => `
-            <div class="badge ${b.chk(n) ? 'unlocked' : 'locked'}" title="${b.name} — ${b.chk(n) ? '획득!' : '아직'}">
+          ${badgeDefs.map(b => {
+            const unlocked = b.chk(n);
+            let progHtml = '';
+            if (!unlocked && b.prog) {
+              const p = b.prog(n);
+              if (p && p.txt) {
+                progHtml = `<div class="b-prog-txt">${p.txt}</div>`;
+              } else if (p && p.max) {
+                const pct = Math.min(100, (p.cur / p.max) * 100);
+                progHtml = `<div class="badge-prog"><div class="fill" style="width:${pct}%"></div></div><div class="b-prog-txt">${p.cur}/${p.max}${p.unit}</div>`;
+              }
+            }
+            return `
+            <div class="badge ${unlocked ? 'unlocked' : 'locked'}" title="${b.name} — ${unlocked ? '획득!' : '아직'}">
               <div class="b-emoji">${b.emoji}</div>
               <div class="b-name">${b.name}</div>
-            </div>`).join('')}
+              ${progHtml}
+            </div>`;
+          }).join('')}
         </div>
       </div>`;
   }).join('');
+}
+
+
+function toggleCollapse(bodyId, btn) {
+  const el = $(bodyId);
+  if (!el) return;
+  const collapsed = el.classList.toggle('collapsed');
+  btn.textContent = collapsed ? '펼치기' : '접기';
 }
 
 function renderUserToggle() {
