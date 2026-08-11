@@ -297,7 +297,7 @@ section { margin-bottom: 28px; }
 @media (max-width: 600px) { .hero-num { font-size: 52px; letter-spacing: -2.5px; } .hero-card { padding: 20px 18px; } .hero-split .hs-item + .hs-item { padding-left: 16px; } .hero-split .hs-km { font-size: 24px; } }
 
 .empty-state { text-align: center; padding: 44px 20px; color: var(--sub); font-size: 15px; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); }
-.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.86); color: #fff; padding: 13px 20px; border-radius: 100px; font-size: 15px; z-index: 1000; opacity: 0; transition: opacity .25s; pointer-events: none; }
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.86); color: #fff; padding: 13px 20px; border-radius: 100px; font-size: 15px; z-index: 1000; opacity: 0; transition: opacity .25s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 28px); overflow: hidden; text-overflow: ellipsis; }
 .toast.show { opacity: 1; }
 
 .help-banner { background: var(--gold-bg); border: 1px solid #FCE9A8; border-radius: var(--radius-sm); padding: 16px 18px; font-size: 14px; line-height: 1.7; color: var(--gold-text); margin-bottom: 18px; }
