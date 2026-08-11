@@ -901,15 +901,6 @@ function getUserByName(n) { return users.find(u => u.user_name === n); }
 function getUserById(id) { return users.find(u => String(u.user_id) === String(id)); }
 function userLogs(name) { const u = getUserByName(name); if (!u) return []; return logs.filter(l => String(l.user_id) === String(u.user_id)); }
 
-function userCurrentStreak(name) {
-  const dates = [...new Set(userLogs(name).map(l => l.run_date))].sort().reverse();
-  if (!dates.length) return 0;
-  const todayKey = dateKey(new Date()); const yKey = dateKey(new Date(Date.now() - 86400000));
-  if (dates[0] !== todayKey && dates[0] !== yKey) return 0;
-  let cur = 1, prev = dates[0];
-  for (let i = 1; i < dates.length; i++) { if (daysBetween(dates[i], prev) === 1) { cur++; prev = dates[i]; } else break; }
-  return cur;
-}
 function userLastRunDate(name) {
   const ds = userLogs(name).map(l => l.run_date).sort();
   return ds.length ? ds[ds.length - 1] : null;
@@ -953,7 +944,6 @@ function renderUserCards() {
       }
     }
     const pct = target ? Math.min(100, (progress / target) * 100) : 0;
-    const streak = userCurrentStreak(name);
     const lastDate = userLastRunDate(name);
     const lastDays = lastDate ? daysBetween(lastDate, dateKey(new Date())) : null;
     // 카드가 좁아 한 줄에 들어가도록 짧게 (배지는 최대 2개)
@@ -962,7 +952,6 @@ function renderUserCards() {
     else if (lastDays === 1) lastTxt = '어제';
     else if (lastDays !== null) lastTxt = `${lastDays}일 전`;
 
-    const streakChip = streak > 0 ? `<span class="chip">🔥 ${streak}일</span>` : '';
     const lastChip = `<span class="chip">📅 ${lastTxt}</span>`;
     // 개인 탭은 카드가 넓으니 이번 달 기록을 더 붙임
     const extraChips = namesToShow.length === 1 ? monthChips(name, goal, progress, target) : '';
@@ -973,7 +962,7 @@ function renderUserCards() {
         <div class="goal-label">${label}</div>
         <div class="progress-num">${pct.toFixed(0)}<small>% 달성</small></div>
         <div class="progress-bar"><div class="fill ${userClass(name)}" style="width:${pct}%"></div></div>
-        <div class="streak${extraChips ? ' wide' : ''}">${streakChip}${lastChip}${extraChips}</div>
+        <div class="streak${extraChips ? ' wide' : ''}">${lastChip}${extraChips}</div>
       </div>`;
   }).join('');
   if (el) el.innerHTML = html;
@@ -987,15 +976,8 @@ function monthChips(name, goal, progress, target) {
     return d.getFullYear() === y && d.getMonth() + 1 === m;
   });
 
-  // 이번 주(월요일 시작) 달린 날 수
-  const now = new Date();
-  const dow = now.getDay() === 0 ? 7 : now.getDay();
-  const monday = new Date(now); monday.setDate(now.getDate() - dow + 1);
-  const weekKey = dateKey(monday);
-  const weekDays = new Set(userLogs(name).filter(l => l.run_date >= weekKey).map(l => l.run_date)).size;
-
   // 한 줄을 유지하려고 글자는 짧게, 뜻은 title로
-  const chips = [`<span class="chip" title="이번 주 달린 날">🏃 주 ${weekDays}회</span>`];
+  const chips = [];
 
   // 이번 달 총 러닝 시간
   const totalSec = mine.reduce((s, l) => s + parseInt(l.duration_seconds || 0), 0);
