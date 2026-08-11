@@ -97,6 +97,10 @@ section { margin-bottom: 28px; }
 .user-card .edit { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.75); border: 0; border-radius: 100px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--sub); cursor: pointer; }
 .user-card .edit:hover { background: #fff; color: var(--text); }
 .user-card .streak { display: flex; gap: 6px; margin-top: 12px; font-size: 13px; flex-wrap: nowrap; overflow: hidden; min-width: 0; }
+/* 개인 탭은 칩이 여러 개 — 줄바꿈 없이 옆으로 밀어서 보기 */
+.user-card .streak.wide { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px; }
+.user-card .streak.wide::-webkit-scrollbar { display: none; }
+.user-card .streak .chip { flex-shrink: 0; }
 .user-card .streak .chip { background: rgba(255,255,255,0.7); padding: 5px 10px; border-radius: 100px; white-space: nowrap; }
 
 /* ===== Activity (calendar + chart side-by-side) ===== */
@@ -960,6 +964,8 @@ function renderUserCards() {
 
     const streakChip = streak > 0 ? `<span class="chip">🔥 ${streak}일</span>` : '';
     const lastChip = `<span class="chip">📅 ${lastTxt}</span>`;
+    // 개인 탭은 카드가 넓으니 이번 달 기록을 더 붙임
+    const extraChips = namesToShow.length === 1 ? monthChips(name, goal, progress, target) : '';
     return `
       <div class="user-card ${userClass(name)}">
         <button class="edit" onclick="openGoal('${u.user_id}','${name}')">목표 ${goal ? '수정' : '설정'}</button>
@@ -967,10 +973,61 @@ function renderUserCards() {
         <div class="goal-label">${label}</div>
         <div class="progress-num">${pct.toFixed(0)}<small>% 달성</small></div>
         <div class="progress-bar"><div class="fill ${userClass(name)}" style="width:${pct}%"></div></div>
-        <div class="streak">${streakChip}${lastChip}</div>
+        <div class="streak${extraChips ? ' wide' : ''}">${streakChip}${lastChip}${extraChips}</div>
       </div>`;
   }).join('');
   if (el) el.innerHTML = html;
+}
+
+// 개인 탭에서만 붙는 이번 달 요약 칩
+function monthChips(name, goal, progress, target) {
+  const y = today.getFullYear(), m = today.getMonth() + 1;
+  const mine = userLogs(name).filter(l => {
+    const d = new Date(l.run_date + 'T00:00');
+    return d.getFullYear() === y && d.getMonth() + 1 === m;
+  });
+
+  // 이번 주(월요일 시작) 달린 날 수
+  const now = new Date();
+  const dow = now.getDay() === 0 ? 7 : now.getDay();
+  const monday = new Date(now); monday.setDate(now.getDate() - dow + 1);
+  const weekKey = dateKey(monday);
+  const weekDays = new Set(userLogs(name).filter(l => l.run_date >= weekKey).map(l => l.run_date)).size;
+
+  // 한 줄을 유지하려고 글자는 짧게, 뜻은 title로
+  const chips = [`<span class="chip" title="이번 주 달린 날">🏃 주 ${weekDays}회</span>`];
+
+  // 이번 달 총 러닝 시간
+  const totalSec = mine.reduce((s, l) => s + parseInt(l.duration_seconds || 0), 0);
+  if (totalSec > 0) {
+    const h = Math.floor(totalSec / 3600), mm = Math.round((totalSec % 3600) / 60);
+    chips.push(`<span class="chip" title="이번 달 총 러닝 시간">⏱️ ${h > 0 ? `${h}시간 ${mm}분` : `${mm}분`}</span>`);
+  }
+
+  // 지난달 같은 날짜까지와 비교 (아직 안 지난 날은 빼야 공평)
+  const prev = new Date(y, m - 2, 1);
+  const py = prev.getFullYear(), pm = prev.getMonth() + 1;
+  const dayOfMonth = today.getDate();
+  const thisKm = mine.reduce((s, l) => s + parseFloat(l.distance || 0), 0);
+  const prevKm = userLogs(name).filter(l => {
+    const d = new Date(l.run_date + 'T00:00');
+    return d.getFullYear() === py && d.getMonth() + 1 === pm && d.getDate() <= dayOfMonth;
+  }).reduce((s, l) => s + parseFloat(l.distance || 0), 0);
+  if (prevKm > 0 || thisKm > 0) {
+    const diff = thisKm - prevKm;
+    const sign = diff >= 0 ? '+' : '−';
+    chips.push(`<span class="chip" title="지난달 같은 날까지와 비교">${diff >= 0 ? '📈' : '📉'} ${sign}${Math.abs(diff).toFixed(1)}km</span>`);
+  }
+
+  // 이번 달 소모 칼로리 합계
+  const kcal = mine.reduce((s, l) => s + calcKcal(parseFloat(l.distance || 0), name), 0);
+  if (kcal > 0) chips.push(`<span class="chip" title="이번 달 소모 칼로리">🔥 ${kcal.toLocaleString()}kcal</span>`);
+
+  // 목표는 위 진행바에 이미 보이니 달성했을 때만 축하 표시
+  if (goal && target && progress >= target) {
+    chips.push(`<span class="chip" title="목표 달성">🎉 달성</span>`);
+  }
+  return chips.join('');
 }
 
 // ===== Hero: 누적 거리 (주 / 월 / 년 / 전체) =====
