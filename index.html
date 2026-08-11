@@ -275,7 +275,9 @@ section { margin-bottom: 28px; }
 @keyframes refreshSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* ===== Modal ===== */
-.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
+/* 모달이 떠 있는 동안 뒤 화면 스크롤 잠금 (스크롤 위치는 복원됨) */
+body.modal-open { position: fixed; left: 0; right: 0; width: 100%; overflow: hidden; }
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: flex-end; justify-content: center; z-index: 100; overscroll-behavior: contain; }
 .modal-bg.show { display: flex; }
 /* 스크롤 없이 한 화면에 들어오도록 여백을 줄임 */
 .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 18px 18px 20px; max-width: 480px; width: 100%; max-height: 92vh; overflow-y: auto; }
@@ -284,7 +286,7 @@ section { margin-bottom: 28px; }
 /* .modal h3의 margin-bottom이 뒤에 나와 덮어쓰므로 더 구체적으로 */
 .modal .modal-head h3 { margin: 0; line-height: 1.2; }
 /* 누르기 쉬운 원형 버튼 — 제목 줄 가운데에 정렬 */
-.modal-close { flex-shrink: 0; width: 38px; height: 38px; margin-right: -6px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: #F2F2F2; color: var(--sub); font-size: 19px; line-height: 1; padding: 0; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; }
+.modal-close { flex-shrink: 0; width: 38px; height: 38px; margin: -2px -6px 0 0; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: #F2F2F2; color: var(--sub); font-size: 19px; line-height: 1; padding: 0; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; }
 .modal-close:hover { background: #E6E6E6; color: var(--text); }
 .modal-close:active { background: var(--accent); color: #fff; }
 .modal h3 { margin: 0 0 18px; font-size: 20px; font-weight: 900; letter-spacing: -.5px; }
@@ -318,16 +320,23 @@ section { margin-bottom: 28px; }
 /* 시·분·초를 테두리 하나로 묶어 거리칸과 같은 상자처럼 보이게 */
 .time-box { display: flex; align-items: center; gap: 2px; height: 46px; padding: 0 8px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: #fff; }
 .time-box span { color: var(--muted); font-size: 15px; flex-shrink: 0; }
-.modal .time-box input { flex: 1; min-width: 0; height: 100%; border: 0; border-radius: 0; padding: 0; text-align: center; background: transparent; }
+/* 회색 표시가 상자에 딱 붙지 않게 위아래 여백을 두고 34px만 차지 */
+.modal .time-box input { flex: 1; min-width: 0; height: 34px; border: 0; border-radius: 8px; padding: 0; text-align: center; background: transparent; }
 .modal .time-box input:focus { border: 0; }
 /* ▲▼가 어느 칸을 조절하는지 표시 */
-.modal .time-box input.active-unit { background: #F2F2F2; border-radius: 6px; }
+.modal .time-box input.active-unit { background: #F0F0F0; }
 .time-box:focus-within { border-color: var(--accent); }
-/* 상자 안 오른쪽 끝 — 분을 1씩 올리고 내림 */
-.min-spin { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; margin-left: 4px; }
-.min-spin button { width: 22px; height: 19px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 5px; background: #F2F2F2; color: var(--sub); font-size: 9px; line-height: 1; padding: 0; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-.min-spin button:hover { background: #E6E6E6; color: var(--text); }
-.min-spin button:active { background: var(--accent); color: #fff; }
+/* 상자 안 오른쪽 끝 — 숫자칸(34px)과 같은 높이로 맞춰 위아래 여백을 통일 */
+.min-spin { display: flex; flex-direction: column; justify-content: space-between; height: 34px; flex-shrink: 0; margin-left: 4px; }
+.min-spin button { width: 24px; height: 16px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 5px; background: transparent; padding: 0; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+/* 채워진 세모 대신 얇은 꺾쇠 */
+.min-spin button::before { content: ''; width: 9px; height: 9px; border-left: 1.8px solid var(--sub); border-top: 1.8px solid var(--sub); border-radius: 1px; }
+.min-spin button.up::before { transform: rotate(45deg) translate(1px, 1px); }
+.min-spin button.down::before { transform: rotate(-135deg) translate(1px, 1px); }
+.min-spin button:hover { background: #F2F2F2; }
+.min-spin button:hover::before { border-color: var(--text); }
+.min-spin button:active { background: var(--accent); }
+.min-spin button:active::before { border-color: #fff; }
 
 /* 자주 쓰는 값 칩 */
 .quick-chips { display: flex; gap: 4px; margin-top: 5px; }
@@ -591,16 +600,11 @@ section { margin-bottom: 28px; }
           <span>:</span>
           <input type="number" id="addS" min="0" max="59" placeholder="00" inputmode="numeric" aria-label="초" />
           <div class="min-spin">
-            <button type="button" onpointerdown="holdMin(event,1)" title="누른 칸 올리기" aria-label="올리기">▲</button>
-            <button type="button" onpointerdown="holdMin(event,-1)" title="누른 칸 내리기" aria-label="내리기">▼</button>
+            <button type="button" class="up" onpointerdown="holdMin(event,1)" title="누른 칸 올리기" aria-label="올리기"></button>
+            <button type="button" class="down" onpointerdown="holdMin(event,-1)" title="누른 칸 내리기" aria-label="내리기"></button>
           </div>
         </div>
-        <div class="quick-chips">
-          <button type="button" onclick="setDuration(20)">20분</button>
-          <button type="button" onclick="setDuration(30)">30분</button>
-          <button type="button" onclick="setDuration(40)">40분</button>
-          <button type="button" onclick="setDuration(50)">50분</button>
-        </div>
+        <div class="quick-chips" id="timeChips"></div>
       </div>
     </div>
     <div class="preview" id="addPreview">입력하면 페이스·칼로리가 계산돼요</div>
@@ -1530,8 +1534,26 @@ function toggleFeedExpand() {
 }
 
 // ============== Modal handlers (same as before) ==============
-function openModal(id) { $(id).classList.add('show'); }
-function closeModal(id) { $(id).classList.remove('show'); }
+// 모달이 열려 있는 동안 뒤 화면이 스크롤되지 않도록 잠금
+let lockedScrollY = 0;
+function lockBodyScroll() {
+  if (document.body.classList.contains('modal-open')) return;
+  lockedScrollY = window.scrollY;
+  document.body.style.top = `-${lockedScrollY}px`;
+  document.body.classList.add('modal-open');
+}
+function unlockBodyScroll() {
+  if (!document.body.classList.contains('modal-open')) return;
+  document.body.classList.remove('modal-open');
+  document.body.style.top = '';
+  window.scrollTo(0, lockedScrollY); // 원래 보던 위치로
+}
+
+function openModal(id) { lockBodyScroll(); $(id).classList.add('show'); }
+function closeModal(id) {
+  $(id).classList.remove('show');
+  if (!document.querySelector('.modal-bg.show')) unlockBodyScroll();
+}
 
 function renderAddPersonOptions() {
   $('addPerson').innerHTML = NAMES.map(n => {
@@ -1589,6 +1611,24 @@ const TIME_STEP = { addH: 3600, addM: 60, addS: 1 };
 function setActiveTimeField(id) {
   activeTimeField = id;
   ['addH', 'addM', 'addS'].forEach(x => $(x).classList.toggle('active-unit', x === id));
+  renderTimeChips();
+}
+
+// 초 칸을 고르면 칩도 초 단위로 바뀜
+function renderTimeChips() {
+  const el = $('timeChips');
+  if (!el) return;
+  const isSec = activeTimeField === 'addS';
+  el.innerHTML = [20, 30, 40, 50].map(v =>
+    isSec ? `<button type="button" onclick="setSeconds(${v})">${v}초</button>`
+          : `<button type="button" onclick="setDuration(${v})">${v}분</button>`
+  ).join('');
+}
+
+function setSeconds(sec) {
+  $('addS').value = sec;
+  if (!$('addM').value) $('addM').value = 0;
+  updateAddPreview();
 }
 
 function stepActiveTime(delta) {
@@ -1752,7 +1792,7 @@ function submitWeights() {
 
 
 document.querySelectorAll('.modal-bg').forEach(bg => {
-  bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('show'); });
+  bg.addEventListener('click', e => { if (e.target === bg) closeModal(bg.id); });
 });
 
 // (하단 버튼은 CSS position:fixed로만 고정한다.
