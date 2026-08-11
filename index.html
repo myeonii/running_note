@@ -103,7 +103,13 @@ section { margin-bottom: 28px; }
 
 /* ===== Activity chart ===== */
 .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; flex-wrap: wrap; }
-.chart-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.chart-title-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.chart-title { font-size: 16px; font-weight: 800; color: var(--text); white-space: nowrap; }
+
+/* 달 이동 화살표 (차트·기록 공용) */
+.mini-nav { display: flex; gap: 4px; flex-shrink: 0; }
+.mini-nav button { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 28px; height: 28px; font-size: 15px; padding: 0; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit; }
+.mini-nav button:hover { background: #F2F2F2; }
 .chart-wrap { position: relative; }
 /* 왼쪽 46px는 눈금 라벨 자리 — 막대와 겹치지 않게 */
 .act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px 0 46px; }
@@ -421,7 +427,13 @@ section { margin-bottom: 28px; }
       </div>
       <div class="card">
         <div class="chart-head">
-          <div class="chart-title" id="actChartLabel"></div>
+          <div class="chart-title-row">
+            <div class="mini-nav">
+              <button onclick="chartStep(-1)" id="chartPrev" title="이전">‹</button>
+              <button onclick="chartStep(1)" id="chartNext" title="다음">›</button>
+            </div>
+            <div class="chart-title" id="actChartLabel"></div>
+          </div>
           <div class="user-toggle">
             <button id="actModeMonth" onclick="setActMode('month')">월별</button>
             <button class="active" id="actModeDay" onclick="setActMode('day')">일별</button>
@@ -444,6 +456,10 @@ section { margin-bottom: 28px; }
   <!-- 4. Feed -->
   <section>
     <div class="sec-head">
+      <div class="mini-nav">
+        <button onclick="prevMonth()" title="이전 달">‹</button>
+        <button onclick="nextMonth()" title="다음 달">›</button>
+      </div>
       <div class="section-title" id="feedTitle">기록</div>
       <button class="collapse-btn" onclick="toggleCollapse('feedBody', this)">접기</button>
     </div>
@@ -929,6 +945,11 @@ function setActMode(mode) {
   actMode = mode;
   $('actModeMonth').classList.toggle('active', mode === 'month');
   $('actModeDay').classList.toggle('active', mode === 'day');
+  const prev = $('chartPrev'), next = $('chartNext');
+  if (prev && next) {
+    prev.title = mode === 'month' ? '이전 해' : '이전 달';
+    next.title = mode === 'month' ? '다음 해' : '다음 달';
+  }
   renderActivityChart();
 }
 
@@ -1247,9 +1268,10 @@ function dayDetailHtml(key) {
 
 // 달을 넘기면 캘린더·차트·기록이 함께 그 달로 이동
 function goMonth(delta) {
-  calMonth += delta;
-  if (calMonth < 1) { calMonth = 12; calYear--; }
-  if (calMonth > 12) { calMonth = 1; calYear++; }
+  // Date로 계산해야 ±12(해 이동) 같은 큰 값도 정확히 넘어감
+  const d = new Date(calYear, calMonth - 1 + delta, 1);
+  calYear = d.getFullYear();
+  calMonth = d.getMonth() + 1;
   feedExpanded = false;
   selectedDay = null; // 달이 바뀌면 선택 해제
   renderCalendar();
@@ -1258,6 +1280,9 @@ function goMonth(delta) {
 }
 function prevMonth() { goMonth(-1); }
 function nextMonth() { goMonth(1); }
+
+// 차트의 화살표는 보고 있는 단위대로 — 일별이면 한 달, 월별이면 한 해
+function chartStep(d) { goMonth(actMode === 'month' ? d * 12 : d); }
 
 let feedExpanded = false;
 
