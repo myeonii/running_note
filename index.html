@@ -115,6 +115,8 @@ section { margin-bottom: 28px; }
 .sec-head .feed-title-row .section-title { margin-bottom: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nav-btn { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 28px; height: 28px; font-size: 15px; padding: 0; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit; flex-shrink: 0; }
 .nav-btn:hover { background: #F2F2F2; }
+/* 갈 데가 없으면(기록 범위 밖) 흐리게 */
+.nav-btn:disabled, .cal-nav button:disabled { opacity: .25; cursor: default; background: transparent; }
 .chart-wrap { position: relative; }
 /* 왼쪽 36px는 눈금 라벨 자리 — 막대와 겹치지 않게 */
 .act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px 0 36px; }
@@ -293,8 +295,15 @@ section { margin-bottom: 28px; }
 .modal input[type="number"]::-webkit-outer-spin-button,
 .modal input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+/* 거리 입력칸을 옆 시/분/초 숫자칸과 같은 높이에 오게 (▲ 버튼 높이 34 + 간격 4) */
+.modal .row .field.with-spin input { margin-top: 38px; }
 .modal .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.modal .row3 input { text-align: center; padding: 13px 4px; }
+.modal .row3 input { text-align: center; padding: 11px 4px; }
+/* 시/분/초 ▲▼ — 누르고 있으면 계속 올라감 */
+.spin { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sp-btn { border: 1px solid var(--line-strong); background: #fff; color: var(--sub); border-radius: var(--radius-sm); height: 34px; font-size: 13px; line-height: 1; padding: 0; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.sp-btn:hover { background: #F2F2F2; color: var(--text); }
+.sp-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .modal .preview { background: #FAFAFA; border-radius: var(--radius-sm); padding: 14px; font-size: 14px; color: var(--sub); margin-bottom: 14px; line-height: 1.7; }
 .modal .preview strong { color: var(--text); font-weight: 800; }
 .modal .preview .pv-line { display: block; }
@@ -458,9 +467,9 @@ section { margin-bottom: 28px; }
       <div class="card cal-card">
         <div class="calendar-head">
           <div class="cal-nav">
-            <button onclick="prevMonth()">‹</button>
+            <button id="calPrev" onclick="prevMonth()" title="이전 달">‹</button>
             <span class="cal-month" id="calMonth"></span>
-            <button onclick="nextMonth()">›</button>
+            <button id="calNext" onclick="nextMonth()" title="다음 달">›</button>
           </div>
           <div class="user-toggle" id="userToggle"></div>
         </div>
@@ -494,9 +503,9 @@ section { margin-bottom: 28px; }
   <section>
     <div class="sec-head">
       <div class="feed-title-row">
-        <button class="nav-btn" onclick="prevMonth()" title="이전 달">‹</button>
+        <button class="nav-btn" id="feedPrev" onclick="prevMonth()" title="이전 달">‹</button>
         <div class="section-title" id="feedTitle">기록</div>
-        <button class="nav-btn" onclick="nextMonth()" title="다음 달">›</button>
+        <button class="nav-btn" id="feedNext" onclick="nextMonth()" title="다음 달">›</button>
       </div>
       <button class="collapse-btn" onclick="toggleCollapse('feedBody', this)">접기</button>
     </div>
@@ -524,16 +533,28 @@ section { margin-bottom: 28px; }
       <input type="date" id="addDate" />
     </div>
     <div class="row">
-      <div class="field">
+      <div class="field with-spin">
         <label>거리 (km)</label>
-        <input type="number" id="addDistance" step="0.01" min="0" placeholder="5.20" />
+        <input type="number" id="addDistance" step="0.01" min="0" placeholder="5.20" inputmode="decimal" />
       </div>
       <div class="field">
         <label>시간 (시 / 분 / 초)</label>
         <div class="row3">
-          <input type="number" id="addH" min="0" max="23" placeholder="0" />
-          <input type="number" id="addM" min="0" max="59" placeholder="30" />
-          <input type="number" id="addS" min="0" max="59" placeholder="0" />
+          <div class="spin">
+            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addH',1)" title="시 올리기">▲</button>
+            <input type="number" id="addH" min="0" max="23" placeholder="0" inputmode="numeric" />
+            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addH',-1)" title="시 내리기">▼</button>
+          </div>
+          <div class="spin">
+            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addM',1)" title="분 올리기">▲</button>
+            <input type="number" id="addM" min="0" max="59" placeholder="30" inputmode="numeric" />
+            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addM',-1)" title="분 내리기">▼</button>
+          </div>
+          <div class="spin">
+            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addS',1)" title="초 올리기">▲</button>
+            <input type="number" id="addS" min="0" max="59" placeholder="0" inputmode="numeric" />
+            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addS',-1)" title="초 내리기">▼</button>
+          </div>
         </div>
       </div>
     </div>
@@ -836,6 +857,7 @@ function renderAll() {
   renderUserToggle();
   renderCalendar();
   renderFeed();
+  updateMonthNav();
   renderAddPersonOptions();
 }
 
@@ -993,6 +1015,7 @@ function setActMode(mode) {
     next.title = mode === 'month' ? '다음 해' : '다음 달';
   }
   renderActivityChart();
+  updateMonthNav(); // 일별↔월별에 따라 넘는 단위(달/해)가 달라짐
 }
 
 function renderActivityChart() {
@@ -1336,8 +1359,44 @@ function dayDetailHtml(key) {
   return head + rows;
 }
 
+// ===== 이동 가능한 달의 범위 (기록이 있는 첫 달 ~ 오늘/마지막 기록) =====
+const absMonth = (y, m) => y * 12 + m;
+
+function monthBounds() {
+  const now = new Date();
+  const today = { y: now.getFullYear(), m: now.getMonth() + 1 };
+  const dates = logs.map(l => l.run_date).filter(Boolean).sort();
+  if (!dates.length) return { min: today, max: today };
+  const [fy, fm] = dates[0].split('-').map(Number);
+  const [ly, lm] = dates[dates.length - 1].split('-').map(Number);
+  const lastLog = { y: ly, m: lm };
+  // 오늘 달은 기록을 새로 넣을 수 있으니 항상 열어둠
+  const max = absMonth(lastLog.y, lastLog.m) > absMonth(today.y, today.m) ? lastLog : today;
+  return { min: { y: fy, m: fm }, max };
+}
+
+function canGoMonth(delta) {
+  const b = monthBounds();
+  const d = new Date(calYear, calMonth - 1 + delta, 1);
+  const t = absMonth(d.getFullYear(), d.getMonth() + 1);
+  return t >= absMonth(b.min.y, b.min.m) && t <= absMonth(b.max.y, b.max.m);
+}
+
+// 갈 데가 없으면 화살표를 비활성화
+function updateMonthNav() {
+  const chartDelta = (actMode === 'month') ? 12 : 1;
+  const set = (id, ok) => { const el = $(id); if (el) el.disabled = !ok; };
+  set('calPrev', canGoMonth(-1));
+  set('calNext', canGoMonth(1));
+  set('feedPrev', canGoMonth(-1));
+  set('feedNext', canGoMonth(1));
+  set('chartPrev', canGoMonth(-chartDelta));
+  set('chartNext', canGoMonth(chartDelta));
+}
+
 // 달을 넘기면 캘린더·차트·기록이 함께 그 달로 이동
 function goMonth(delta) {
+  if (!canGoMonth(delta)) return; // 기록이 없는 구간으로는 안 감
   // Date로 계산해야 ±12(해 이동) 같은 큰 값도 정확히 넘어감
   const d = new Date(calYear, calMonth - 1 + delta, 1);
   calYear = d.getFullYear();
@@ -1347,6 +1406,7 @@ function goMonth(delta) {
   renderCalendar();
   renderActivityChart();
   renderFeed();
+  updateMonthNav();
 }
 function prevMonth() { goMonth(-1); }
 function nextMonth() { goMonth(1); }
@@ -1446,6 +1506,34 @@ function updateAddPreview() {
   if (!html) html = '거리·시간을 입력하면 페이스 · 칼로리가 자동 계산돼요';
   $('addPreview').innerHTML = html;
 }
+// 시/분/초 ▲▼ — 한 번 누르면 1씩, 누르고 있으면 빠르게. 끝을 넘으면 반대쪽으로 순환
+function stepTime(id, delta) {
+  const el = $(id);
+  if (!el) return;
+  const min = parseInt(el.min) || 0;
+  const max = parseInt(el.max);
+  let v = (parseInt(el.value) || 0) + delta;
+  if (v > max) v = min;
+  if (v < min) v = max;
+  el.value = v;
+  updateAddPreview();
+}
+
+let holdTimer = null, holdRepeat = null;
+function stopHold() {
+  clearTimeout(holdTimer); clearInterval(holdRepeat);
+  holdTimer = holdRepeat = null;
+}
+function holdStep(e, id, delta) {
+  e.preventDefault(); // 버튼 눌러도 입력칸 포커스/키보드가 뜨지 않게
+  stopHold();
+  stepTime(id, delta);
+  holdTimer = setTimeout(() => { holdRepeat = setInterval(() => stepTime(id, delta), 90); }, 400);
+}
+['pointerup', 'pointercancel', 'pointerleave', 'blur'].forEach(ev => {
+  document.addEventListener(ev, stopHold, true);
+});
+
 ['addDistance','addH','addM','addS'].forEach(id => {
   document.addEventListener('input', e => { if (e.target && e.target.id === id) updateAddPreview(); });
 });
