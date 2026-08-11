@@ -104,13 +104,15 @@ section { margin-bottom: 28px; }
 /* ===== Activity chart ===== */
 /* 월별·일별 토글이 아랫줄로 떨어지지 않게 한 줄 유지 */
 .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; flex-wrap: nowrap; }
-.chart-title-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.chart-title-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .chart-title { font-size: 16px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* 달 이동 화살표 (차트·기록 공용) */
-.mini-nav { display: flex; gap: 4px; flex-shrink: 0; }
-.mini-nav button { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 28px; height: 28px; font-size: 15px; padding: 0; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit; }
-.mini-nav button:hover { background: #F2F2F2; }
+/* 달 이동 화살표 — 달력처럼 제목 양옆에 (차트·기록 공용) */
+.feed-title-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+/* 제목이 늘어나면 ›가 멀어지므로 제목은 내용 크기로 두고, 남는 공간은 '접기' 쪽으로 */
+.feed-title-row .section-title { margin-bottom: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-btn { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 28px; height: 28px; font-size: 15px; padding: 0; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit; flex-shrink: 0; }
+.nav-btn:hover { background: #F2F2F2; }
 .chart-wrap { position: relative; }
 /* 왼쪽 36px는 눈금 라벨 자리 — 막대와 겹치지 않게 */
 .act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px 0 36px; }
@@ -143,7 +145,12 @@ section { margin-bottom: 28px; }
 .act-bar-label { font-size: 13px; color: var(--sub); text-align: center; font-weight: 700; line-height: 16px; height: 16px; }
 .act-bar-total { font-size: 13px; color: var(--text); font-weight: 800; line-height: 16px; height: 16px; }
 .act-bar.narrow .act-bar-total { display: none; }
-.chart-legend { display: flex; gap: 18px; justify-content: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 15px; color: var(--sub); }
+/* 범례를 누르면 그 사람만 보기 */
+.chart-legend { display: flex; gap: 10px; justify-content: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 15px; color: var(--sub); }
+.chart-legend button { display: inline-flex; align-items: center; background: transparent; border: 0; border-radius: 100px; padding: 5px 12px; font-family: inherit; font-size: 15px; color: var(--sub); cursor: pointer; transition: opacity .15s, background .15s; }
+.chart-legend button:hover { background: #F2F2F2; }
+.chart-legend button.on { color: var(--text); font-weight: 700; background: #F2F2F2; }
+.chart-legend button.off { opacity: .35; }
 .chart-legend .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; margin-right: 6px; vertical-align: middle; }
 .chart-legend .sw.mh { background: var(--mh); }
 .chart-legend .sw.hj { background: var(--hj); }
@@ -442,11 +449,9 @@ section { margin-bottom: 28px; }
       <div class="card">
         <div class="chart-head">
           <div class="chart-title-row">
-            <div class="mini-nav">
-              <button onclick="chartStep(-1)" id="chartPrev" title="이전">‹</button>
-              <button onclick="chartStep(1)" id="chartNext" title="다음">›</button>
-            </div>
+            <button class="nav-btn" onclick="chartStep(-1)" id="chartPrev" title="이전">‹</button>
             <div class="chart-title" id="actChartLabel"></div>
+            <button class="nav-btn" onclick="chartStep(1)" id="chartNext" title="다음">›</button>
           </div>
           <div class="user-toggle">
             <button id="actModeMonth" onclick="setActMode('month')">월별</button>
@@ -457,10 +462,7 @@ section { margin-bottom: 28px; }
           <div class="act-chart" id="actChart"></div>
           <div class="chart-tip" id="chartTip"></div>
         </div>
-        <div class="chart-legend">
-          <div><span class="sw hj"></span>현주</div>
-          <div><span class="sw mh"></span>미현</div>
-        </div>
+        <div class="chart-legend" id="chartLegend"></div>
         <div class="act-stats" id="actStats"></div>
       </div>
     </div>
@@ -470,11 +472,11 @@ section { margin-bottom: 28px; }
   <!-- 4. Feed -->
   <section>
     <div class="sec-head">
-      <div class="mini-nav">
-        <button onclick="prevMonth()" title="이전 달">‹</button>
-        <button onclick="nextMonth()" title="다음 달">›</button>
+      <div class="feed-title-row">
+        <button class="nav-btn" onclick="prevMonth()" title="이전 달">‹</button>
+        <div class="section-title" id="feedTitle">기록</div>
+        <button class="nav-btn" onclick="nextMonth()" title="다음 달">›</button>
       </div>
-      <div class="section-title" id="feedTitle">기록</div>
       <button class="collapse-btn" onclick="toggleCollapse('feedBody', this)">접기</button>
     </div>
     <div id="feedBody" class="collapsible">
@@ -609,6 +611,7 @@ let calYear = today.getFullYear();
 let calMonth = today.getMonth() + 1;
 let calFilter = 'all';
 let selectedDay = null; // 달력에서 고른 날짜 (YYYY-MM-DD)
+let chartOnly = null;   // 범례로 고른 사람만 차트에 표시 ('현주' | '미현' | null)
 let goalEditingUserId = null;
 let addPersonName = '현주';
 // 접속하면 항상 '함께'로 시작 (기간은 '월', 달력·차트·기록은 이번 달)
@@ -721,6 +724,7 @@ function resetView() {
   if (btn) { btn.classList.add('spinning'); setTimeout(() => btn.classList.remove('spinning'), 500); }
 
   selectedDay = null;
+  chartOnly = null;
   calYear = new Date().getFullYear();
   calMonth = new Date().getMonth() + 1;
   calFilter = 'all';
@@ -740,6 +744,7 @@ function resetView() {
   document.querySelectorAll('.collapse-btn').forEach(b => b.textContent = '접기');
 
   renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' }); // 맨 위로
   toast('처음 화면으로 돌아왔어요');
 }
 
@@ -970,8 +975,33 @@ function setActMode(mode) {
 }
 
 function renderActivityChart() {
+  renderChartLegend();
   if (actMode === 'month') renderMonthChart();
   else renderDayChart();
+}
+
+// 범례 = 필터. 한 명만 눌러두면 그 사람 막대만 보임
+function renderChartLegend() {
+  const el = $('chartLegend');
+  if (!el) return;
+  const names = scopedNames();
+  if (chartOnly && !names.includes(chartOnly)) chartOnly = null;
+  el.innerHTML = names.map(n => {
+    const cls = chartOnly === n ? 'on' : (chartOnly ? 'off' : '');
+    return `<button class="${cls}" onclick="toggleChartOnly('${n}')" title="${n}만 보기"><span class="sw ${userClass(n)}"></span>${n}</button>`;
+  }).join('');
+}
+
+function toggleChartOnly(name) {
+  if (scopedNames().length < 2) return; // 혼자 보는 중이면 거를 게 없음
+  chartOnly = (chartOnly === name) ? null : name;
+  renderActivityChart();
+}
+
+// 범례로 걸러낸 사람의 값을 0으로 (막대·눈금·아래 통계까지 같이 반영됨)
+function applyChartOnly(rows) {
+  if (!chartOnly) return rows;
+  return rows.map(r => ({ ...r, mh: chartOnly === '미현' ? r.mh : 0, hj: chartOnly === '현주' ? r.hj : 0 }));
 }
 
 // ===== y축 눈금 =====
@@ -1054,7 +1084,7 @@ document.addEventListener('mouseout', e => {
 function renderMonthChart() {
   const year = calYear; // 달력에서 보고 있는 연도를 따라감
   $('actChartLabel').textContent = `${year}년`; // 월별/일별은 옆 토글이 알려줌
-  const months = [];
+  let months = [];
   for (let m = 1; m <= 12; m++) months.push({ label: m, mh: 0, hj: 0 });
   for (const l of scopedLogs()) {
     const d = new Date(l.run_date + 'T00:00');
@@ -1065,6 +1095,7 @@ function renderMonthChart() {
       if (u && u.user_name === '현주') months[d.getMonth()].hj += km;
     }
   }
+  months = applyChartOnly(months);
   const axis = axisFor(Math.max(0.1, ...months.map(m => m.mh + m.hj)));
   const max = axis.max;
   $('actChart').innerHTML = gridHtml(axis, true) + months.map(m => {
@@ -1103,7 +1134,7 @@ function renderDayChart() {
   const month = calMonth;
   $('actChartLabel').textContent = `${year}년 ${month}월`;
   const daysInMonth = new Date(year, month, 0).getDate();
-  const days = [];
+  let days = [];
   for (let i = 1; i <= daysInMonth; i++) {
     const d = new Date(year, month - 1, i);
     days.push({ date: dateKey(d), label: `${i}`, mh: 0, hj: 0 });
@@ -1117,6 +1148,7 @@ function renderDayChart() {
       if (u && u.user_name === '현주') day.hj += km;
     }
   }
+  days = applyChartOnly(days);
   const axis = axisFor(Math.max(0.1, ...days.map(d => d.mh + d.hj)));
   const max = axis.max;
   $('actChart').innerHTML = gridHtml(axis, false) + days.map((d, i) => {
