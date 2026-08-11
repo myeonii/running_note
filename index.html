@@ -584,7 +584,7 @@ section { margin-bottom: 28px; }
         </div>
       </div>
     </div>
-    <div class="preview" id="addPreview">거리·시간을 입력하면 페이스 · 칼로리가 자동 계산돼요</div>
+    <div class="preview" id="addPreview">입력하면 페이스·칼로리가 계산돼요</div>
     <div class="field">
       <label>메모 (선택)</label>
       <textarea id="addMemo" placeholder="오늘의 러닝은 어땠나요?"></textarea>
@@ -1538,7 +1538,7 @@ function updateAddPreview() {
   let html = '';
   if (km && sec) html += `<div class="pv-line">평균 페이스 <strong>${paceFromSec(sec, km)}/km</strong></div>`;
   if (km) html += `<div class="pv-line">예상 소모 <strong>${kcal} kcal</strong> <span class="pv-food">≈ ${getFood(kcal)}</span></div>`;
-  if (!html) html = '거리·시간을 입력하면 페이스 · 칼로리가 자동 계산돼요';
+  if (!html) html = '입력하면 페이스·칼로리가 계산돼요';
   $('addPreview').innerHTML = html;
 }
 // 시/분/초 ▲▼ — 한 번 누르면 1씩, 누르고 있으면 빠르게. 끝을 넘으면 반대쪽으로 순환
