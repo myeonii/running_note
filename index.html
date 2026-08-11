@@ -42,6 +42,8 @@ body {
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  /* 버튼 누르다 더블탭으로 인식돼 확대되는 것 방지 (핀치 확대는 그대로 됨) */
+  touch-action: manipulation;
 }
 .wrap { max-width: 880px; margin: 0 auto; padding: 40px 20px 120px; }
 
