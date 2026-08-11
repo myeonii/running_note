@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server 8777 --bind 127.0.0.1)",
+      "Bash(cd \"d:/workspace/running_note\" && python -m http.server 8777 --bind 127.0.0.1)",
+      "Bash(curl -s http://127.0.0.1:*)",
+      "Bash(curl -sI http://127.0.0.1:*)",
+      "Bash(curl -s -m 3 http://127.0.0.1:*)",
+      "Bash(curl -s https://myeonii.github.io/running_note/*)",
+      "Bash(git ls-remote *)"
+    ]
+  }
+}

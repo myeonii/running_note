@@ -276,6 +276,10 @@ section { margin-bottom: 28px; }
 .modal-bg.show { display: flex; }
 .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 24px 22px 30px; max-width: 480px; width: 100%; max-height: 92vh; overflow-y: auto; }
 @media (min-width: 600px) { .modal-bg { align-items: center; } .modal { border-radius: var(--radius); } }
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
+.modal-head h3 { margin: 0; }
+.modal-close { background: transparent; border: 0; color: var(--muted); font-size: 20px; line-height: 1; padding: 4px 2px; margin: -4px -2px; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; flex-shrink: 0; }
+.modal-close:hover { color: var(--text); }
 .modal h3 { margin: 0 0 18px; font-size: 20px; font-weight: 900; letter-spacing: -.5px; }
 .modal .field { margin-bottom: 16px; }
 .modal label { display: block; font-size: 14px; color: var(--sub); margin-bottom: 7px; font-weight: 600; }
@@ -298,7 +302,12 @@ section { margin-bottom: 28px; }
 .modal input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
 /* 거리 입력칸을 옆 시/분/초 숫자칸과 같은 높이에 오게 (▲ 버튼 높이 34 + 간격 4) */
-.modal .row .field.with-spin input { margin-top: 38px; }
+.modal .row .field.with-spin > input { margin-top: 38px; }
+/* 자주 쓰는 값 칩 */
+.quick-chips { display: flex; gap: 4px; margin-top: 6px; }
+.quick-chips button { flex: 1; min-width: 0; border: 1px solid var(--line); background: #FAFAFA; color: var(--sub); border-radius: 100px; padding: 7px 2px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; -webkit-appearance: none; appearance: none; white-space: nowrap; }
+.quick-chips button:hover { background: #F0F0F0; color: var(--text); }
+.quick-chips button:active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .modal .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .modal .row3 input { text-align: center; padding: 11px 4px; }
 /* 시/분/초 ▲▼ — 누르고 있으면 계속 올라감 */
@@ -525,7 +534,10 @@ section { margin-bottom: 28px; }
 <!-- Add Record Modal -->
 <div class="modal-bg" id="addModal">
   <div class="modal">
-    <h3>러닝 기록 추가</h3>
+    <div class="modal-head">
+      <h3>러닝 기록 추가</h3>
+      <button class="modal-close" onclick="closeModal('addModal')" title="닫기" aria-label="닫기">✕</button>
+    </div>
     <div class="field">
       <label>누구의 기록?</label>
       <div class="person-toggle" id="addPerson"></div>
@@ -538,6 +550,12 @@ section { margin-bottom: 28px; }
       <div class="field with-spin">
         <label>거리 (km)</label>
         <input type="number" id="addDistance" step="0.01" min="0" placeholder="5.20" inputmode="decimal" />
+        <div class="quick-chips">
+          <button type="button" onclick="setDistance(3)">3</button>
+          <button type="button" onclick="setDistance(5)">5</button>
+          <button type="button" onclick="setDistance(7)">7</button>
+          <button type="button" onclick="setDistance(10)">10</button>
+        </div>
       </div>
       <div class="field">
         <label>시간 (시 / 분 / 초)</label>
@@ -558,6 +576,12 @@ section { margin-bottom: 28px; }
             <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addS',-1)" title="초 내리기">▼</button>
           </div>
         </div>
+        <div class="quick-chips">
+          <button type="button" onclick="setDuration(20)">20분</button>
+          <button type="button" onclick="setDuration(30)">30분</button>
+          <button type="button" onclick="setDuration(40)">40분</button>
+          <button type="button" onclick="setDuration(60)">60분</button>
+        </div>
       </div>
     </div>
     <div class="preview" id="addPreview">거리·시간을 입력하면 페이스 · 칼로리가 자동 계산돼요</div>
@@ -575,7 +599,10 @@ section { margin-bottom: 28px; }
 <!-- Goal Modal -->
 <div class="modal-bg" id="goalModal">
   <div class="modal">
-    <h3 id="goalModalTitle">목표 설정</h3>
+    <div class="modal-head">
+      <h3 id="goalModalTitle">목표 설정</h3>
+      <button class="modal-close" onclick="closeModal('goalModal')" title="닫기" aria-label="닫기">✕</button>
+    </div>
     <div class="field">
       <label>목표 종류</label>
       <select id="goalType">
@@ -597,7 +624,10 @@ section { margin-bottom: 28px; }
 <!-- Race D-day Modal -->
 <div class="modal-bg" id="raceModal">
   <div class="modal">
-    <h3>목표 대회 D-day</h3>
+    <div class="modal-head">
+      <h3>목표 대회 D-day</h3>
+      <button class="modal-close" onclick="closeModal('raceModal')" title="닫기" aria-label="닫기">✕</button>
+    </div>
     <div class="field">
       <label>대회 이름</label>
       <input type="text" id="raceName" placeholder="예: 춘천마라톤" maxlength="20" />
@@ -617,7 +647,10 @@ section { margin-bottom: 28px; }
 <!-- Setup Modal -->
 <div class="modal-bg" id="setupModal">
   <div class="modal">
-    <h3>설정</h3>
+    <div class="modal-head">
+      <h3>설정</h3>
+      <button class="modal-close" onclick="closeModal('setupModal')" title="닫기" aria-label="닫기">✕</button>
+    </div>
     <div class="field">
       <label>몸무게 (kg) — 칼로리 계산에만 사용. 이 브라우저에만 저장돼요</label>
       <div class="row">
@@ -1509,6 +1542,18 @@ function updateAddPreview() {
   $('addPreview').innerHTML = html;
 }
 // 시/분/초 ▲▼ — 한 번 누르면 1씩, 누르고 있으면 빠르게. 끝을 넘으면 반대쪽으로 순환
+// 자주 쓰는 값 한 번에 넣기 (소수점·초는 그 뒤에 직접 다듬으면 됨)
+function setDistance(km) {
+  $('addDistance').value = km;
+  updateAddPreview();
+}
+function setDuration(min) {
+  $('addH').value = Math.floor(min / 60) || '';
+  $('addM').value = min % 60;
+  $('addS').value = 0;
+  updateAddPreview();
+}
+
 function stepTime(id, delta) {
   const el = $(id);
   if (!el) return;
