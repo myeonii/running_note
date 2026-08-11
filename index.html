@@ -1521,26 +1521,9 @@ document.querySelectorAll('.modal-bg').forEach(bg => {
   bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('show'); });
 });
 
-// 하단 버튼 위치를 '실제로 보이는 영역' 기준으로 잡음.
-// position:fixed는 레이아웃 뷰포트 기준이라, 모바일에서 주소창이 접히거나
-// 고무줄 스크롤이 일어나면 한 박자 늦게 따라오면서 덜렁거린다.
-(function dockToVisualViewport() {
-  const vv = window.visualViewport;
-  const dock = document.getElementById('fabDock');
-  if (!vv || !dock) return; // 미지원 브라우저는 기존 fixed 동작 그대로
-  let raf = 0;
-  function place() {
-    raf = 0;
-    // 보이는 영역의 아래끝이 레이아웃 아래끝보다 위에 있으면 그만큼 끌어올림
-    const lift = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
-    dock.style.transform = lift ? `translateY(${-lift}px)` : '';
-  }
-  function onChange() { if (!raf) raf = requestAnimationFrame(place); }
-  vv.addEventListener('resize', onChange);
-  vv.addEventListener('scroll', onChange);
-  window.addEventListener('orientationchange', onChange);
-  place();
-})();
+// (하단 버튼은 CSS position:fixed로만 고정한다.
+//  visualViewport로 위치를 보정해봤더니 iOS 사파리에서는 innerHeight가
+//  툴바 영역까지 포함해 보고해서 버튼이 화면 중앙까지 떠올랐다.)
 
 loadAll();
 
