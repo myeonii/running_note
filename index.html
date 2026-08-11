@@ -155,9 +155,10 @@ section { margin-bottom: 28px; }
 .chart-legend .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; margin-right: 6px; vertical-align: middle; }
 .chart-legend .sw.mh { background: var(--mh); }
 .chart-legend .sw.hj { background: var(--hj); }
-/* margin-top:auto를 빼서 범례 바로 아래에 붙임 (가운데가 휑하게 비지 않게) */
-.act-stats { display: flex; gap: 20px; padding-top: 14px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-.act-stats .stat { font-size: 13px; color: var(--sub); }
+/* 세 칸을 균등 폭으로 나누고 사이에 구분선 — 왼쪽으로 쏠리지 않게 (달력 요약과 같은 방식) */
+.act-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.act-stats .stat { font-size: 13px; color: var(--sub); min-width: 0; }
+.act-stats .stat + .stat { padding-left: 12px; border-left: 1px solid var(--line); }
 .act-stats .stat strong { color: var(--text); font-size: 19px; font-weight: 900; display: block; letter-spacing: -.5px; margin-bottom: 2px; }
 
 /* ===== Calendar ===== */
@@ -338,7 +339,7 @@ section { margin-bottom: 28px; }
 
 /* ===== Weather — 토글 아래 한 줄, 연하게 ===== */
 .header-col { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; min-width: 0; }
-.weather-line { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: right; }
+.weather-line { font-size: 14px; color: var(--sub); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: right; }
 .weather-line:empty { display: none; }
 .weather-line.hint { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 .weather-line.hint:hover { color: var(--sub); }
@@ -351,7 +352,7 @@ section { margin-bottom: 28px; }
   header h1 { font-size: 24px; padding-right: 150px; }
   .dday { position: absolute; top: 0; right: 0; }
   .header-col { align-items: stretch; gap: 10px; }
-  .weather-line { text-align: left; }
+  .weather-line { text-align: left; padding-left: 14px; }
   .header-right { justify-content: space-between; }
   .scope-inline { flex: 1; }
   .scope-inline button { flex: 1; }
