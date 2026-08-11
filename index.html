@@ -275,33 +275,37 @@ section { margin-bottom: 28px; }
 .modal h3 { margin: 0 0 18px; font-size: 20px; font-weight: 900; letter-spacing: -.5px; }
 .modal .field { margin-bottom: 16px; }
 .modal label { display: block; font-size: 14px; color: var(--sub); margin-bottom: 7px; font-weight: 600; }
+/* iOS는 입력칸에 기본 파란 글자색과 자체 정렬을 씌운다 — 전부 명시해서 통일 */
 .modal input, .modal textarea, .modal select {
-  width: 100%; padding: 13px 14px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); font-family: inherit; font-size: 16px; background: #fff; color: var(--text);
+  width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box;
+  padding: 13px 14px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 16px; line-height: 1.3; background: #fff; color: var(--text);
+  -webkit-appearance: none; appearance: none; text-align: left;
 }
 .modal input:focus, .modal textarea:focus, .modal select:focus { outline: none; border-color: var(--accent); }
-.modal textarea { resize: vertical; min-height: 60px; }
-.modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.modal .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-.modal .row3 input { text-align: center; }
+.modal textarea { resize: vertical; min-height: 72px; }
+/* 날짜칸: 사파리는 내용을 가운데 정렬하고 칸보다 넓게 그려서 잘려 보인다 */
+.modal input[type="date"] { display: block; height: 50px; min-height: 50px; padding-right: 10px; }
+.modal input[type="date"]::-webkit-date-and-time-value { display: block; width: 100%; text-align: left; margin: 0; padding: 0; }
+.modal input[type="date"]::-webkit-datetime-edit { padding: 0; }
+.modal input[type="date"]::-webkit-calendar-picker-indicator { margin-left: auto; opacity: .55; }
+.modal input[type="number"] { -moz-appearance: textfield; }
+.modal input[type="number"]::-webkit-outer-spin-button,
+.modal input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+.modal .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.modal .row3 input { text-align: center; padding: 13px 4px; }
 .modal .preview { background: #FAFAFA; border-radius: var(--radius-sm); padding: 14px; font-size: 14px; color: var(--sub); margin-bottom: 14px; line-height: 1.7; }
 .modal .preview strong { color: var(--text); font-weight: 800; }
-/* 삭제 확인 */
-.btn-danger { background: #D14343; }
-.del-preview { background: #FAFAFA; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; }
-.del-preview .del-who { display: flex; align-items: center; gap: 7px; font-size: 15px; }
-.del-preview .del-who .dot { width: 9px; height: 9px; border-radius: 50%; }
-.del-preview .del-who .dot.mh { background: var(--mh-strong); }
-.del-preview .del-who .dot.hj { background: var(--hj-strong); }
-.del-preview .del-date { color: var(--muted); font-size: 14px; }
-.del-preview .del-stat { margin-top: 8px; font-size: 15px; color: var(--sub); }
-.del-preview .del-stat b { font-size: 20px; font-weight: 900; color: var(--text); letter-spacing: -.5px; }
-.del-warn { margin-top: 12px; font-size: 14px; color: #B84040; }
-
+.modal .preview .pv-line { display: block; }
+.modal .preview .pv-line + .pv-line { margin-top: 4px; }
+.modal .preview .pv-food { white-space: nowrap; }
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .modal-actions .btn { flex: 1; }
 .modal-actions .btn-ghost { flex: 0 0 auto; }
-.person-toggle { display: flex; gap: 6px; }
-.person-toggle button { flex: 1; border: 1px solid var(--line-strong); background: #fff; border-radius: var(--radius-sm); padding: 14px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all .15s; }
+.person-toggle { display: flex; gap: 8px; }
+/* color를 안 주면 iOS에서 파란 글씨로 나옴 */
+.person-toggle button { flex: 1; min-width: 0; border: 1px solid var(--line-strong); background: #fff; color: var(--sub); border-radius: var(--radius-sm); padding: 14px 10px; font-family: inherit; font-weight: 700; font-size: 16px; cursor: pointer; -webkit-appearance: none; appearance: none; transition: all .15s; }
 .person-toggle button.active.mh { background: var(--mh-bg); color: var(--mh-text); border-color: var(--mh-strong); }
 .person-toggle button.active.hj { background: var(--hj-bg); color: var(--hj-text); border-color: var(--hj-strong); }
 
@@ -563,19 +567,6 @@ section { margin-bottom: 28px; }
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('goalModal')">취소</button>
       <button class="btn" onclick="submitGoal()">저장</button>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Confirm Modal -->
-<div class="modal-bg" id="delModal">
-  <div class="modal">
-    <h3>이 기록을 삭제할까요?</h3>
-    <div class="del-preview" id="delPreview"></div>
-    <div class="del-warn">삭제하면 되돌릴 수 없어요.</div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeModal('delModal')">취소</button>
-      <button class="btn btn-danger" id="delSubmit" onclick="confirmDelete()">삭제</button>
     </div>
   </div>
 </div>
@@ -1448,9 +1439,10 @@ function updateAddPreview() {
   const h = parseInt($('addH').value) || 0, m = parseInt($('addM').value) || 0, s = parseInt($('addS').value) || 0;
   const sec = h*3600 + m*60 + s;
   const kcal = calcKcal(km, addPersonName);
+  // 페이스와 칼로리는 각각 한 줄씩
   let html = '';
-  if (km && sec) html += `평균 페이스 <strong>${paceFromSec(sec, km)}/km</strong>`;
-  if (km) { if (html) html += ' · '; html += `예상 소모 <strong>${kcal} kcal</strong> ≈ ${getFood(kcal)}`; }
+  if (km && sec) html += `<div class="pv-line">평균 페이스 <strong>${paceFromSec(sec, km)}/km</strong></div>`;
+  if (km) html += `<div class="pv-line">예상 소모 <strong>${kcal} kcal</strong> <span class="pv-food">≈ ${getFood(kcal)}</span></div>`;
   if (!html) html = '거리·시간을 입력하면 페이스 · 칼로리가 자동 계산돼요';
   $('addPreview').innerHTML = html;
 }
@@ -1543,33 +1535,11 @@ async function submitEdit(id) {
   await loadAll();
 }
 
-// 삭제는 어떤 기록인지 보여주고 한 번 더 확인 (잘못 눌러도 안전하게)
-let pendingDeleteId = null;
-
-function deleteLog(id) {
-  const log = logs.find(l => l.id === id);
-  if (!log) return;
-  const u = getUserById(log.user_id);
-  const name = u ? u.user_name : '?';
-  const km = parseFloat(log.distance || 0);
-  const sec = parseInt(log.duration_seconds || 0);
-  pendingDeleteId = id;
-  $('delPreview').innerHTML = `
-    <div class="del-who"><span class="dot ${userClass(name)}"></span><b>${name}</b><span class="del-date">${fmtDate(log.run_date)}</span></div>
-    <div class="del-stat"><b>${km.toFixed(2)}</b>km · ${fmtDuration(sec)} · ${paceFromSec(sec, km)}/km</div>`;
-  $('delSubmit').disabled = false;
-  openModal('delModal');
-}
-
-async function confirmDelete() {
-  if (!pendingDeleteId) return;
-  $('delSubmit').disabled = true;
-  const { error } = await sb.from('run_log').delete().eq('id', pendingDeleteId);
-  if (error) { toast('삭제 실패: ' + error.message); $('delSubmit').disabled = false; return; }
-  pendingDeleteId = null;
-  closeModal('delModal');
-  toast('삭제됐어요');
-  await loadAll();
+async function deleteLog(id) {
+  if (!confirm('이 기록을 삭제할까요?')) return;
+  const { error } = await sb.from('run_log').delete().eq('id', id);
+  if (error) { toast('삭제 실패: ' + error.message); return; }
+  toast('삭제됐어요'); await loadAll();
 }
 
 function openGoal(userId, name) {
