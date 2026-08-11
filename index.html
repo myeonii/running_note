@@ -301,20 +301,25 @@ section { margin-bottom: 28px; }
 .modal input[type="number"]::-webkit-outer-spin-button,
 .modal input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
-/* 거리 입력칸을 옆 시/분/초 숫자칸과 같은 높이에 오게 (▲ 버튼 높이 34 + 간격 4) */
-.modal .row .field.with-spin > input { margin-top: 38px; }
+
+/* 거리·시간을 같은 모양으로 — 라벨줄 / 입력상자(50px) / 칩줄 */
+.field-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+.field-head label { margin-bottom: 0; }
+.clear-btn { background: transparent; border: 0; color: var(--muted); font-size: 13px; font-family: inherit; cursor: pointer; padding: 0 1px; flex-shrink: 0; -webkit-appearance: none; appearance: none; }
+.clear-btn:hover { color: var(--text); }
+.modal input.big-input { height: 50px; }
+/* 시·분·초를 테두리 하나로 묶어 거리칸과 같은 상자처럼 보이게 */
+.time-box { display: flex; align-items: center; gap: 2px; height: 50px; padding: 0 8px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: #fff; }
+.time-box span { color: var(--muted); font-size: 15px; flex-shrink: 0; }
+.modal .time-box input { flex: 1; min-width: 0; height: 100%; border: 0; border-radius: 0; padding: 0; text-align: center; background: transparent; }
+.modal .time-box input:focus { border: 0; }
+.time-box:focus-within { border-color: var(--accent); }
+
 /* 자주 쓰는 값 칩 */
 .quick-chips { display: flex; gap: 4px; margin-top: 6px; }
 .quick-chips button { flex: 1; min-width: 0; border: 1px solid var(--line); background: #FAFAFA; color: var(--sub); border-radius: 100px; padding: 7px 2px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; -webkit-appearance: none; appearance: none; white-space: nowrap; }
 .quick-chips button:hover { background: #F0F0F0; color: var(--text); }
 .quick-chips button:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.modal .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.modal .row3 input { text-align: center; padding: 11px 4px; }
-/* 시/분/초 ▲▼ — 누르고 있으면 계속 올라감 */
-.spin { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.sp-btn { border: 1px solid var(--line-strong); background: #fff; color: var(--sub); border-radius: var(--radius-sm); height: 34px; font-size: 13px; line-height: 1; padding: 0; cursor: pointer; font-family: inherit; -webkit-appearance: none; appearance: none; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-.sp-btn:hover { background: #F2F2F2; color: var(--text); }
-.sp-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .modal .preview { background: #FAFAFA; border-radius: var(--radius-sm); padding: 14px; font-size: 14px; color: var(--sub); margin-bottom: 14px; line-height: 1.7; }
 .modal .preview strong { color: var(--text); font-weight: 800; }
 .modal .preview .pv-line { display: block; }
@@ -547,9 +552,12 @@ section { margin-bottom: 28px; }
       <input type="date" id="addDate" />
     </div>
     <div class="row">
-      <div class="field with-spin">
-        <label>거리 (km)</label>
-        <input type="number" id="addDistance" step="0.01" min="0" placeholder="5.20" inputmode="decimal" />
+      <div class="field">
+        <div class="field-head">
+          <label>거리 (km)</label>
+          <button type="button" class="clear-btn" onclick="clearDistance()">지우기</button>
+        </div>
+        <input type="number" id="addDistance" class="big-input" step="0.01" min="0" placeholder="5.20" inputmode="decimal" />
         <div class="quick-chips">
           <button type="button" onclick="setDistance(3)">3</button>
           <button type="button" onclick="setDistance(5)">5</button>
@@ -558,23 +566,16 @@ section { margin-bottom: 28px; }
         </div>
       </div>
       <div class="field">
-        <label>시간 (시 / 분 / 초)</label>
-        <div class="row3">
-          <div class="spin">
-            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addH',1)" title="시 올리기">▲</button>
-            <input type="number" id="addH" min="0" max="23" placeholder="0" inputmode="numeric" />
-            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addH',-1)" title="시 내리기">▼</button>
-          </div>
-          <div class="spin">
-            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addM',1)" title="분 올리기">▲</button>
-            <input type="number" id="addM" min="0" max="59" placeholder="30" inputmode="numeric" />
-            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addM',-1)" title="분 내리기">▼</button>
-          </div>
-          <div class="spin">
-            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addS',1)" title="초 올리기">▲</button>
-            <input type="number" id="addS" min="0" max="59" placeholder="0" inputmode="numeric" />
-            <button type="button" class="sp-btn" onpointerdown="holdStep(event,'addS',-1)" title="초 내리기">▼</button>
-          </div>
+        <div class="field-head">
+          <label>시간</label>
+          <button type="button" class="clear-btn" onclick="clearDuration()">지우기</button>
+        </div>
+        <div class="time-box">
+          <input type="number" id="addH" min="0" max="23" placeholder="0" inputmode="numeric" aria-label="시" />
+          <span>:</span>
+          <input type="number" id="addM" min="0" max="59" placeholder="30" inputmode="numeric" aria-label="분" />
+          <span>:</span>
+          <input type="number" id="addS" min="0" max="59" placeholder="00" inputmode="numeric" aria-label="초" />
         </div>
         <div class="quick-chips">
           <button type="button" onclick="setDuration(20)">20분</button>
@@ -1553,33 +1554,14 @@ function setDuration(min) {
   $('addS').value = 0;
   updateAddPreview();
 }
-
-function stepTime(id, delta) {
-  const el = $(id);
-  if (!el) return;
-  const min = parseInt(el.min) || 0;
-  const max = parseInt(el.max);
-  let v = (parseInt(el.value) || 0) + delta;
-  if (v > max) v = min;
-  if (v < min) v = max;
-  el.value = v;
+function clearDistance() {
+  $('addDistance').value = '';
   updateAddPreview();
 }
-
-let holdTimer = null, holdRepeat = null;
-function stopHold() {
-  clearTimeout(holdTimer); clearInterval(holdRepeat);
-  holdTimer = holdRepeat = null;
+function clearDuration() {
+  $('addH').value = ''; $('addM').value = ''; $('addS').value = '';
+  updateAddPreview();
 }
-function holdStep(e, id, delta) {
-  e.preventDefault(); // 버튼 눌러도 입력칸 포커스/키보드가 뜨지 않게
-  stopHold();
-  stepTime(id, delta);
-  holdTimer = setTimeout(() => { holdRepeat = setInterval(() => stepTime(id, delta), 90); }, 400);
-}
-['pointerup', 'pointercancel', 'pointerleave', 'blur'].forEach(ev => {
-  document.addEventListener(ev, stopHold, true);
-});
 
 ['addDistance','addH','addM','addS'].forEach(id => {
   document.addEventListener('input', e => { if (e.target && e.target.id === id) updateAddPreview(); });
