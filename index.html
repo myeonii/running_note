@@ -232,19 +232,23 @@ section { margin-bottom: 28px; }
 .feed-toggle-btn:hover { background: #F2F2F2; }
 
 /* ===== Floating add button ===== */
-/* 스크롤 중 떨림 방지: 자체 레이어로 올리고(translateZ) 아이폰 안전영역만큼 띄움 */
-.fab, .fab-refresh {
+/* 하단 버튼 묶음 — 스크롤 중 떨림 방지용으로 한 덩어리로 두고 JS가 위치를 잡음 */
+.fab-dock {
   position: fixed;
-  transform: translateZ(0);
+  right: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 50;
   will-change: transform;
   backface-visibility: hidden;
-  z-index: 50;
 }
-.fab { right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--accent); color: #fff; border: 0; width: 58px; height: 58px; border-radius: 50%; font-size: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.22); cursor: pointer; line-height: 0; padding-bottom: 4px; }
-.fab:hover { transform: translate3d(0, -2px, 0); transition: transform .2s; }
+.fab { background: var(--accent); color: #fff; border: 0; width: 58px; height: 58px; border-radius: 50%; font-size: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.22); cursor: pointer; line-height: 0; padding-bottom: 4px; flex-shrink: 0; }
+.fab:hover { transform: translateY(-2px); transition: transform .2s; }
 
 /* 화면 초기화 — ＋ 버튼 왼쪽 */
-.fab-refresh { right: 94px; bottom: calc(27px + env(safe-area-inset-bottom, 0px)); background: #fff; color: var(--text); border: 1px solid var(--line-strong); width: 52px; height: 52px; border-radius: 50%; font-size: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); cursor: pointer; line-height: 1; padding: 0; font-family: inherit; }
+.fab-refresh { background: #fff; color: var(--text); border: 1px solid var(--line-strong); width: 52px; height: 52px; border-radius: 50%; font-size: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); cursor: pointer; line-height: 1; padding: 0; font-family: inherit; flex-shrink: 0; }
 .fab-refresh:hover { background: #F2F2F2; }
 .fab-refresh.spinning { animation: refreshSpin .8s linear infinite; pointer-events: none; color: var(--muted); }
 @keyframes refreshSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -477,8 +481,10 @@ section { margin-bottom: 28px; }
   </section>
 </div>
 
-<button class="fab-refresh" id="resetBtn" onclick="resetView()" title="처음 화면으로">↻</button>
-<button class="fab" onclick="openAddModal()" title="기록 추가">＋</button>
+<div class="fab-dock" id="fabDock">
+  <button class="fab-refresh" id="resetBtn" onclick="resetView()" title="처음 화면으로">↻</button>
+  <button class="fab" onclick="openAddModal()" title="기록 추가">＋</button>
+</div>
 
 <!-- Add Record Modal -->
 <div class="modal-bg" id="addModal">
@@ -1514,6 +1520,27 @@ function submitWeights() {
 document.querySelectorAll('.modal-bg').forEach(bg => {
   bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('show'); });
 });
+
+// 하단 버튼 위치를 '실제로 보이는 영역' 기준으로 잡음.
+// position:fixed는 레이아웃 뷰포트 기준이라, 모바일에서 주소창이 접히거나
+// 고무줄 스크롤이 일어나면 한 박자 늦게 따라오면서 덜렁거린다.
+(function dockToVisualViewport() {
+  const vv = window.visualViewport;
+  const dock = document.getElementById('fabDock');
+  if (!vv || !dock) return; // 미지원 브라우저는 기존 fixed 동작 그대로
+  let raf = 0;
+  function place() {
+    raf = 0;
+    // 보이는 영역의 아래끝이 레이아웃 아래끝보다 위에 있으면 그만큼 끌어올림
+    const lift = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+    dock.style.transform = lift ? `translateY(${-lift}px)` : '';
+  }
+  function onChange() { if (!raf) raf = requestAnimationFrame(place); }
+  vv.addEventListener('resize', onChange);
+  vv.addEventListener('scroll', onChange);
+  window.addEventListener('orientationchange', onChange);
+  place();
+})();
 
 loadAll();
 
