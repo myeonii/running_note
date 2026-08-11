@@ -146,7 +146,8 @@ section { margin-bottom: 28px; }
 .act-bar-total { font-size: 13px; color: var(--text); font-weight: 800; line-height: 16px; height: 16px; }
 .act-bar.narrow .act-bar-total { display: none; }
 /* 범례를 누르면 그 사람만 보기 */
-.chart-legend { display: flex; gap: 10px; justify-content: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 15px; color: var(--sub); }
+/* 버튼 자체 여백(5px)만큼 빼서 구분선 위아래 간격을 같게 */
+.chart-legend { display: flex; gap: 10px; justify-content: center; margin-top: 14px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 15px; color: var(--sub); }
 .chart-legend button { display: inline-flex; align-items: center; background: transparent; border: 0; border-radius: 100px; padding: 5px 12px; font-family: inherit; font-size: 15px; color: var(--sub); cursor: pointer; transition: opacity .15s, background .15s; }
 .chart-legend button:hover { background: #F2F2F2; }
 .chart-legend button.on { color: var(--text); font-weight: 700; background: #F2F2F2; }
@@ -154,9 +155,10 @@ section { margin-bottom: 28px; }
 .chart-legend .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; margin-right: 6px; vertical-align: middle; }
 .chart-legend .sw.mh { background: var(--mh); }
 .chart-legend .sw.hj { background: var(--hj); }
-.act-stats { display: flex; gap: 20px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-.act-stats .stat { font-size: 14px; color: var(--sub); }
-.act-stats .stat strong { color: var(--text); font-size: 23px; font-weight: 900; display: block; letter-spacing: -.5px; margin-bottom: 2px; }
+/* margin-top:auto를 빼서 범례 바로 아래에 붙임 (가운데가 휑하게 비지 않게) */
+.act-stats { display: flex; gap: 20px; padding-top: 14px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.act-stats .stat { font-size: 13px; color: var(--sub); }
+.act-stats .stat strong { color: var(--text); font-size: 19px; font-weight: 900; display: block; letter-spacing: -.5px; margin-bottom: 2px; }
 
 /* ===== Calendar ===== */
 .cal-card { padding: 18px; }
