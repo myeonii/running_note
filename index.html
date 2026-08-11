@@ -232,14 +232,22 @@ section { margin-bottom: 28px; }
 .feed-toggle-btn:hover { background: #F2F2F2; }
 
 /* ===== Floating add button ===== */
-.fab { position: fixed; right: 24px; bottom: 24px; background: var(--accent); color: #fff; border: 0; width: 58px; height: 58px; border-radius: 50%; font-size: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.22); cursor: pointer; line-height: 0; padding-bottom: 4px; z-index: 50; }
-.fab:hover { transform: translateY(-2px); transition: transform .2s; }
+/* 스크롤 중 떨림 방지: 자체 레이어로 올리고(translateZ) 아이폰 안전영역만큼 띄움 */
+.fab, .fab-refresh {
+  position: fixed;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  z-index: 50;
+}
+.fab { right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--accent); color: #fff; border: 0; width: 58px; height: 58px; border-radius: 50%; font-size: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.22); cursor: pointer; line-height: 0; padding-bottom: 4px; }
+.fab:hover { transform: translate3d(0, -2px, 0); transition: transform .2s; }
 
 /* 화면 초기화 — ＋ 버튼 왼쪽 */
-.fab-refresh { position: fixed; right: 94px; bottom: 27px; background: #fff; color: var(--text); border: 1px solid var(--line-strong); width: 52px; height: 52px; border-radius: 50%; font-size: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); cursor: pointer; line-height: 1; padding: 0; z-index: 50; font-family: inherit; }
+.fab-refresh { right: 94px; bottom: calc(27px + env(safe-area-inset-bottom, 0px)); background: #fff; color: var(--text); border: 1px solid var(--line-strong); width: 52px; height: 52px; border-radius: 50%; font-size: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); cursor: pointer; line-height: 1; padding: 0; font-family: inherit; }
 .fab-refresh:hover { background: #F2F2F2; }
 .fab-refresh.spinning { animation: refreshSpin .8s linear infinite; pointer-events: none; color: var(--muted); }
-@keyframes refreshSpin { to { transform: rotate(360deg); } }
+@keyframes refreshSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* ===== Modal ===== */
 .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
