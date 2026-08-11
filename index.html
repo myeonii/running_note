@@ -105,15 +105,16 @@ section { margin-bottom: 28px; }
 .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; flex-wrap: wrap; }
 .chart-title { font-size: 16px; font-weight: 800; color: var(--text); }
 .chart-wrap { position: relative; }
-.act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px; }
+/* 왼쪽 46px는 눈금 라벨 자리 — 막대와 겹치지 않게 */
+.act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px 0 46px; }
 .act-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; cursor: default; }
 .act-bar:hover .act-bar-fill { filter: brightness(.88); }
 .act-bar:hover .act-bar-label { color: var(--text); }
 
 /* ===== 눈금선 (5km·10km…) ===== */
-.act-grid { position: absolute; left: 0; right: 0; pointer-events: none; }
+.act-grid { position: absolute; left: 46px; right: 0; pointer-events: none; }
 .act-grid .gl { position: absolute; left: 0; right: 0; border-top: 1px dashed #E6E6E6; }
-.act-grid .gl b { position: absolute; left: 0; top: -9px; font-size: 12px; font-weight: 700; color: var(--muted); background: var(--card); padding-right: 5px; line-height: 1; }
+.act-grid .gl b { position: absolute; left: -46px; width: 40px; text-align: right; top: -8px; font-size: 12px; font-weight: 700; color: var(--muted); line-height: 1; }
 
 /* ===== Chart tooltip ===== */
 .chart-tip { position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none; opacity: 0; visibility: hidden; transform: translate(-50%, -100%); background: rgba(26,26,26,.92); color: #fff; padding: 6px 11px; border-radius: 100px; font-size: 14px; line-height: 1.4; white-space: nowrap; transition: opacity .1s ease; display: flex; align-items: center; gap: 8px; }
@@ -154,8 +155,11 @@ section { margin-bottom: 28px; }
 .user-toggle button { background: transparent; border: 0; padding: 7px 9px; border-radius: 100px; font-size: 14px; color: var(--sub); cursor: pointer; font-family: inherit; white-space: nowrap; }
 .user-toggle button.active { background: #fff; color: var(--text); font-weight: 700; }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
-.cal-day { aspect-ratio: 1; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--sub); position: relative; background: #FAFAFA; padding: 2px 0; }
-.cal-day.empty { background: transparent; }
+.cal-day { aspect-ratio: 1; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--sub); position: relative; background: #FAFAFA; padding: 2px 0; cursor: pointer; }
+.cal-day:hover { background: #F0F0F0; }
+.cal-day.selected { box-shadow: inset 0 0 0 2px var(--accent); color: var(--text); font-weight: 800; }
+.cal-day.empty { background: transparent; cursor: default; }
+.cal-day.empty:hover { background: transparent; }
 .cal-day.today { border: 2px solid var(--accent); font-weight: 900; color: var(--text); background: #fff; }
 .cal-day.both { background: linear-gradient(135deg, var(--mh-bg) 50%, var(--hj-bg) 50%); }
 .cal-day.mh-only { background: var(--mh-bg); }
@@ -166,10 +170,28 @@ section { margin-bottom: 28px; }
 .cal-day .dots .mh { background: var(--mh-strong); }
 .cal-day .dots .hj { background: var(--hj-strong); }
 .cal-weekday { font-size: 13px; color: var(--muted); text-align: center; padding: 4px 0; font-weight: 700; }
-.cal-summary { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); }
-.cal-sum-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+/* 달 요약 ↔ 날짜 상세를 오가도 카드 높이가 변하지 않게 높이 고정 (3명 이상이면 내부 스크롤) */
+.cal-summary { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); height: 102px; overflow-y: auto; }
+
+/* 날짜 클릭 시 상세 */
+.cd-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.cd-head b { font-size: 15px; font-weight: 800; }
+.cd-head .cd-sum { font-size: 13px; color: var(--sub); }
+.cd-head .cd-sum b { font-size: 14px; color: var(--text); }
+.cd-close { margin-left: auto; background: transparent; border: 0; color: var(--muted); font-size: 15px; cursor: pointer; padding: 0 2px; line-height: 1; font-family: inherit; }
+.cd-close:hover { color: var(--text); }
+.cd-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 2px 0; font-size: 14px; }
+.cd-row .cd-who { display: flex; align-items: center; gap: 6px; font-weight: 700; white-space: nowrap; }
+.cd-row .cd-who .dot { width: 8px; height: 8px; border-radius: 50%; }
+.cd-row .cd-who .dot.mh { background: var(--mh-strong); }
+.cd-row .cd-who .dot.hj { background: var(--hj-strong); }
+.cd-row .cd-val { color: var(--sub); white-space: nowrap; }
+.cd-row .cd-val b { color: var(--text); font-weight: 800; font-size: 15px; }
+.cd-empty { font-size: 14px; color: var(--muted); padding: 4px 0; }
+.cal-sum-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; }
 .cal-sum-item { min-width: 0; }
-.cal-sum-item.together { padding-left: 8px; border-left: 1px solid var(--line); }
+/* '같이'가 카드 오른쪽 끝에 붙지 않도록 안쪽 여백 */
+.cal-sum-item.together { padding-left: 12px; padding-right: 6px; border-left: 1px solid var(--line); }
 .cal-sum-item .cs-name { display: flex; align-items: center; gap: 5px; font-size: 14px; color: var(--sub); font-weight: 600; white-space: nowrap; }
 .cal-sum-item .cs-name .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .cal-sum-item .cs-name .dot.mh { background: var(--mh-strong); }
@@ -545,22 +567,15 @@ const today = new Date();
 let calYear = today.getFullYear();
 let calMonth = today.getMonth() + 1;
 let calFilter = 'all';
+let selectedDay = null; // 달력에서 고른 날짜 (YYYY-MM-DD)
 let goalEditingUserId = null;
 let addPersonName = '현주';
-const SCOPE_KEY = 'view_scope';
-// 이 브라우저에서 마지막으로 보던 사람으로 시작 (없으면 '함께')
+// 접속하면 항상 '함께'로 시작 (기간은 '월', 달력·차트·기록은 이번 달)
 let viewScope = 'all'; // 'all' | '미현' | '현주'
 let heroPeriod = 'month'; // 'week' | 'month' | 'year' | 'all'
-let scopeRestored = false;
-
-function savedScope() {
-  const s = localStorage.getItem(SCOPE_KEY);
-  return (s === 'all' || NAMES.includes(s)) ? s : null;
-}
 
 function setScope(scope) {
   viewScope = scope;
-  localStorage.setItem(SCOPE_KEY, scope); // 이 브라우저에서 마지막으로 본 사람을 기억
   document.querySelectorAll('#scopeTabs button').forEach(b => {
     b.classList.toggle('active', b.dataset.scope === scope);
   });
@@ -655,10 +670,6 @@ async function loadAll() {
     showHelp('데이터를 불러오지 못했어요: ' + e.message + '<br>Supabase RLS 정책에서 anon에게 SELECT 권한이 있는지 확인해 주세요.');
     return;
   }
-  // 첫 로드에서만 저장된 범위를 복원 (setScope가 렌더까지 담당)
-  const saved = !scopeRestored && savedScope();
-  scopeRestored = true;
-  if (saved && saved !== viewScope) { setScope(saved); return; }
   renderAll();
 }
 function showHelp(html) { $('banner').innerHTML = `<div class="help-banner">${html}</div>`; }
@@ -1119,7 +1130,9 @@ function renderCalendar() {
       if (u) bgCls = userClass(u.user_name) === 'mh' ? ' mh-only' : ' hj-only';
     }
     const todayCls = (isThisMonth && d === todayD.getDate()) ? ' today' : '';
-    html += `<div class="cal-day${todayCls}${bgCls}"><span class="num">${d}</span><div class="dots">${dots}</div></div>`;
+    const key = `${calYear}-${String(calMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const selCls = (selectedDay === key) ? ' selected' : '';
+    html += `<div class="cal-day${todayCls}${bgCls}${selCls}" onclick="selectDay('${key}')"><span class="num">${d}</span><div class="dots">${dots}</div></div>`;
   }
   // 달마다 주 수(5~6)가 달라 카드 높이가 들썩이지 않도록 항상 6줄을 채움
   const CELLS = 42;
@@ -1139,7 +1152,9 @@ function renderCalendar() {
   let common = 0; for (const d of mhDates) if (hjDates.has(d)) common++;
   const mhKm = userLogs('미현').filter(x => { const d = new Date(x.run_date+'T00:00'); return d.getFullYear()===calYear && (d.getMonth()+1)===calMonth; }).reduce((s,x)=>s+parseFloat(x.distance||0),0);
   const hjKm = userLogs('현주').filter(x => { const d = new Date(x.run_date+'T00:00'); return d.getFullYear()===calYear && (d.getMonth()+1)===calMonth; }).reduce((s,x)=>s+parseFloat(x.distance||0),0);
-  $('calSummary').innerHTML = `
+
+  // 날짜를 고른 상태면 그 날 상세, 아니면 이 달 요약
+  $('calSummary').innerHTML = selectedDay ? dayDetailHtml(selectedDay) : `
     <div class="cal-sum-grid">
       <div class="cal-sum-item">
         <div class="cs-name"><span class="dot hj"></span>현주</div>
@@ -1157,12 +1172,49 @@ function renderCalendar() {
   `;
 }
 
+// 날짜 클릭 — 같은 날 다시 누르면 해제
+function selectDay(key) {
+  selectedDay = (selectedDay === key) ? null : key;
+  renderCalendar();
+}
+
+function dayDetailHtml(key) {
+  const d = new Date(key + 'T00:00');
+  const wd = ['일','월','화','수','목','금','토'][d.getDay()];
+  const title = `${d.getMonth() + 1}월 ${d.getDate()}일 (${wd})`;
+  // 달력 필터(전체/현주/미현)를 그대로 따름
+  let dayLogs = logs.filter(l => l.run_date === key);
+  if (calFilter !== 'all') dayLogs = dayLogs.filter(l => String(l.user_id) === String(calFilter));
+
+  const total = dayLogs.reduce((s, l) => s + parseFloat(l.distance || 0), 0);
+  // 합계는 제목 줄에 함께 둬서 높이를 아끼기
+  const sum = dayLogs.length > 1 ? `<span class="cd-sum">합계 <b>${total.toFixed(2)}km</b></span>` : '';
+  const head = `<div class="cd-head"><b>${title}</b>${sum}<button class="cd-close" onclick="selectDay(null)" title="닫기">✕</button></div>`;
+
+  if (!dayLogs.length) return head + '<div class="cd-empty">이 날은 쉬었어요</div>';
+
+  const rows = dayLogs.map(l => {
+    const u = getUserById(l.user_id);
+    const name = u ? u.user_name : '?';
+    const km = parseFloat(l.distance || 0);
+    const sec = parseInt(l.duration_seconds || 0);
+    return `
+      <div class="cd-row">
+        <span class="cd-who"><span class="dot ${userClass(name)}"></span>${name}</span>
+        <span class="cd-val"><b>${km.toFixed(2)}</b>km · ${fmtDuration(sec)} · ${paceFromSec(sec, km)}/km</span>
+      </div>`;
+  }).join('');
+
+  return head + rows;
+}
+
 // 달을 넘기면 캘린더·차트·기록이 함께 그 달로 이동
 function goMonth(delta) {
   calMonth += delta;
   if (calMonth < 1) { calMonth = 12; calYear--; }
   if (calMonth > 12) { calMonth = 1; calYear++; }
   feedExpanded = false;
+  selectedDay = null; // 달이 바뀌면 선택 해제
   renderCalendar();
   renderActivityChart();
   renderFeed();
