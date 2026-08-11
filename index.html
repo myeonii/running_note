@@ -71,13 +71,14 @@ button { font-family: inherit; cursor: pointer; }
 .btn-ghost.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 section { margin-bottom: 28px; }
-.section-title { font-size: 13px; font-weight: 800; color: var(--sub); margin-bottom: 12px; letter-spacing: 1.2px; text-transform: uppercase; }
+.section-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 12px; letter-spacing: -.2px; }
 
 .card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--line); overflow: hidden; }
 
 /* ===== User goal cards ===== */
 .users-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.user-card { padding: 20px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); position: relative; }
+/* min-width:0이 없으면 안쪽 칩들이 카드를 넓혀 좁은 화면에서 가로 스크롤이 생김 */
+.user-card { padding: 20px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); position: relative; min-width: 0; overflow: hidden; }
 .user-card.mh { background: var(--mh-bg); border-color: #d6e6f5; }
 .user-card.hj { background: var(--hj-bg); border-color: #fadfe5; }
 .user-card .name { font-weight: 800; font-size: 17px; display: flex; align-items: center; gap: 8px; }
@@ -93,7 +94,7 @@ section { margin-bottom: 28px; }
 .progress-bar .fill.hj { background: var(--hj-strong); }
 .user-card .edit { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.75); border: 0; border-radius: 100px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--sub); cursor: pointer; }
 .user-card .edit:hover { background: #fff; color: var(--text); }
-.user-card .streak { display: flex; gap: 6px; margin-top: 12px; font-size: 13px; flex-wrap: nowrap; overflow: hidden; }
+.user-card .streak { display: flex; gap: 6px; margin-top: 12px; font-size: 13px; flex-wrap: nowrap; overflow: hidden; min-width: 0; }
 .user-card .streak .chip { background: rgba(255,255,255,0.7); padding: 5px 10px; border-radius: 100px; white-space: nowrap; }
 
 /* ===== Activity (calendar + chart side-by-side) ===== */
@@ -105,12 +106,13 @@ section { margin-bottom: 28px; }
 /* 월별·일별 토글이 아랫줄로 떨어지지 않게 한 줄 유지 */
 .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; flex-wrap: nowrap; }
 .chart-title-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.chart-title { font-size: 16px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chart-title { font-size: 17px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* 달 이동 화살표 — 달력처럼 제목 양옆에 (차트·기록 공용) */
 .feed-title-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 /* 제목이 늘어나면 ›가 멀어지므로 제목은 내용 크기로 두고, 남는 공간은 '접기' 쪽으로 */
-.feed-title-row .section-title { margin-bottom: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* .sec-head .section-title의 flex:1이 뒤에 나와 제목 상자가 늘어나므로 더 구체적으로 덮어씀 */
+.sec-head .feed-title-row .section-title { margin-bottom: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nav-btn { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 28px; height: 28px; font-size: 15px; padding: 0; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit; flex-shrink: 0; }
 .nav-btn:hover { background: #F2F2F2; }
 .chart-wrap { position: relative; }
@@ -168,7 +170,7 @@ section { margin-bottom: 28px; }
 .cal-nav { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .cal-nav button { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 30px; height: 30px; font-size: 16px; padding: 0; line-height: 1; color: var(--text); flex-shrink: 0; }
 .cal-nav button:hover { background: #F2F2F2; }
-.cal-month { font-size: 16px; font-weight: 800; width: 92px; text-align: center; white-space: nowrap; }
+.cal-month { font-size: 17px; font-weight: 800; width: 96px; text-align: center; white-space: nowrap; }
 .user-toggle { display: flex; gap: 2px; background: #F2F2F2; padding: 3px; border-radius: 100px; flex-shrink: 0; }
 .user-toggle button { background: transparent; border: 0; padding: 7px 9px; border-radius: 100px; font-size: 14px; color: var(--sub); cursor: pointer; font-family: inherit; white-space: nowrap; }
 .user-toggle button.active { background: #fff; color: var(--text); font-weight: 700; }
@@ -283,6 +285,18 @@ section { margin-bottom: 28px; }
 .modal .row3 input { text-align: center; }
 .modal .preview { background: #FAFAFA; border-radius: var(--radius-sm); padding: 14px; font-size: 14px; color: var(--sub); margin-bottom: 14px; line-height: 1.7; }
 .modal .preview strong { color: var(--text); font-weight: 800; }
+/* 삭제 확인 */
+.btn-danger { background: #D14343; }
+.del-preview { background: #FAFAFA; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; }
+.del-preview .del-who { display: flex; align-items: center; gap: 7px; font-size: 15px; }
+.del-preview .del-who .dot { width: 9px; height: 9px; border-radius: 50%; }
+.del-preview .del-who .dot.mh { background: var(--mh-strong); }
+.del-preview .del-who .dot.hj { background: var(--hj-strong); }
+.del-preview .del-date { color: var(--muted); font-size: 14px; }
+.del-preview .del-stat { margin-top: 8px; font-size: 15px; color: var(--sub); }
+.del-preview .del-stat b { font-size: 20px; font-weight: 900; color: var(--text); letter-spacing: -.5px; }
+.del-warn { margin-top: 12px; font-size: 14px; color: #B84040; }
+
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .modal-actions .btn { flex: 1; }
 .modal-actions .btn-ghost { flex: 0 0 auto; }
@@ -295,7 +309,7 @@ section { margin-bottom: 28px; }
 .hero-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
 /* 라벨 길이가 바뀌어도 토글이 줄바꿈되지 않도록 nowrap + 라벨만 축소 */
 .hero-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: nowrap; margin-bottom: 4px; }
-.hero-label { font-size: 14px; font-weight: 800; color: var(--sub); letter-spacing: .8px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hero-label { font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: -.2px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #heroPeriodToggle { flex-shrink: 0; }
 .hero-num-row { margin-top: 8px; }
 .hero-num { font-size: 68px; font-weight: 900; letter-spacing: -3.5px; line-height: 1; }
@@ -549,6 +563,19 @@ section { margin-bottom: 28px; }
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('goalModal')">취소</button>
       <button class="btn" onclick="submitGoal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-bg" id="delModal">
+  <div class="modal">
+    <h3>이 기록을 삭제할까요?</h3>
+    <div class="del-preview" id="delPreview"></div>
+    <div class="del-warn">삭제하면 되돌릴 수 없어요.</div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('delModal')">취소</button>
+      <button class="btn btn-danger" id="delSubmit" onclick="confirmDelete()">삭제</button>
     </div>
   </div>
 </div>
@@ -1516,11 +1543,33 @@ async function submitEdit(id) {
   await loadAll();
 }
 
-async function deleteLog(id) {
-  if (!confirm('이 기록을 삭제할까요?')) return;
-  const { error } = await sb.from('run_log').delete().eq('id', id);
-  if (error) { toast('삭제 실패: ' + error.message); return; }
-  toast('삭제됐어요'); await loadAll();
+// 삭제는 어떤 기록인지 보여주고 한 번 더 확인 (잘못 눌러도 안전하게)
+let pendingDeleteId = null;
+
+function deleteLog(id) {
+  const log = logs.find(l => l.id === id);
+  if (!log) return;
+  const u = getUserById(log.user_id);
+  const name = u ? u.user_name : '?';
+  const km = parseFloat(log.distance || 0);
+  const sec = parseInt(log.duration_seconds || 0);
+  pendingDeleteId = id;
+  $('delPreview').innerHTML = `
+    <div class="del-who"><span class="dot ${userClass(name)}"></span><b>${name}</b><span class="del-date">${fmtDate(log.run_date)}</span></div>
+    <div class="del-stat"><b>${km.toFixed(2)}</b>km · ${fmtDuration(sec)} · ${paceFromSec(sec, km)}/km</div>`;
+  $('delSubmit').disabled = false;
+  openModal('delModal');
+}
+
+async function confirmDelete() {
+  if (!pendingDeleteId) return;
+  $('delSubmit').disabled = true;
+  const { error } = await sb.from('run_log').delete().eq('id', pendingDeleteId);
+  if (error) { toast('삭제 실패: ' + error.message); $('delSubmit').disabled = false; return; }
+  pendingDeleteId = null;
+  closeModal('delModal');
+  toast('삭제됐어요');
+  await loadAll();
 }
 
 function openGoal(userId, name) {
