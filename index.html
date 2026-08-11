@@ -102,25 +102,27 @@ section { margin-bottom: 28px; }
 @media (max-width: 760px) { .activity-row { grid-template-columns: 1fr; } }
 
 /* ===== Activity chart ===== */
-.chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; flex-wrap: wrap; }
+/* 월별·일별 토글이 아랫줄로 떨어지지 않게 한 줄 유지 */
+.chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; flex-wrap: nowrap; }
 .chart-title-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.chart-title { font-size: 16px; font-weight: 800; color: var(--text); white-space: nowrap; }
+.chart-title { font-size: 16px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* 달 이동 화살표 (차트·기록 공용) */
 .mini-nav { display: flex; gap: 4px; flex-shrink: 0; }
 .mini-nav button { background: transparent; border: 1px solid var(--line-strong); border-radius: 100px; width: 28px; height: 28px; font-size: 15px; padding: 0; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit; }
 .mini-nav button:hover { background: #F2F2F2; }
 .chart-wrap { position: relative; }
-/* 왼쪽 46px는 눈금 라벨 자리 — 막대와 겹치지 않게 */
-.act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px 0 46px; }
+/* 왼쪽 36px는 눈금 라벨 자리 — 막대와 겹치지 않게 */
+.act-chart { position: relative; display: flex; gap: 4px; align-items: flex-end; height: 200px; padding: 0 2px 0 36px; }
 .act-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; cursor: default; }
 .act-bar:hover .act-bar-fill { filter: brightness(.88); }
 .act-bar:hover .act-bar-label { color: var(--text); }
 
 /* ===== 눈금선 (5km·10km…) ===== */
-.act-grid { position: absolute; left: 46px; right: 0; pointer-events: none; }
+.act-grid { position: absolute; left: 36px; right: 0; pointer-events: none; }
 .act-grid .gl { position: absolute; left: 0; right: 0; border-top: 1px dashed #E6E6E6; }
-.act-grid .gl b { position: absolute; left: -46px; width: 40px; text-align: right; top: -8px; font-size: 12px; font-weight: 700; color: var(--muted); line-height: 1; }
+.act-grid .gl.base { border-top-color: var(--line-strong); }
+.act-grid .gl b { position: absolute; left: -36px; width: 30px; text-align: right; top: -8px; font-size: 12px; font-weight: 700; color: var(--muted); line-height: 1; }
 
 /* ===== Chart tooltip ===== */
 .chart-tip { position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none; opacity: 0; visibility: hidden; transform: translate(-50%, -100%); background: rgba(26,26,26,.92); color: #fff; padding: 6px 11px; border-radius: 100px; font-size: 14px; line-height: 1.4; white-space: nowrap; transition: opacity .1s ease; display: flex; align-items: center; gap: 8px; }
@@ -196,10 +198,10 @@ section { margin-bottom: 28px; }
 .cd-row .cd-val { color: var(--sub); white-space: nowrap; }
 .cd-row .cd-val b { color: var(--text); font-weight: 800; font-size: 15px; }
 .cd-empty { font-size: 14px; color: var(--muted); padding: 4px 0; }
-.cal-sum-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; }
+/* 세 칸을 같은 폭으로 — 넓은 화면에서 '같이'만 오른쪽 끝으로 쏠리지 않게 */
+.cal-sum-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .cal-sum-item { min-width: 0; }
-/* '같이'가 카드 오른쪽 끝에 붙지 않도록 안쪽 여백 */
-.cal-sum-item.together { padding-left: 12px; padding-right: 6px; border-left: 1px solid var(--line); }
+.cal-sum-item.together { padding-left: 12px; border-left: 1px solid var(--line); }
 .cal-sum-item .cs-name { display: flex; align-items: center; gap: 5px; font-size: 14px; color: var(--sub); font-weight: 600; white-space: nowrap; }
 .cal-sum-item .cs-name .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .cal-sum-item .cs-name .dot.mh { background: var(--mh-strong); }
@@ -992,9 +994,10 @@ function axisFor(rawMax) {
 function gridHtml(axis, hasTotalRow) {
   // 막대 영역(스택)의 아래쪽 여백: 라벨 행(+합계 행) 높이만큼 띄움
   const bottom = LABEL_H + ROW_GAP + (hasTotalRow ? LABEL_H + ROW_GAP : 0);
-  let lines = '';
+  // 단위는 맨 아래 0km에만 붙이고 위쪽은 숫자만 — 축 자리를 좁게
+  let lines = `<div class="gl base" style="bottom:0%"><b>0km</b></div>`;
   for (let v = axis.step; v <= axis.max + 0.001; v += axis.step) {
-    lines += `<div class="gl" style="bottom:${(v / axis.max) * 100}%"><b>${v}km</b></div>`;
+    lines += `<div class="gl" style="bottom:${(v / axis.max) * 100}%"><b>${v}</b></div>`;
   }
   return `<div class="act-grid" style="bottom:${bottom}px;height:${STACK_H}px">${lines}</div>`;
 }
@@ -1050,7 +1053,7 @@ document.addEventListener('mouseout', e => {
 
 function renderMonthChart() {
   const year = calYear; // 달력에서 보고 있는 연도를 따라감
-  $('actChartLabel').textContent = `${year}년 월별 활동`;
+  $('actChartLabel').textContent = `${year}년`; // 월별/일별은 옆 토글이 알려줌
   const months = [];
   for (let m = 1; m <= 12; m++) months.push({ label: m, mh: 0, hj: 0 });
   for (const l of scopedLogs()) {
@@ -1098,7 +1101,7 @@ function renderMonthChart() {
 function renderDayChart() {
   const year = calYear;   // 달력에서 보고 있는 연·월을 따라감
   const month = calMonth;
-  $('actChartLabel').textContent = `${year}년 ${month}월 일별 활동`;
+  $('actChartLabel').textContent = `${year}년 ${month}월`;
   const daysInMonth = new Date(year, month, 0).getDate();
   const days = [];
   for (let i = 1; i <= daysInMonth; i++) {
