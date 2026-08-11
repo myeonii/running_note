@@ -628,14 +628,18 @@ body.modal-open { position: fixed; left: 0; right: 0; width: 100%; overflow: hid
     </div>
     <div class="field">
       <label>목표 종류</label>
-      <select id="goalType">
+      <select id="goalType" onchange="renderGoalChips()">
         <option value="MONTHLY_DISTANCE">이번 달 누적 거리 (km)</option>
         <option value="WEEKLY_COUNT">주간 러닝 횟수 (회/주)</option>
       </select>
     </div>
     <div class="field">
-      <label>목표값</label>
-      <input type="number" id="goalValue" step="1" min="1" placeholder="예: 50" />
+      <div class="field-head">
+        <label id="goalValueLabel">목표값</label>
+        <button type="button" class="clear-btn" onclick="clearGoalValue()">지우기</button>
+      </div>
+      <input type="number" id="goalValue" class="big-input" step="1" min="1" placeholder="예: 50" inputmode="numeric" />
+      <div class="quick-chips" id="goalChips"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('goalModal')">취소</button>
@@ -1765,8 +1769,24 @@ function openGoal(userId, name) {
   const ex = goals.find(g => String(g.user_id) === String(userId));
   if (ex) { $('goalType').value = ex.goal_type; $('goalValue').value = ex.target_value; }
   else { $('goalType').value = 'MONTHLY_DISTANCE'; $('goalValue').value = ''; }
+  renderGoalChips();
   openModal('goalModal');
 }
+
+// 목표 종류에 따라 칩과 단위가 바뀜
+function renderGoalChips() {
+  const isCount = $('goalType').value === 'WEEKLY_COUNT';
+  const label = $('goalValueLabel');
+  if (label) label.textContent = isCount ? '목표값 (회/주)' : '목표값 (km)';
+  $('goalValue').placeholder = isCount ? '예: 3' : '예: 50';
+  const el = $('goalChips');
+  if (!el) return;
+  const opts = isCount ? [2, 3, 4, 5] : [30, 50, 80, 100];
+  el.innerHTML = opts.map(v => `<button type="button" onclick="setGoalValue(${v})">${v}${isCount ? '회' : ''}</button>`).join('');
+}
+
+function setGoalValue(v) { $('goalValue').value = v; }
+function clearGoalValue() { $('goalValue').value = ''; }
 
 async function submitGoal() {
   const type = $('goalType').value;
